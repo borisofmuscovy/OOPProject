@@ -1,4 +1,5 @@
 package com.company;
+import java.util.Random;
 
 public class Monster {
 
@@ -7,6 +8,8 @@ public class Monster {
     public final int strength;
     public int protection;
     public int hp;
+    private int MAX_DAMAGE;
+    private int MIN_DAMAGE = 1;
 
     public Monster(String startName, int startDamage, int startStrength, int startProtection, int startHP) throws IllegalArgumentException {
         if (!startName.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
@@ -16,10 +19,16 @@ public class Monster {
         } else {
             this.name = startName;
         }
-        this.damage = startDamage;
+        setMAX_DAMAGE(20);
+        Random randno = new Random();
+        this.damage = randno.nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE;
         this.strength = startStrength;
         protection = startProtection;
         hp = startHP;
+    }
+
+    public void setMAX_DAMAGE(int newMAX_DAMAGE) {
+        MAX_DAMAGE = newMAX_DAMAGE;
     }
 
 

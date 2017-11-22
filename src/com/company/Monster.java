@@ -4,8 +4,8 @@ import java.util.Random;
 public class Monster {
 
     public final String name;
-    public final int damage;
     public final int strength;
+    public int damage;
     public int protection;
     public int hp;
     private int MAX_DAMAGE;
@@ -20,8 +20,7 @@ public class Monster {
             this.name = startName;
         }
         setMAX_DAMAGE(20);
-        Random randno = new Random();
-        this.damage = randno.nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE;
+        changeDamage();
         this.strength = startStrength;
         protection = startProtection;
         hp = startHP;
@@ -29,6 +28,11 @@ public class Monster {
 
     public void setMAX_DAMAGE(int newMAX_DAMAGE) {
         MAX_DAMAGE = newMAX_DAMAGE;
+    }
+
+    public void changeDamage(){
+        Random randno = new Random();
+        this.damage = randno.nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE;
     }
 
 

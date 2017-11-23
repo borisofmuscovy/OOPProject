@@ -11,13 +11,13 @@ public class Monster {
     private int MAX_DAMAGE;
     private int MIN_DAMAGE = 1;
 
-    public Monster(String startName, int startDamage, int startStrength, int startProtection, int startHP) throws IllegalArgumentException {
-        if (!startName.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
+    public Monster(String Name, int startDamage, int startStrength, int startProtection, int startHP) throws IllegalArgumentException {
+        if (!Name.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
             throw new IllegalArgumentException("You cannot name your monster " +
-                    startName + "! Monster culture demands names begin with " +
+                    Name + "! Monster culture demands names begin with " +
                     "a capital letter and consist only of upper or lowercase letters and digits, with \' also allowed.");
         } else {
-            this.name = startName;
+            this.name = Name;
         }
         setMAX_DAMAGE(20);
         changeDamage();

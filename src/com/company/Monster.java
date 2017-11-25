@@ -19,8 +19,9 @@ public class Monster {
     private int MAX_DAMAGE;
     private int MIN_DAMAGE = 1;
     private int MAX_HP;
+    private boolean isAlive;
 
-    public Monster(String Name, int startDamage, int startStrength, int startHP) throws IllegalArgumentException {
+    public Monster(String Name, int startHP, int startDamage, int startStrength) throws IllegalArgumentException {
         if (!Name.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
             throw new IllegalArgumentException("You cannot name your monster " +
                     Name + "! Monster culture demands names begin with " +
@@ -37,6 +38,7 @@ public class Monster {
         this.protection = startProtection ;
         hp = startHP;
         MAX_HP = hp;
+        boolean isAlive = true;
     }
 
     private int getStrength(){
@@ -112,38 +114,54 @@ public class Monster {
         return this.hp;
     }
 
-    private void setHP(int newHP){
-        this.hp = newHP;
+    private void setHP(int newHP) throws IllegalArgumentException{
+        try{
+            if (newHP <= 0) {
+                throw new IllegalArgumentException;
+            } else {
+                this.hp = newHP;
+            }
+        } catch IllegalArgumentException{
+            this.Death();
+        }
+
     }
 
     public void setMAX_HP(int newMAX_HP){
         this.MAX_HP = newMAX_HP;
     }
 
-    public int hit(Monster opponent){
-        // D&D-like dice mechanic - generate a random number between 1-30 to try and bypass attackers protection
-        system.out.println(this.getName() + " is taking a swing at " + opponent.getName() + "!");
-        Random randno = new Random();
-        int diceVal = randno.nextInt(30 - 1 + 1) + 1;
-        int genVal;
-        if (diceVal < opponent.getHP()) {
-            genVal = diceVal;
-        } else if (diceVal => opponent.getHP()) {
-            genval = opponent.getHP();
+    public int hit(Monster opponent) throws IllegalArgumentException{
+        try {
+            // D&D-like dice mechanic - generate a random number between 1-30 to try and bypass attackers protection
+            system.out.println(this.getName() + " is taking a swing at " + opponent.getName() + "!");
+            Random randno = new Random();
+            int diceVal = randno.nextInt(30 - 1 + 1) + 1;
+            int genVal;
+            if (diceVal < opponent.getHP()) {
+                genVal = diceVal;
+            } else if (diceVal =>opponent.getHP()){
+                genval = opponent.getHP();
+            }
+            // compare generated value to opponent protection
+
+            if (genVal =>opponent.getProtection()){
+                System.out.println("The hit connects!");
+                int newHP = opponent.getHP() - this.hitDamage();
+                opponent.setHP(newHP);
+                System.out.println(this.getName()" does " + newHP + " damage to " + opponent.getName());
+            } else{
+                System.out.println(this.getName() + " misses " + opponent.getName()" completely!");
+            }
         }
-        // compare generated value to opponent protection
+        catch IllegalArgumentException{
 
-        if (genVal => opponent.getProtection()) {
-            System.out.println("The hit connects!");
-            int newHP = opponent.getHP() - this.hitDamage();
-            opponent.setHP(newHP);
-            System.out.println(this.getName() " does " + newHP + " damage to " + opponent.getName());
-        } else {
-            System.out.println(this.getName() + " misses " + opponent.getName() " completely!");
         }
+    }
 
-
-
+    private void Death(){
+        this.isAlive = false;
+        System.out.println(this.getName() " has died.");
     }
 
 

@@ -1,5 +1,6 @@
 package com.company;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Random;
 
 
@@ -13,13 +14,13 @@ public class Monster {
     public final String name;
     public final int strength;
     public int damage;
-    public int protection;
+    public final int protection;
     public int hp;
     private int MAX_DAMAGE;
     private int MIN_DAMAGE = 1;
     private int MAX_HP;
 
-    public Monster(String Name, int startDamage, int startStrength, int startProtection, int startHP) throws IllegalArgumentException {
+    public Monster(String Name, int startDamage, int startStrength, int startHP) throws IllegalArgumentException {
         if (!Name.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
             throw new IllegalArgumentException("You cannot name your monster " +
                     Name + "! Monster culture demands names begin with " +
@@ -30,7 +31,10 @@ public class Monster {
         setMAX_DAMAGE(20);
         changeDamage();
         this.strength = startStrength;
-        protection = startProtection;
+
+        int startProtection = generateProtectionFactor();
+        assert isPrime(startProtection);
+        this.protection = startProtection ;
         hp = startHP;
         MAX_HP = hp;
     }
@@ -61,7 +65,7 @@ public class Monster {
     int MAX_PROTECTION = 40;
     int MIN_PROTECTION = 1;
 
-    public ArrayList<Integer> primeList(int MAX_PROTECTION) {
+    public int generateProtectionFactor() {
         ArrayList<Integer> primeList = new ArrayList<Integer>();
         for(int i=1; i < MAX_PROTECTION; i++){
             boolean isPrime = true;
@@ -74,7 +78,9 @@ public class Monster {
             if(isPrime)
                 primeList.add(i);
         }
-        return primeList;
+        Random n = new Random();
+        int protectionFactor = primeList.get(n.nextInt(primeList.size()));
+        return protectionFactor;
     }
 
     public boolean isPrime(int n) {

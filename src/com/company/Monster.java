@@ -115,16 +115,14 @@ public class Monster {
         return this.hp;
     }
 
-    private void setHP(int newHP) throws IllegalArgumentException{
-        try{
+    private void setHP(int newHP){
+        // look at exception catching again later, make sure it will actually throw if HP <= 0
             if (newHP <= 0) {
-                throw new IllegalArgumentException;
+                this.Death();
+                throw new IllegalArgumentException("Battle over, quitting...");
             } else {
                 this.hp = newHP;
             }
-        } catch IllegalArgumentException{
-            this.Death();
-        }
 
     }
 
@@ -132,37 +130,37 @@ public class Monster {
         this.MAX_HP = newMAX_HP;
     }
 
-    public int hit(Monster opponent) throws IllegalArgumentException{
+    public void hit(Monster opponent) throws IllegalArgumentException{
         try {
             // D&D-like dice mechanic - generate a random number between 1-30 to try and bypass attackers protection
-            system.out.println(this.getName() + " is taking a swing at " + opponent.getName() + "!");
+            System.out.println(this.getName() + " is taking a swing at " + opponent.getName() + "!");
             Random randno = new Random();
             int diceVal = randno.nextInt(30 - 1 + 1) + 1;
             int genVal;
             if (diceVal < opponent.getHP()) {
                 genVal = diceVal;
-            } else if (diceVal =>opponent.getHP()){
-                genval = opponent.getHP();
+            } else {
+                genVal = opponent.getHP();
             }
             // compare generated value to opponent protection
 
-            if (genVal =>opponent.getProtection()){
+            if (genVal >= opponent.getProtection()){
                 System.out.println("The hit connects!");
                 int newHP = opponent.getHP() - this.hitDamage();
                 opponent.setHP(newHP);
-                System.out.println(this.getName()" does " + newHP + " damage to " + opponent.getName());
+                System.out.println(this.getName() + " does " + newHP + " damage to " + opponent.getName());
             } else{
-                System.out.println(this.getName() + " misses " + opponent.getName()" completely!");
+                System.out.println(this.getName() + " misses " + opponent.getName() + " completely!");
             }
         }
-        catch IllegalArgumentException{
+        catch (IllegalArgumentException e) {
 
         }
     }
 
     private void Death(){
         this.isAlive = false;
-        System.out.println(this.getName() " has died.");
+        System.out.println(this.getName() + " has died.");
     }
 
 

@@ -31,6 +31,7 @@ public class Monster {
         }
         setMAX_DAMAGE(20);
         changeDamage();
+        startStrength = (int) (new Random().nextGaussian() + 10);
         this.strength = startStrength;
 
         int startProtection = generateProtectionFactor();

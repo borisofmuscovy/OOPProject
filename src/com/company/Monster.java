@@ -139,7 +139,11 @@ public class Monster {
             int genVal;
             if (diceVal < opponent.getHP()) {
                 genVal = diceVal;
+<<<<<<< Updated upstream
             } else {
+=======
+            } else if (diceVal >= opponent.getHP()){
+>>>>>>> Stashed changes
                 genVal = opponent.getHP();
             }
             // compare generated value to opponent protection

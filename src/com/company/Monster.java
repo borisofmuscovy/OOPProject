@@ -17,6 +17,7 @@ public class Monster {
     public int hp;
     private int MAX_DAMAGE;
     private int MIN_DAMAGE = 1;
+    private int MAX_HP;
 
     public Monster(String Name, int startDamage, int startStrength, int startProtection, int startHP) throws IllegalArgumentException {
         if (!Name.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
@@ -31,7 +32,9 @@ public class Monster {
         this.strength = startStrength;
         protection = startProtection;
         hp = startHP;
+        MAX_HP = hp;
     }
+
 
     public void setMAX_DAMAGE(int newMAX_DAMAGE) {
         MAX_DAMAGE = newMAX_DAMAGE;
@@ -40,6 +43,14 @@ public class Monster {
     public void changeDamage(){
         Random randno = new Random();
         this.damage = randno.nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE;
+    }
+
+    private int getDamage(){
+        return this.damage;
+    }
+
+    public int hitDamage(){
+
     }
 
 
@@ -77,8 +88,49 @@ public class Monster {
         return true;
     }
 
+    public int getProtection(){
+        return this.protection;
+    }
+
     public void setProtection(){
         Random protection = new Random();
 
     }
+
+    public int getHP(){
+        return this.hp;
+    }
+
+    private void setHP(int newHP){
+        this.hp = newHP;
+    }
+
+    public void setMAX_HP(int newMAX_HP){
+        this.MAX_HP = newMAX_HP;
+    }
+
+    public int hitBy(Monster attacker){
+        // D&D-like dice mechanic - generate a random number between 1-30 to try and bypass attackers protection
+        system.out.println(this.getName() + " is taking a swing at " + attacker.getName() + "!")
+        Random randno = new Random();
+        int diceVal = randno.nextInt(30 - 1 + 1) + 1;
+        int genVal;
+        if (diceVal < attacker.getHP()) {
+            genVal = diceVal;
+        } else if (diceVal => attacker.getHP()) {
+            genval = attacker.getHP();
+        }
+        // compare generated value to opponent protection
+
+        if (genVal => attacker.getProtection()) {
+            System.out.println("The hit connects!");
+            attacker.setHP(attacker.getHP() - attacker.get)
+        }
+
+
+
+    }
+
+
+
 }

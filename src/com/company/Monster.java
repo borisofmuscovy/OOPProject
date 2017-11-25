@@ -39,6 +39,10 @@ public class Monster {
         MAX_HP = hp;
     }
 
+    private int getStrength(){
+        return this.strength;
+    }
+
 
     public void setMAX_DAMAGE(int newMAX_DAMAGE) {
         MAX_DAMAGE = newMAX_DAMAGE;
@@ -54,7 +58,8 @@ public class Monster {
     }
 
     public int hitDamage(){
-
+        int momentaryStrength = ((this.getStrength() - 5) / 3);
+        return (this.getDamage() + momentaryStrength);
     }
 
 
@@ -115,22 +120,26 @@ public class Monster {
         this.MAX_HP = newMAX_HP;
     }
 
-    public int hitBy(Monster attacker){
+    public int hit(Monster opponent){
         // D&D-like dice mechanic - generate a random number between 1-30 to try and bypass attackers protection
-        system.out.println(this.getName() + " is taking a swing at " + attacker.getName() + "!")
+        system.out.println(this.getName() + " is taking a swing at " + opponent.getName() + "!");
         Random randno = new Random();
         int diceVal = randno.nextInt(30 - 1 + 1) + 1;
         int genVal;
-        if (diceVal < attacker.getHP()) {
+        if (diceVal < opponent.getHP()) {
             genVal = diceVal;
-        } else if (diceVal => attacker.getHP()) {
-            genval = attacker.getHP();
+        } else if (diceVal => opponent.getHP()) {
+            genval = opponent.getHP();
         }
         // compare generated value to opponent protection
 
-        if (genVal => attacker.getProtection()) {
+        if (genVal => opponent.getProtection()) {
             System.out.println("The hit connects!");
-            attacker.setHP(attacker.getHP() - attacker.get)
+            int newHP = opponent.getHP() - this.hitDamage();
+            opponent.setHP(newHP);
+            System.out.println(this.getName() " does " + newHP + " damage to " + opponent.getName());
+        } else {
+            System.out.println(this.getName() + " misses " + opponent.getName() " completely!");
         }
 
 

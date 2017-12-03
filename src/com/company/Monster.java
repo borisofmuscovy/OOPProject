@@ -166,19 +166,21 @@ public class Monster {
                 Random randno = new Random();
                 int diceVal = randno.nextInt(30 - 1 + 1) + 1;
                 int genVal;
-                if (diceVal < opponent.getHP()) {
+                if (diceVal < this.getHP()) {
                     genVal = diceVal;
                 } else {
-                    genVal = opponent.getHP();
+                    genVal = this.getHP();
                 }
                 // compare generated value to opponent protection
 
                 if (genVal >= opponent.getProtection()){
                     int damagedHP = opponent.getHP() - this.hitDamage();
-                    System.out.println("The hit connects! " + this.getName() + " does " + this.hitDamage() + " damage to " + opponent.getName() + "!");
+                    System.out.println("The hit connects! " + this.getName() + " does " + this.hitDamage() + " damage to "
+                            + opponent.getName() + "! ");
                     opponent.setHP(damagedHP);
+                    System.out.println(opponent.getName() + " has " + opponent.getHP() + " HP left!");
                 } else {
-                    System.out.println(this.getName() + " misses " + opponent.getName() + " completely!");
+                    System.out.println(this.getName() + "'s hit has no effect on " + opponent.getName() + ".");
                 }
             }
         } catch (IllegalArgumentException e) {

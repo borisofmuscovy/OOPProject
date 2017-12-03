@@ -21,7 +21,7 @@ public class Monster {
     private int MAX_HP;
     private boolean Alive = true;
 
-    public Monster(String Name, int startHP, int startDamage, int startStrength) throws IllegalArgumentException {
+    public Monster(String Name, int startHP) throws IllegalArgumentException {
         if (!Name.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
             throw new IllegalArgumentException("You cannot name your monster " +
                     Name + "! Monster culture demands names begin with " +
@@ -31,8 +31,7 @@ public class Monster {
         }
         setMAX_DAMAGE(20);
         changeDamage();
-        startStrength = (int) (new Random().nextGaussian() + 10);
-        this.strength = startStrength;
+        this.strength = (int) (new Random().nextGaussian() + 10);
 
         int startProtection = generateProtectionFactor();
         assert isPrime(startProtection);
@@ -45,7 +44,7 @@ public class Monster {
         return this.Alive;
     }
 
-    private int getStrength(){
+    public int getStrength(){
         return this.strength;
     }
 
@@ -59,7 +58,7 @@ public class Monster {
         this.damage = randno.nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE;
     }
 
-    private int getDamage(){
+    public int getDamage(){
         return this.damage;
     }
 
@@ -143,6 +142,8 @@ public class Monster {
 
     }
 
+    public int getMAX_HP() { return this.MAX_HP; }
+
     /**
      * Sets the ceiling for allowed HP values.
      * @param newMAX_HP
@@ -174,8 +175,8 @@ public class Monster {
 
                 if (genVal >= opponent.getProtection()){
                     int damagedHP = opponent.getHP() - this.hitDamage();
-                    opponent.setHP(damagedHP);
                     System.out.println("The hit connects! " + this.getName() + " does " + this.hitDamage() + " damage to " + opponent.getName() + "!");
+                    opponent.setHP(damagedHP);
                 } else {
                     System.out.println(this.getName() + " misses " + opponent.getName() + " completely!");
                 }

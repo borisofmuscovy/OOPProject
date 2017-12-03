@@ -118,7 +118,7 @@ public class Monster {
         if (this.isAlive == true){
             return this.hp;
         } else {
-            throw new IllegalAccessException(this.getName() + " is dead.")
+            throw new IllegalAccessException(this.getName() + " is dead.");
         }
     }
 
@@ -179,7 +179,9 @@ public class Monster {
                 System.out.println(this.getName() + " misses " + opponent.getName() + " completely!");
             }
         } catch (IllegalArgumentException e) {
-            
+            System.out.println("The battle is over as one of the participants has died.");
+        } catch (IllegalAccessException e) {
+            System.out.println("The opponent is dead; it is not possible to damage him further!");
         }
     }
 

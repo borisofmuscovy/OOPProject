@@ -19,7 +19,7 @@ public class Monster {
     private int MAX_DAMAGE;
     private int MIN_DAMAGE = 1;
     private int MAX_HP;
-    private boolean isAlive;
+    private boolean Alive = true;
 
     public Monster(String Name, int startHP, int startDamage, int startStrength) throws IllegalArgumentException {
         if (!Name.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
@@ -39,7 +39,10 @@ public class Monster {
         this.protection = startProtection ;
         hp = startHP;
         MAX_HP = hp;
-        boolean isAlive = true;
+    }
+
+    public boolean isAlive() {
+        return this.Alive;
     }
 
     private int getStrength(){
@@ -114,12 +117,8 @@ public class Monster {
      *         | this.isAlive == false
      */
 
-    public int getHP() throws IllegalAccessException {
-        if (this.isAlive == true){
-            return this.hp;
-        } else {
-            throw new IllegalAccessException(this.getName() + " is dead.");
-        }
+    public int getHP() {
+        return this.hp;
     }
 
     /**
@@ -156,38 +155,40 @@ public class Monster {
         this.MAX_HP = newMAX_HP;
     }
 
-    public void hit(Monster opponent) throws IllegalArgumentException{
+    public void hit(Monster opponent) throws IllegalArgumentException, IllegalStateException{
         try {
-            // D&D-like dice mechanic - generate a random number between 1-30 to try and bypass attackers protection
-            System.out.println(this.getName() + " is taking a swing at " + opponent.getName() + "!");
-            Random randno = new Random();
-            int diceVal = randno.nextInt(30 - 1 + 1) + 1;
-            int genVal;
-            if (diceVal < opponent.getHP()) {
-                genVal = diceVal;
+            if (this.isAlive() == false) {
+                throw new IllegalStateException();
             } else {
-                genVal = opponent.getHP();
-            }
-            // compare generated value to opponent protection
+                // D&D-like dice mechanic - generate a random number between 1-30 to try and bypass attackers protection
+                System.out.println(this.getName() + " is taking a swing at " + opponent.getName() + "!");
+                Random randno = new Random();
+                int diceVal = randno.nextInt(30 - 1 + 1) + 1;
+                int genVal;
+                if (diceVal < opponent.getHP()) {
+                    genVal = diceVal;
+                } else {
+                    genVal = opponent.getHP();
+                }
+                // compare generated value to opponent protection
 
-            if (genVal >= opponent.getProtection()){
-                System.out.println("The hit connects!");
-                int newHP = opponent.getHP() - this.hitDamage();
-                opponent.setHP(newHP);
-                System.out.println(this.getName() + " does " + newHP + " damage to " + opponent.getName());
-            } else {
-                System.out.println(this.getName() + " misses " + opponent.getName() + " completely!");
+                if (genVal >= opponent.getProtection()){
+                    int damagedHP = opponent.getHP() - this.hitDamage();
+                    opponent.setHP(damagedHP);
+                    System.out.println("The hit connects! " + this.getName() + " does " + this.hitDamage() + " damage to " + opponent.getName() + "!");
+                } else {
+                    System.out.println(this.getName() + " misses " + opponent.getName() + " completely!");
+                }
             }
         } catch (IllegalArgumentException e) {
-            System.out.println("The battle is over as one of the participants has died.");
-        } catch (IllegalAccessException e) {
-            System.out.println("The opponent is dead; it is not possible to damage him further!");
+            System.out.println(opponent.getName() + " has died.");
+        } catch (IllegalStateException e) {
+            System.out.println(this.getName() + " is dead, they cannot hurt anyone no more.");
         }
     }
 
     private void Death(){
-        this.isAlive = false;
-        System.out.println(this.getName() + " has died.");
+        this.Alive = false;
     }
 
 

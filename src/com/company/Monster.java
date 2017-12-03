@@ -102,20 +102,38 @@ public class Monster {
         return true;
     }
 
-    public int getProtection(){
-        return this.protection;
+    public int getProtection(){ return this.protection; }
+
+    public void setProtection(){ Random protection = new Random(); }
+
+    /**
+     * Retrieves the current health points of the monster. If the monster is dead, throws exception.
+     * @return The integer hp if and only if the monster isAlive.
+     * @throws IllegalAccessException
+     *         This monster is dead. Health points are no longer meaningful.
+     *         | this.isAlive == false
+     */
+
+    public int getHP() throws IllegalAccessException {
+        if (this.isAlive == true){
+            return this.hp;
+        } else {
+            throw new IllegalAccessException(this.getName() + " is dead.")
+        }
     }
 
-    public void setProtection(){
-        Random protection = new Random();
+    /**
+     * Allows to directly modify the health points of the monster.
+     * @param newHP
+     *        The new HP for this monster.
+     * @post The HP of the monster will be equal to the HP provided, if it is not equal or less than 0.
+     *       | if (newHP > 0) {hp == newHP}
+     * @throws IllegalArgumentException
+     *         The new HP is equal to or less than 0, which means the monster is dead.
+     *         | if (newHP <= 0) { Death() }
+     */
 
-    }
-
-    public int getHP(){
-        return this.hp;
-    }
-
-    private void setHP(int newHP){
+    private void setHP(int newHP) throws IllegalArgumentException {
         // look at exception catching again later, make sure it will actually throw if HP <= 0
             if (newHP <= 0) {
                 this.Death();
@@ -125,6 +143,14 @@ public class Monster {
             }
 
     }
+
+    /**
+     * Sets the ceiling for allowed HP values.
+     * @param newMAX_HP
+     *        The new HP ceiling.
+     * @post The new HP ceiling will always equal the provided value.
+     *       | MAX_HP == newMAX_HP
+     */
 
     public void setMAX_HP(int newMAX_HP){
         this.MAX_HP = newMAX_HP;
@@ -149,12 +175,11 @@ public class Monster {
                 int newHP = opponent.getHP() - this.hitDamage();
                 opponent.setHP(newHP);
                 System.out.println(this.getName() + " does " + newHP + " damage to " + opponent.getName());
-            } else{
+            } else {
                 System.out.println(this.getName() + " misses " + opponent.getName() + " completely!");
             }
-        }
-        catch (IllegalArgumentException e) {
-
+        } catch (IllegalArgumentException e) {
+            
         }
     }
 
@@ -162,7 +187,6 @@ public class Monster {
         this.isAlive = false;
         System.out.println(this.getName() + " has died.");
     }
-
 
 
 }

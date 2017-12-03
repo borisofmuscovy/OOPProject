@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * A class of Monsters
  *
- * @author Boris Shulov & Alicja Ochman
+ * @author Boris Shilov & Alicja Ochman
  */
 public class Monster {
 

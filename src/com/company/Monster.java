@@ -1,8 +1,8 @@
 package com.company;
+import be.kuleuven.cs.som.annotate.Basic;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
 
 

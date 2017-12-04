@@ -260,9 +260,12 @@ public class Monster {
     }
 
     /**
-     * @param opponent
-     * @throws IllegalArgumentException
-     * @throws IllegalStateException
+     * Method representing battle of the monsters.
+     * @param   opponent
+     *          | Oponent monster
+     * @throws  IllegalStateException
+     *          If the isAlive is false (monster has no HP) it cannot take part in the battle.
+     *          |  if !this.isAlive() || !opponent.isAlive()
      */
     public void hit(Monster opponent) throws IllegalArgumentException, IllegalStateException{
         try {

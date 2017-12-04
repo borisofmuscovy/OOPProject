@@ -23,7 +23,7 @@ class MonsterTest {
 
     @org.junit.jupiter.api.Test
     void healerTest() {
-        Bob.setStrength(-10);
+        Bob.setStrength(-30);
         int oldHealth = Alice.getHP();
         Bob.hit(Alice);
         assertTrue(Alice.getHP() > oldHealth);

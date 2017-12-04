@@ -1,5 +1,7 @@
 package com.company;
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
+
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -155,8 +157,10 @@ public class Monster {
 
     /**
      * Generates a protection factor which is a prime number between the allowed minimum and maximum protection values
-     * @return protection
-     * @post
+     * @return  protection
+     * @pre     The protection is represented as a prime number between MIN_PROTECTION and MAX_PROTECTION
+     *          | isPrime(initialProtectionFactor)
+     *          | MIN_PROTECTION < initialProtectionFactor <MAX_PROTECTION
      */
     private int generateProtectionFactor() {
         ArrayList<Integer> primeList = new ArrayList<Integer>();
@@ -174,13 +178,15 @@ public class Monster {
         }
         Random n = new Random();
         int initialProtectionFactor = primeList.get(n.nextInt(primeList.size()));
-        assert isPrime(initialProtectionFactor);
+        assert (isPrime(initialProtectionFactor)&&(MIN_PROTECTION <= initialProtectionFactor)&&(initialProtectionFactor <= MAX_PROTECTION));
         return initialProtectionFactor;
     }
 
     /**
-     * @param n
-     * @return
+     * @param   n
+     *          The number to be checked
+     * @return  True if the number is a prime number and false otherwise
+     *
      */
     private boolean isPrime(int n) {
         //check if n is a multiple of 2
@@ -197,7 +203,8 @@ public class Monster {
 
     /**
      * Retrieves the current health points of the monster. If the monster is dead, throws exception.
-     * @return The integer hp if and only if the monster isAlive.
+     * @return      The integer hp if and only if the monster isAlive.
+     *              | this.hp
      */
 
     public int getHP() {

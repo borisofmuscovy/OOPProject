@@ -8,11 +8,9 @@ public class Main {
 
         Monster Bob = new Monster("Bob", 15);
         Monster Alice = new Monster("Alice", 15);
-        int swings = 0;
         while (Bob.isAlive() && Alice.isAlive()) {
             Bob.hit(Alice);
             Alice.hit(Bob);
-            swings++;
         }
         if (Bob.isAlive() && Bob.isAlive()) {
             System.out.println(Bob.getName() + " has Protection " + Bob.getProtection() + ", Strength " +

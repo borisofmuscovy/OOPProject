@@ -15,11 +15,11 @@ import java.util.Random;
  */
 public class Monster {
 
-    public final String name;
-    public final int strength;
-    public int damage;
-    public final int protection;
-    public int hp;
+    private final String name;
+    private final int strength;
+    private int damage;
+    private final int protection;
+    private int hp;
     private static int MAX_DAMAGE;
     private static final int MIN_DAMAGE;
     private int MAX_HP;
@@ -232,7 +232,6 @@ public class Monster {
      */
 
     private void setHP(int newHP) throws IllegalArgumentException {
-        // look at exception catching again later, make sure it will actually throw if HP <= 0
             if (newHP <= 0) {
                 this.Death();
                 throw new IllegalArgumentException();

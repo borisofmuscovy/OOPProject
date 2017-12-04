@@ -293,9 +293,10 @@ public class Monster {
                 }
             }
         } catch (IllegalArgumentException e) {
-            return (opponent.getName() + " has died.");
+            return (opponent.getName() + " has been slain! The mortal blow has been dealt by " + this.getName()
+                    + " dealing " + this.hitDamage() + " damage!");
         } catch (IllegalStateException e) {
-            return (this.getName() + " is dead, they cannot hurt anyone no more.");
+            return null;
         }
     }
 

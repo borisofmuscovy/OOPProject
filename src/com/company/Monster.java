@@ -16,7 +16,7 @@ import java.util.Random;
 public class Monster {
 
     private final String name;
-    private final int strength;
+    private int strength;
     private int damage;
     private final int protection;
     private int hp;
@@ -113,6 +113,14 @@ public class Monster {
      */
     public int getStrength(){
         return this.strength;
+    }
+
+    protected void setStrength(int newStrength){
+        this.strength = newStrength;
+    }
+
+    protected static int getMAX_DAMAGE() {
+        return MAX_DAMAGE;
     }
 
     /**

@@ -62,7 +62,8 @@ public class Monster {
 
     /**
      * Return the name of this monster.
-     * @return name
+     * @return  name
+     *          | this.name
      */
     @Basic @Immutable
     public String getName(){
@@ -71,10 +72,14 @@ public class Monster {
 
     /**
      * Checks validity of the monsters name
-     * @param Name
-     *        Name of the monster as a string to be checked.
-     * @return True if and only if the monsters name will begin with an uppercase letter, and will contain only
-     *         lower, uppercase characters, numbers and the symbol '.
+     * @param   Name
+     *          Name of the monster as a string to be checked.
+     * @return  True if and only if the monsters name will begin with an uppercase letter, and will contain only
+     *          lower, uppercase characters, numbers and the symbol '.
+     *          | if (Name.matches("[A-Z][a-zA-Z0-9 ']{2,}"))
+     *                  return True
+     *            else
+     *                  return False
      */
     private boolean isValidName(String Name) {
         if (!Name.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
@@ -86,7 +91,8 @@ public class Monster {
 
     /**
      * Returns whether the monster is alive or not.
-     * @return True if alive, false if dead.
+     * @return  True if alive, false if dead.
+     *          | this.Alive
      */
     public boolean isAlive() {
         return this.Alive;
@@ -94,6 +100,7 @@ public class Monster {
 
     /**
      * Kills the monster by setting Alive to false.
+     * @post    Sets this.Alive to false
      */
     private void Death(){
         this.Alive = false;
@@ -101,7 +108,8 @@ public class Monster {
 
     /**
      * Returns the strength of the monster.
-     * @return strength
+     * @return  strength
+     *          | this.strength
      */
     public int getStrength(){
         return this.strength;
@@ -109,10 +117,10 @@ public class Monster {
 
     /**
      * Allows setting a new maximum damage value for this monster.
-     * @param newMAX_DAMAGE
-     *        The new maximum damage value to be adopted.
-     * @post If the new maximum damage is more than or equal 1, the maximum damage value will equal to the new value.
-     *       | if (newMAX_DAMAGE => 1) { MAX_DAMAGE = newMAX_DAMAGE }
+     * @param   newMAX_DAMAGE
+     *          The new maximum damage value to be adopted.
+     * @post    If the new maximum damage is more than or equal 1, the maximum damage value will equal to the new value.
+     *          | if (newMAX_DAMAGE => 1) { MAX_DAMAGE = newMAX_DAMAGE }
      */
     public static void setMAX_DAMAGE(int newMAX_DAMAGE) {
         if (newMAX_DAMAGE >= 1) {
@@ -122,7 +130,8 @@ public class Monster {
 
     /**
      * Returns the damage of the monster.
-     * @return damage
+     * @return  damage
+     *          | this.damage
      */
     public int getDamage(){
         return this.damage;
@@ -141,7 +150,7 @@ public class Monster {
 
     /**
      * Calculates the damage dealt by a single hit using the strength and damage values, according to a set formula.
-     * @return damage + ((strength - 5) / 3)
+     * @return  | damage + ((strength - 5) / 3)
      */
     private int hitDamage() {
         int momentaryStrength = ((this.getStrength() - 5) / 3);
@@ -151,7 +160,7 @@ public class Monster {
 
     /**
      * Returns the protection value.
-     * @return protection
+     * @return  protection
      */
     public int getProtection() { return this.protection; }
 
@@ -213,13 +222,13 @@ public class Monster {
 
     /**
      * Allows to directly modify the health points of the monster.
-     * @param newHP
-     *        The new HP for this monster.
-     * @post The HP of the monster will be equal to the HP provided, if it is not equal or less than 0.
-     *       | if (newHP > 0) {hp == newHP}
-     * @throws IllegalArgumentException
-     *         The new HP is equal to or less than 0, which means the monster is dead.
-     *         | if (newHP <= 0) { Death() }
+     * @param   newHP
+     *          The new HP for this monster.
+     * @post    The HP of the monster will be equal to the HP provided, if it is not equal or less than 0.
+     *          | if (newHP > 0) {hp == newHP}
+     * @throws  IllegalArgumentException
+     *          The new HP is equal to or less than 0, which means the monster is dead.
+     *          | if (newHP <= 0) { Death() }
      */
 
     private void setHP(int newHP) throws IllegalArgumentException {
@@ -233,7 +242,8 @@ public class Monster {
     }
 
     /**
-     * @return
+     * @return  MAX_HP
+     *          | this.MAX_HP
      */
     public int getMAX_HP() { return this.MAX_HP; }
 
@@ -250,9 +260,12 @@ public class Monster {
     }
 
     /**
-     * @param opponent
-     * @throws IllegalArgumentException
-     * @throws IllegalStateException
+     * Method representing battle of the monsters.
+     * @param   opponent
+     *          | Oponent monster
+     * @throws  IllegalStateException
+     *          If the isAlive is false (monster has no HP) it cannot take part in the battle.
+     *          |  if !this.isAlive() || !opponent.isAlive()
      */
     public String hit(Monster opponent) throws IllegalArgumentException, IllegalStateException{
         try {

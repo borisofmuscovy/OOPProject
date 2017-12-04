@@ -48,8 +48,10 @@ public class Monster {
      *        The health points value the monster starts with. This is the maximum HP of the monster unless changed explicitly.
      *
      */
-    public Monster(String Name, int startHP) {
-        assert(isValidName(Name));
+    public Monster(String Name, int startHP) throws IllegalArgumentException{
+        if (!isValidName(Name)){
+            throw new IllegalArgumentException();
+            }
         this.name = Name;
         changeDamage();
         this.strength = (int) (new Random().nextGaussian() + 10);
@@ -128,6 +130,8 @@ public class Monster {
 
     /**
      * Re-roll the damage of the monster.
+     * @post The new damage value will be a random number between the MIN_DAMAGE value and the MAX_DAMAGE value.
+     *       | newDamage == rand(MIN_DAMAGE:MAX_DAMAGE)
      */
 
     private void changeDamage() {

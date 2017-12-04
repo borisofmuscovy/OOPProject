@@ -254,13 +254,12 @@ public class Monster {
      * @throws IllegalArgumentException
      * @throws IllegalStateException
      */
-    public void hit(Monster opponent) throws IllegalArgumentException, IllegalStateException{
+    public String hit(Monster opponent) throws IllegalArgumentException, IllegalStateException{
         try {
             if (!this.isAlive()) {
                 throw new IllegalStateException();
             } else {
                 // D&D-like dice mechanic - generate a random number between 1-30 to try and bypass attackers protection
-                System.out.println(this.getName() + " is taking a swing at " + opponent.getName() + "!");
                 Random randno = new Random();
                 int diceVal = randno.nextInt(30 - 1 + 1) + 1;
                 int genVal;
@@ -273,18 +272,17 @@ public class Monster {
 
                 if (genVal >= opponent.getProtection()){
                     int damagedHP = opponent.getHP() - this.hitDamage();
-                    System.out.println("The hit connects! " + this.getName() + " does " + this.hitDamage() + " damage to "
-                            + opponent.getName() + "! ");
                     opponent.setHP(damagedHP);
-                    System.out.println(opponent.getName() + " has " + opponent.getHP() + " HP left!");
+                    return (this.getName() + " hits " + opponent.getName() +" and does " + this.hitDamage()
+                            + " damage! " + opponent.getName() + " has " + opponent.getHP() + " HP left!");
                 } else {
-                    System.out.println(this.getName() + "'s hit has no effect on " + opponent.getName() + ".");
+                    return (this.getName() + " tried to hit " + opponent.getName() + ", but had no effect!");
                 }
             }
         } catch (IllegalArgumentException e) {
-            System.out.println(opponent.getName() + " has died.");
+            return (opponent.getName() + " has died.");
         } catch (IllegalStateException e) {
-            System.out.println(this.getName() + " is dead, they cannot hurt anyone no more.");
+            return (this.getName() + " is dead, they cannot hurt anyone no more.");
         }
     }
 

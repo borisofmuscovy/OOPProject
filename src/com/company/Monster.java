@@ -274,7 +274,10 @@ public class Monster {
      *          | Oponent monster
      * @throws  IllegalStateException
      *          If the isAlive is false (monster has no HP) it cannot take part in the battle.
-     *          |  if !this.isAlive() || !opponent.isAlive()
+     *          |  if !this.isAlive()
+     * @throws  IllegalArgumentException
+     *          If oponent monster dies during the battle
+     *          |!opponen.isAlive()
      */
     public String hit(Monster opponent) throws IllegalArgumentException, IllegalStateException{
         try {

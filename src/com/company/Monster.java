@@ -195,7 +195,8 @@ public class Monster {
         }
         Random n = new Random();
         int initialProtectionFactor = primeList.get(n.nextInt(primeList.size()));
-        assert (isPrime(initialProtectionFactor)&&(MIN_PROTECTION <= initialProtectionFactor)&&(initialProtectionFactor <= MAX_PROTECTION));
+        assert (isPrime(initialProtectionFactor) &&
+                (MIN_PROTECTION <= initialProtectionFactor)&&(initialProtectionFactor <= MAX_PROTECTION));
         return initialProtectionFactor;
     }
 

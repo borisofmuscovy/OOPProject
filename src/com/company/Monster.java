@@ -270,7 +270,7 @@ public class Monster {
     /**
      * Method representing battle of the monsters.
      * @param   opponent
-     *          | Oponent monster
+     *          | Opponent monster
      * @throws  IllegalStateException
      *          If the isAlive is false (monster has no HP) it cannot take part in the battle.
      *          |  if !this.isAlive()

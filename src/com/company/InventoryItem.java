@@ -1,8 +1,5 @@
 package com.company;
 
-import java.util.List;
-import java.util.Random;
-
 /**
  * Abstract class of Inventory Items
  * Superclass of weapons ans purses
@@ -12,6 +9,7 @@ public abstract class InventoryItem {
     public int ID;
     public int value;
     public float weight;
+    public Monster holder;
 
     {
         value = 0;
@@ -34,6 +32,7 @@ public abstract class InventoryItem {
     public InventoryItem(int value, Monster holder) throws IllegalArgumentException {
         assert (!(value < 0));
         this.value = value;
+        this.holder = holder;
     }
 
     /**
@@ -56,5 +55,31 @@ public abstract class InventoryItem {
      */
     public int getValue() {
         return this.value;
+    }
+
+    /**
+     * Set the holder of the item.
+     * @param holder
+     *        Monster who holds the item.
+     */
+    public void setHolder(Monster holder){
+        this.holder = holder;
+    }
+
+    /**
+     * Change the holder of an item to another monster
+     * @param other
+     *        Another monster who will hold the item.
+     */
+    public void changeHolder(Monster other){
+        this.holder = other;
+    }
+
+    /**
+     * Gets holder of the item.
+     * @return  this.holder
+     */
+    public Monster getHolder(){
+        return this.holder;
     }
 }

@@ -6,6 +6,7 @@ public class Purse extends InventoryItem {
     int content;
     final int capacity;
     int totalValue;
+    boolean Torn;
     /**
      * Constructor of purse object
      * Value of intialized content cannot be bigger than purses capacity
@@ -24,6 +25,7 @@ public class Purse extends InventoryItem {
         assert(content <= capacity);
         this.content = content;
         this.capacity = capacity;
+        this.Torn = false;
     }
 
     /**
@@ -117,5 +119,15 @@ public class Purse extends InventoryItem {
     public void tearThePurse(){
         this.value = 0;
         this.content = 0;
+        this.Torn = true;
     }
+
+    /**
+     *  Method indicating that purse is torn.
+     */
+    public boolean isTorn(){
+        return this.Torn;
+    }
+
+
 }

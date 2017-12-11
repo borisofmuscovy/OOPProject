@@ -67,7 +67,7 @@ public class Weapon extends InventoryItem {
      *          | weight < 0
      */
     public float setWeight(float weight) throws IllegalArgumentException{
-        if(weight <0)
+        if(weight < 0)
             throw new IllegalArgumentException();
         else
             return weight;

@@ -29,10 +29,11 @@ public abstract class InventoryItem {
      * @throws IllegalArgumentException If weight of the weapon is smaller than zero
      *                                  | weight < 0
      */
-    public InventoryItem(int value, Monster holder) throws IllegalArgumentException {
+    public InventoryItem(int value, Monster holder, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
         this.value = value;
         this.holder = holder;
+        this.weight = weight;
     }
 
     /**

@@ -10,16 +10,21 @@ public class Weapon extends InventoryItem {
 
     /**
      * Constructor of weapon object
+     * @pre   Damage cause by the weapon has to be in the range from 1 to MAXIMUM_DAMAGE
+     *        damage >= 1 && damage <= MAX_DAMAGE
      * @param weight
      *        Describes weight of the weapon
      * @param value
      *        Describes value of the weapon
+     * @param damage
+     *        Describes damage cause by the weapon
      * @param holder
      *        Monster that holds the weapon
      */
-    public Weapon(float weight, int value, Monster holder){
-        super(value, holder);
-        this.damage = setDamage(MAX_DAMAGE);
+    public Weapon(float weight, int value, int damage, Monster holder){
+        super(value, holder, weight);
+        assert(damage >= 1 && damage <= MAX_DAMAGE);
+        this.damage = damage;
         this.weight = setWeight(weight);
         setWeaponID(allIDs);
     }
@@ -45,17 +50,33 @@ public class Weapon extends InventoryItem {
     }
 
     /**
-     * Sets damage to a random number from 1 to MAX_DAMAGE
-     * @param MAX_DAMAGE
-     *        Maximum damage
-     * @return damage
+     * Sets new MAX_DAMAGE for weapons
+     * @return MAX_DAMAGE
      */
-    public int setDamage(int MAX_DAMAGE){
+    public int setMaxDamage(){
         Random r = new Random();
-        damage = r.nextInt(MAX_DAMAGE + 1) + 1;
-        return damage;
+        MAX_DAMAGE = r.nextInt(20 + 1) + 1;
+        return MAX_DAMAGE;
     }
 
+    /**
+     * Sets damage cause by weapon to new damage
+     * @param newDamage
+     * @pre   newDamage is in range(1, MAX_DAMAGE)
+     *        | newDamage >= 1 && newDamage <= MAX_DAMAGE
+     */
+    public void setDamage(int newDamage){
+        assert( newDamage >= 1 && newDamage <= MAX_DAMAGE);
+        this.damage = newDamage;
+    }
+
+    /**
+     * Returns damage od the weapon
+     * @return  this.damage
+     */
+    public int getDamage(){
+        return this.damage;
+    }
     /**
      * Method setting weight of an item
      * @param   weight

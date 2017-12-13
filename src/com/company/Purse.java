@@ -19,8 +19,8 @@ public class Purse extends InventoryItem {
      * @param capacity
      *        Describes maximum capacity of the purse
      */
-    public Purse(int value, Monster holder, int content, int capacity){
-        super(value, holder);
+    public Purse(int value, Monster holder, int weight,  int content, int capacity){
+        super(value, holder, weight);
         setPurseID(25);
         assert(content <= capacity);
         this.content = content;

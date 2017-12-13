@@ -26,6 +26,7 @@ public class Monster {
     private boolean Alive;
     private static int MAX_PROTECTION;
     private static final int MIN_PROTECTION;
+    private int carryingCapacity;
 
     static {
         MIN_DAMAGE = 1;
@@ -58,6 +59,7 @@ public class Monster {
         this.protection = generateProtectionFactor();
         hp = startHP;
         MAX_HP = hp;
+        this.carryingCapacity = this.getStrength() * 12;
     }
 
     /**
@@ -268,6 +270,35 @@ public class Monster {
         this.MAX_HP = newMAX_HP;
     }
 
+    public int getCarryingCapacity(){
+        return this.carryingCapacity;
+    }
+
+    public void pickUpPurse(){}
+
+    public void dropPurse(){}
+
+    public void exchangePurse(){}
+
+    public int totalValueofInventory(){
+        return 1;
+    }
+
+    public void attachWeapon(){}
+
+    public void deleteWeapon(){}
+
+    public void exchangeWeapon(){}
+
+    public void getWeapons(){}
+
+    /**
+     * Make sure that no of weapons that not exceed allowed no of anchors
+     * @return
+     */
+    public int totalValueofWeapons(){
+        return 1;
+    }
     /**
      * Method representing battle of the monsters.
      * @param   opponent

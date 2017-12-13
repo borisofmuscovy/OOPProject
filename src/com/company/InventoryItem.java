@@ -37,7 +37,6 @@ public abstract class InventoryItem {
 
     /**
      * Sets new value of the item
-     *
      * @param newValue Sets new value of the item not lower than 0
      *                 this.value = newValue
      * @pre Value of the item cannot be lower than zero
@@ -50,7 +49,6 @@ public abstract class InventoryItem {
 
     /**
      * Gets value of an item
-     *
      * @return this.value
      */
     public int getValue() {
@@ -82,4 +80,5 @@ public abstract class InventoryItem {
     public Monster getHolder(){
         return this.holder;
     }
+
 }

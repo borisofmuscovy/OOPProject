@@ -61,7 +61,6 @@ public class Weapon extends InventoryItem {
      * @param   weight
      *          | Non-negative float
      * @return  weight
-     *
      * @throws  IllegalArgumentException
      *          Thrown if the weight of the weapon is about to be smaller than 0
      *          | weight < 0

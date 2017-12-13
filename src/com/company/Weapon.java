@@ -7,6 +7,7 @@ public class Weapon extends InventoryItem {
     int damage;
     int MAX_DAMAGE = 20;
     List allIDs;
+    long ID;
 
     /**
      * Constructor of weapon object
@@ -26,7 +27,7 @@ public class Weapon extends InventoryItem {
         assert(damage >= 1 && damage <= MAX_DAMAGE);
         this.damage = damage;
         this.weight = setWeight(weight);
-        setWeaponID(allIDs);
+        ID = setWeaponID(allIDs);
     }
     /**
      * Method setting unique, odd ID of a weapon of long type
@@ -77,27 +78,5 @@ public class Weapon extends InventoryItem {
     public int getDamage(){
         return this.damage;
     }
-    /**
-     * Method setting weight of an item
-     * @param   weight
-     *          | Non-negative float
-     * @return  weight
-     * @throws  IllegalArgumentException
-     *          Thrown if the weight of the weapon is about to be smaller than 0
-     *          | weight < 0
-     */
-    public float setWeight(float weight) throws IllegalArgumentException{
-        if(weight < 0)
-            throw new IllegalArgumentException();
-        else
-            return weight;
-    }
 
-    /**
-     * Gets weight of an item
-     * @return  this.weight
-     */
-    public float getWeight(){
-        return this.weight;
-    }
 }

@@ -1,4 +1,6 @@
 package com.company;
+import java.text.DecimalFormat;
+import java.math.RoundingMode;
 
 /**
  * Abstract class of Inventory Items
@@ -44,7 +46,7 @@ public abstract class InventoryItem {
      * | !(newValue < 0)
      */
     public void setValue(int newValue) {
-        assert (!(newValue < 0));
+        assert !(newValue < 0);
         this.value = newValue;
     }
 
@@ -93,6 +95,8 @@ public abstract class InventoryItem {
      *          | weight < 0
      */
     public float setWeight(float weight) throws IllegalArgumentException{
+        DecimalFormat df = new DecimalFormat("#.##");
+        df.setRoundingMode(RoundingMode.CEILING);
         if(weight < 0)
             throw new IllegalArgumentException();
         else

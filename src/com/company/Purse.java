@@ -50,8 +50,6 @@ public class Purse extends InventoryItem {
 
     /**
      *  Method returning random long number from fibonacci series
-     * @param   n
-     *          Number of fibonacci number to generate
      * @return  purseID
      *          Random long from the fibonacciSeries array
      */

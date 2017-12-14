@@ -5,9 +5,10 @@ import java.util.Random;
 
 public class Weapon extends InventoryItem {
     int damage;
+    int MIN_DAMAGE = 1;
     int MAX_DAMAGE = 20;
-    List allIDs;
-    long ID;
+    static List existingIDs;
+    final long ID;
 
     /**
      * Constructor of weapon object
@@ -24,28 +25,26 @@ public class Weapon extends InventoryItem {
      */
     public Weapon(float weight, int value, int damage, Monster holder){
         super(value, holder, weight);
-        assert(damage >= 1 && damage <= MAX_DAMAGE);
-        this.damage = damage;
+        this.setValue(value);
+        this.damage = generateDamage();
         this.weight = setWeight(weight);
-        ID = setWeaponID(allIDs);
+        this.ID = generateWeaponID();
     }
     /**
      * Method setting unique, odd ID of a weapon of long type
-     * @param   allIDs
-     *          List of ID's that were ascribed to other weapons
      * @return  weaponID
      */
-    public long setWeaponID(List allIDs){
+    public long generateWeaponID(){
         long weaponID = 0;
         int i = 1;
         while(i == 1){
             Random ID = new Random();
             weaponID = ID.nextLong();
-            if((weaponID % 2 != 0) &&(!allIDs.contains(weaponID))){
-                allIDs.add(weaponID);
+            if( (weaponID % 2 != 0) && (!existingIDs.contains(weaponID)) ){
+                existingIDs.add(weaponID);
                 i = 0;
-            }else
-                i =1;
+            } else
+                i = 1;
         }
         return weaponID;
     }
@@ -61,22 +60,41 @@ public class Weapon extends InventoryItem {
     }
 
     /**
-     * Sets damage cause by weapon to new damage
-     * @param newDamage
+     * Sets damage caused by weapon to new damage
      * @pre   newDamage is in range(1, MAX_DAMAGE)
      *        | newDamage >= 1 && newDamage <= MAX_DAMAGE
      */
-    public void setDamage(int newDamage){
-        assert( newDamage >= 1 && newDamage <= MAX_DAMAGE);
-        this.damage = newDamage;
+    public int generateDamage(){
+        Random randno = new Random();
+        int valuedDamage;
+        //pegs damage to the value of a weapon
+        if (this.getValue() < 10){
+            valuedDamage = randno.nextInt(5 - MIN_DAMAGE + 1) + MIN_DAMAGE;
+        } else if (this.getValue() > 10 && this.getValue() < 100){
+            valuedDamage = randno.nextInt(15 - MIN_DAMAGE + 1) + MIN_DAMAGE;
+        } else {
+            valuedDamage = randno.nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE;
+        }
+        assert(valuedDamage >= 1 && valuedDamage <= MAX_DAMAGE);
+        return valuedDamage;
     }
 
     /**
-     * Returns damage od the weapon
+     * Returns damage of the weapon
      * @return  this.damage
      */
     public int getDamage(){
         return this.damage;
+    }
+
+    public void repair(int value) {
+        assert(value > 0);
+        setValue(this.value + value);
+    }
+
+    public void erode(int value) {
+        assert(this.value - value > 0);
+        setValue(this.value - value);
     }
 
 }

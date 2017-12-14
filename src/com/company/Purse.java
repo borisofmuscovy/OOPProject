@@ -4,9 +4,12 @@ import java.util.Random;
 
 public class Purse extends InventoryItem {
     int content;
+    long ID;
     final int capacity;
     int totalValue;
-    boolean Torn;
+    private boolean Torn;
+
+
     /**
      * Constructor of purse object
      * Value of intialized content cannot be bigger than purses capacity
@@ -21,11 +24,11 @@ public class Purse extends InventoryItem {
      */
     public Purse(int value, Monster holder, int content, int capacity){
         super(value, holder);
-        setPurseID(25);
+        ID = setPurseID();
         assert(content <= capacity);
         this.content = content;
         this.capacity = capacity;
-        this.Torn = false;
+        Torn = false;
     }
 
     /**
@@ -52,7 +55,8 @@ public class Purse extends InventoryItem {
      * @return  purseID
      *          Random long from the fibonacciSeries array
      */
-    public long setPurseID(int n){
+    public long setPurseID(){
+        int n = 25;
         int[] fibonacciSeries = fibonacci(n);
         Random r = new Random();
         long purseID = (long) fibonacciSeries[r.nextInt(fibonacciSeries.length)];
@@ -97,7 +101,7 @@ public class Purse extends InventoryItem {
      * @param dukats
      *        Number of dukats to be transferred
      */
-    public void transferContenr(Purse other, int dukats){
+    public void transferContent(Purse other, int dukats){
         setContent(this.content - dukats);
         setContent(other.content + dukats);
         if(this.content > this.capacity)

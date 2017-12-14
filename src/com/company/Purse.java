@@ -22,13 +22,13 @@ public class Purse extends InventoryItem {
      * @param capacity
      *        Describes maximum capacity of the purse
      */
-    public Purse(int value, Monster holder, int content, int capacity){
-        super(value, holder);
-        ID = setPurseID();
+    public Purse(int value, Monster holder, int weight,  int content, int capacity){
+        super(value, holder, weight);
+        this.ID = setPurseID();
         assert(content <= capacity);
         this.content = content;
         this.capacity = capacity;
-        Torn = false;
+        this.Torn = false;
     }
 
     /**

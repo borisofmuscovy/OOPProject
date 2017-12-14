@@ -4,6 +4,7 @@ import be.kuleuven.cs.som.annotate.Immutable;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.List;
 
 
 /**
@@ -27,6 +28,8 @@ public class Monster {
     private static int MAX_PROTECTION;
     private static final int MIN_PROTECTION;
     private int carryingCapacity;
+    private List<InventoryItem> inventory;
+    private int anchors;
 
     static {
         MIN_DAMAGE = 1;
@@ -55,11 +58,13 @@ public class Monster {
             }
         this.name = Name;
         changeDamage();
+        this.anchors = 2;
         this.strength = (int) (new Random().nextGaussian() + 10);
         this.protection = generateProtectionFactor();
         hp = startHP;
         MAX_HP = hp;
         this.carryingCapacity = this.getStrength() * 12;
+        this.inventory = new ArrayList<InventoryItem>(anchors);
     }
 
     /**
@@ -270,9 +275,69 @@ public class Monster {
         this.MAX_HP = newMAX_HP;
     }
 
+
+    public float getTotalCarriedWeight() {
+        float totalCarriedWeight = 0;
+        for (InventoryItem anItem : this.inventory) {
+            if (anItem != null) {
+                totalCarriedWeight += anItem.getWeight();
+            }
+        }
+        return totalCarriedWeight;
+    }
+
     public int getCarryingCapacity(){
         return this.carryingCapacity;
     }
+
+    public List getInventoryContents(){
+        return this.inventory;
+    }
+
+
+    public void equip(InventoryItem item){
+        try {
+            for (int i=0;i<this.inventory.size();i++){
+                if ( (this.inventory.get(i) == null) && !( (this.getTotalCarriedWeight() + item.getWeight()) > this.getCarryingCapacity() ) ){
+                    this.inventory.set(i, item);
+                    item.setHolder(this);
+                } else {
+                    throw new IllegalStateException();
+                }
+            }
+        } catch (IllegalStateException e) {
+            System.out.println(this.getName() + " cannot equip item since all their anchors are full!");
+        }
+    }
+
+    public void unequip(InventoryItem item){
+        try {
+            if (item instanceof Weapon) {
+                throw new IllegalArgumentException();
+            } else {
+                item.setHolder(null);
+                System.out.println(this.getName() + " has dropped an item.");
+            }
+        } catch (IllegalArgumentException e){
+            System.out.println(this.getName() + " cannot drop weapons!");
+        }
+    }
+
+//    public void trade(Monster other, InventoryItem item) {
+//        try {
+//            if (!this.inventory.contains(item)){
+//                throw new IllegalStateException();
+//            } else if (item instanceof Purse){
+//                for (int i=0;i<=this.getInventoryContents().size();i++) {
+//                    if (this.getInventoryContents().get(i) instanceof Purse) {
+//                        Object dummy;
+//                        dummy = this.getInventoryContents().get(i);
+//
+//            }
+//        }
+//
+//    }
+
 
     public void pickUpPurse(){}
 
@@ -283,6 +348,9 @@ public class Monster {
     public int totalValueofInventory(){
         return 1;
     }
+
+
+
 
     public void attachWeapon(){}
 

@@ -231,7 +231,6 @@ public class Monster {
      * @return      The integer hp if and only if the monster isAlive.
      *              | this.hp
      */
-
     public int getHP() {
         return this.hp;
     }
@@ -246,7 +245,6 @@ public class Monster {
      *          The new HP is equal to or less than 0, which means the monster is dead.
      *          | if (newHP <= 0) { Death() }
      */
-
     private void setHP(int newHP) throws IllegalArgumentException {
             if (newHP <= 0) {
                 this.Death();
@@ -270,10 +268,12 @@ public class Monster {
      * @post The new HP ceiling will always equal the provided value.
      *       | MAX_HP == newMAX_HP
      */
-
     public void setMAX_HP(int newMAX_HP){
         this.MAX_HP = newMAX_HP;
     }
+
+
+    //all of the following inventory code deals with anchors only for now, no support for looking into backpacks
 
 
     public float getTotalCarriedWeight() {
@@ -290,7 +290,7 @@ public class Monster {
         return this.carryingCapacity;
     }
 
-    public List getInventoryContents(){
+    public List<InventoryItem> getInventoryContents(){
         return this.inventory;
     }
 
@@ -298,8 +298,11 @@ public class Monster {
     public void equip(InventoryItem item){
         try {
             for (int i=0;i<this.inventory.size();i++){
-                if ( (this.inventory.get(i) == null) && !( (this.getTotalCarriedWeight() + item.getWeight()) > this.getCarryingCapacity() ) ){
-                    this.inventory.set(i, item);
+                //any item to be equipped (put into inventory) must not put total weight above maximum,
+                // and there must be a free position in the inventory (assuming inventory fixed to 3 slots)
+                if ( (this.getInventoryContents().get(i) == null) &&
+                        !( (this.getTotalCarriedWeight() + item.getWeight()) > this.getCarryingCapacity() ) ){
+                    this.getInventoryContents().set(i, item);
                     item.setHolder(this);
                 } else {
                     throw new IllegalStateException();
@@ -311,6 +314,7 @@ public class Monster {
     }
 
     public void unequip(InventoryItem item){
+        // drop or unequip from inventory. cannot drop weapons, sets holder to null
         try {
             if (item instanceof Weapon) {
                 throw new IllegalArgumentException();
@@ -323,20 +327,38 @@ public class Monster {
         }
     }
 
-//    public void trade(Monster other, InventoryItem item) {
-//        try {
-//            if (!this.inventory.contains(item)){
-//                throw new IllegalStateException();
-//            } else if (item instanceof Purse){
-//                for (int i=0;i<=this.getInventoryContents().size();i++) {
-//                    if (this.getInventoryContents().get(i) instanceof Purse) {
-//                        Object dummy;
-//                        dummy = this.getInventoryContents().get(i);
-//
-//            }
-//        }
-//
-//    }
+    public void trade(Monster other, InventoryItem item) {
+        try {
+            //first determine if this monster trying to trade has the item in question
+            if (!this.getInventoryContents().contains(item)){
+                throw new IllegalStateException();
+            } else if (item instanceof Purse){
+                //if the item is a purse, we must check whether the other monster has a purse already
+                for (int i=0;i<=other.getInventoryContents().size();i++) {
+                    if (other.getInventoryContents().get(i) instanceof Purse) {
+                        throw new IllegalStateException();
+                    } else {
+                        other.getInventoryContents().add(this.getInventoryContents().remove(0));
+                    }
+                }
+            } else if (item instanceof Weapon){
+                //if the item is a weapon, we simply check if the inventory of the other monster is full
+                if (other.getInventoryContents().size() >= 2) {
+                    throw new IllegalAccessException();
+                } else {
+                    other.getInventoryContents().add(this.getInventoryContents().remove(0));
+                }
+            } else if (item instanceof Backpack) {
+                //TODO
+                throw new UnsupportedOperationException();
+            }
+        } catch (IllegalStateException e1) {
+            System.out.println(this.getName() + " tried to trade an item they do not possess.");
+        } catch (IllegalAccessException e2) {
+            System.out.print(this.getName() + " tried to trade a weapon to " + other.getName() + ", but " +
+                    "their inventory was full!");
+        }
+    }
 
 
     public void pickUpPurse(){}
@@ -345,7 +367,7 @@ public class Monster {
 
     public void exchangePurse(){}
 
-    public int totalValueofInventory(){
+    public int getTotalInventoryValue(){
         return 1;
     }
 

@@ -22,8 +22,8 @@ public class Purse extends InventoryItem {
      * @param capacity
      *        Describes maximum capacity of the purse
      */
-    public Purse(float value, float weight, float content, float capacity, Monster holder){
-        super(value, weight, holder);
+    public Purse(int value, float weight, float content, float capacity, Monster holder){
+        super(value, holder, weight);
         this.ID = setPurseID();
         assert(content <= capacity);
         this.content = content;
@@ -31,8 +31,8 @@ public class Purse extends InventoryItem {
         this.Torn = false;
     }
 
-    public Purse(float value, float weight, float content, float capacity){
-        super(value, weight);
+    public Purse(int value, float weight, float content, float capacity){
+        super(value, null ,weight);
         this.ID = setPurseID();
         assert(content <= capacity);
         this.content = content;

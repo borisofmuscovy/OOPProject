@@ -5,7 +5,7 @@ import java.util.Random;
 
 public class Weapon extends InventoryItem {
     int damage;
-    int MIN_DAMAGE = 1;
+    final int MIN_DAMAGE = 1;
     int MAX_DAMAGE = 20;
     static List existingIDs;
     final long ID;

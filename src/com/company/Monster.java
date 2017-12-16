@@ -343,7 +343,6 @@ public class Monster {
 
     public void dropPurse(){}
 
-    public void exchangePurse(){}
 
     public int totalValueofInventory(){
         return 1;
@@ -356,8 +355,6 @@ public class Monster {
 
     public void deleteWeapon(){}
 
-    public void exchangeWeapon(){}
-
     public void getWeapons(){}
 
     /**
@@ -367,6 +364,7 @@ public class Monster {
     public int totalValueofWeapons(){
         return 1;
     }
+
     /**
      * Method representing battle of the monsters.
      * @param   opponent

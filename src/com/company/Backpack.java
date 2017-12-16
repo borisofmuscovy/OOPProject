@@ -5,8 +5,8 @@ import java.util.Random;
 public class Backpack extends InventoryItem{
     final long ID;
 
-    public Backpack(int value, Monster holder, float weight){
-        super(value, holder, weight);
+    public Backpack(float value, float weight, Monster holder){
+        super(value, weight, holder);
         ID = setBackpackID();
     }
 

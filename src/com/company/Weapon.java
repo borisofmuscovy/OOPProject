@@ -23,13 +23,25 @@ public class Weapon extends InventoryItem {
      * @param holder
      *        Monster that holds the weapon
      */
-    public Weapon(float weight, int value, int damage, Monster holder){
-        super(value, holder, weight);
+    public Weapon(float weight, float value, int damage, Monster holder){
+        super(value, weight, holder);
         this.setValue(value);
         this.damage = generateDamage();
         this.weight = setWeight(weight);
         this.ID = generateWeaponID();
     }
+
+    public Weapon(float weight, float value, int damage){
+        super(value, weight);
+        this.setValue(value);
+        this.damage = generateDamage();
+        this.weight = setWeight(weight);
+        this.ID = generateWeaponID();
+    }
+
+
+
+
     /**
      * Method setting unique, odd ID of a weapon of long type
      * @return  weaponID

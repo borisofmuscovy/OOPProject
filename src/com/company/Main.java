@@ -7,6 +7,8 @@ public class Main {
     public static void main(String[] args) {
         Monster Bob = new Monster("Bob", 40);
         Monster Alice = new Monster("Alice", 40);
+        Weapon SKULLCRUSHER = new Weapon(2, 10, 10);
+        Alice.equip(SKULLCRUSHER);
 
         if (Math.random() < 0.5){
             while (Bob.isAlive() && Alice.isAlive()) {

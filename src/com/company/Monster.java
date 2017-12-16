@@ -360,15 +360,12 @@ public class Monster {
         }
     }
 
-
-    public void pickUpPurse(){}
-
-    public void dropPurse(){}
-
-    public void exchangePurse(){}
-
-    public int getTotalInventoryValue(){
-        return 1;
+    public float getTotalInventoryValue(){
+        float totalValue = 0;
+        for (int i=0;i<=this.getInventoryContents().size();i++){
+            totalValue += this.getInventoryContents().get(i).getValue();
+        }
+        return totalValue;
     }
 
 

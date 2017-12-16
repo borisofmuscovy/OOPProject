@@ -6,7 +6,7 @@ public class Purse extends InventoryItem {
     int content;
     long ID;
     final int capacity;
-    int totalValue;
+    float totalValue;
     private boolean Torn;
 
 
@@ -23,7 +23,7 @@ public class Purse extends InventoryItem {
      *        Describes maximum capacity of the purse
      */
     public Purse(int value, Monster holder, int weight,  int content, int capacity){
-        super(value, holder, weight);
+        super(value, weight, holder);
         this.ID = setPurseID();
         assert(content <= capacity);
         this.content = content;

@@ -3,10 +3,10 @@ package com.company;
 import java.util.Random;
 
 public class Purse extends InventoryItem {
-    int content;
+    float content;
     long ID;
-    final int capacity;
-    int totalValue;
+    final float capacity;
+    float totalValue;
     private boolean Torn;
 
 
@@ -22,8 +22,17 @@ public class Purse extends InventoryItem {
      * @param capacity
      *        Describes maximum capacity of the purse
      */
-    public Purse(int value, Monster holder, int weight,  int content, int capacity){
-        super(value, holder, weight);
+    public Purse(float value, float weight, float content, float capacity, Monster holder){
+        super(value, weight, holder);
+        this.ID = setPurseID();
+        assert(content <= capacity);
+        this.content = content;
+        this.capacity = capacity;
+        this.Torn = false;
+    }
+
+    public Purse(float value, float weight, float content, float capacity){
+        super(value, weight);
         this.ID = setPurseID();
         assert(content <= capacity);
         this.content = content;
@@ -38,7 +47,7 @@ public class Purse extends InventoryItem {
      * @return  long[] fibonacciSeries
      *          Array containing fibonacci numbers of type long
      */
-    public static int[] fibonacci(int number) {
+    private static int[] fibonacci(int number) {
         int[] fibonacciSeries = new int[number];
         fibonacciSeries[0] = 0;
         fibonacciSeries[1] = 1;
@@ -57,7 +66,7 @@ public class Purse extends InventoryItem {
         int n = 25;
         int[] fibonacciSeries = fibonacci(n);
         Random r = new Random();
-        long purseID = (long) fibonacciSeries[r.nextInt(fibonacciSeries.length)];
+        long purseID = (long) fibonacciSeries[r.nextInt(fibonacciSeries.length-1)];
         return purseID;
     }
 
@@ -66,7 +75,7 @@ public class Purse extends InventoryItem {
      * @param newContent
      *        Describes new content of a purse
      */
-    public void setContent(int newContent){
+    public void setContent(float newContent){
         this.content = newContent;
     }
 
@@ -76,7 +85,7 @@ public class Purse extends InventoryItem {
      * @param dukats
      *        Number of dukats to be added to the purse
      */
-    public void addContent(int dukats){
+    public void addContent(float dukats){
         setContent(this.content + dukats);
         if(this.content > this.capacity)
             tearThePurse();
@@ -87,7 +96,7 @@ public class Purse extends InventoryItem {
      * @param dukats
      *        Number of dukats to be removed from the purse
      */
-    public void removeContent(int dukats){
+    public void removeContent(float dukats){
         setContent(this.content - dukats);
     }
 
@@ -99,7 +108,7 @@ public class Purse extends InventoryItem {
      * @param dukats
      *        Number of dukats to be transferred
      */
-    public void transferContent(Purse other, int dukats){
+    public void transferContent(Purse other, float dukats){
         setContent(this.content - dukats);
         setContent(other.content + dukats);
         if(this.content > this.capacity)

@@ -1,13 +1,15 @@
 package com.company;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Weapon extends InventoryItem {
     int damage;
     int MIN_DAMAGE = 1;
     int MAX_DAMAGE = 20;
-    static List existingIDs;
+    static List<Long> existingIDs = new ArrayList<Long>();
     final long ID;
 
     /**
@@ -47,18 +49,13 @@ public class Weapon extends InventoryItem {
      * @return  weaponID
      */
     public long generateWeaponID(){
-        long weaponID = 0;
-        int i = 1;
-        while(i == 1){
-            Random ID = new Random();
-            weaponID = ID.nextLong();
+        while(true){
+            long weaponID = ThreadLocalRandom.current().nextLong(10000);
             if( (weaponID % 2 != 0) && (!existingIDs.contains(weaponID)) ){
                 existingIDs.add(weaponID);
-                i = 0;
-            } else
-                i = 1;
+                return weaponID;
+            }
         }
-        return weaponID;
     }
 
     /**

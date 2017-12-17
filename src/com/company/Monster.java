@@ -101,7 +101,7 @@ public class Monster {
      * @return  True if alive, false if dead.
      *          | this.Alive
      */
-    public boolean isAlive() {
+     public boolean isAlive() {
         return this.Alive;
     }
 

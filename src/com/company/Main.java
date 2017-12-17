@@ -34,5 +34,16 @@ public class Main {
             System.out.println("Everybody is dead!");
         }
 
+        
+        Backpack Pocket = new Backpack(20, null, 25);
+        Pocket.addBackpackContent(Gucci);
+        Pocket.addBackpackContent(SKULLCRUSHER);
+
+        System.out.println(Pocket.getBackpackContent());
+        Pocket.removeBackpackContent(Gucci);
+        System.out.println(Pocket.getBackpackContent());
+
+
+
     }
 }

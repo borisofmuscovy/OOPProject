@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Purse extends InventoryItem {
     float content;
-    long ID;
+    final long ID;
     final float capacity;
     float totalValue;
     private boolean Torn;
@@ -70,13 +70,19 @@ public class Purse extends InventoryItem {
         return purseID;
     }
 
+    public long getID(){
+        return this.ID;
+    }
     /**
      * Sets new value of the content of a purse
      * @param newContent
      *        Describes new content of a purse
      */
     public void setContent(float newContent){
-        this.content = newContent;
+        if(this.Torn == true)
+            setContent(0);
+        else
+            this.content = newContent;
     }
 
     /**
@@ -86,7 +92,10 @@ public class Purse extends InventoryItem {
      *        Number of dukats to be added to the purse
      */
     public void addContent(float dukats){
-        setContent(this.content + dukats);
+        if(this.Torn == true)
+            setContent(0);
+        else
+            setContent(this.content + dukats);
         if(this.content > this.capacity)
             tearThePurse();
     }
@@ -97,7 +106,10 @@ public class Purse extends InventoryItem {
      *        Number of dukats to be removed from the purse
      */
     public void removeContent(float dukats){
-        setContent(this.content - dukats);
+        if(this.Torn == true)
+            setContent(0);
+        else
+            setContent(this.content - dukats);
     }
 
     /**
@@ -121,7 +133,7 @@ public class Purse extends InventoryItem {
      * Calculates total value of the purse
      */
     public void totalValue(){
-        this.totalValue = this.value + this.content;
+        this.totalValue = this.getValue() + this.content;
     }
 
     /**

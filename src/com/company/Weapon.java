@@ -28,7 +28,8 @@ public class Weapon extends InventoryItem {
     public Weapon(float weight, int value, int damage, Monster holder){
         super(value, holder, weight);
         this.setValue(value);
-        this.damage = generateDamage();
+        assert(damage >= 1 & damage <= MAX_DAMAGE);
+        this.damage = damage;
         this.weight = setWeight(weight);
         this.ID = generateWeaponID();
     }
@@ -39,11 +40,15 @@ public class Weapon extends InventoryItem {
     public long generateWeaponID(){
         while(true){
             long weaponID = ThreadLocalRandom.current().nextLong(10000);
-            if( (weaponID % 2 != 0) && (!existingIDs.contains(weaponID)) ){
+            if( (weaponID % 2 != 0) && (!existingIDs.contains(weaponID)) && (weaponID >= 0) ){
                 existingIDs.add(weaponID);
                 return weaponID;
             }
         }
+    }
+
+    public long getID(){
+        return this.ID;
     }
 
     /**
@@ -61,19 +66,9 @@ public class Weapon extends InventoryItem {
      * @pre   newDamage is in range(1, MAX_DAMAGE)
      *        | newDamage >= 1 && newDamage <= MAX_DAMAGE
      */
-    public int generateDamage(){
-        Random randno = new Random();
-        int valuedDamage;
-        //pegs damage to the value of a weapon
-        if (this.getValue() < 10){
-            valuedDamage = randno.nextInt(5 - MIN_DAMAGE + 1) + MIN_DAMAGE;
-        } else if (this.getValue() > 10 && this.getValue() < 100){
-            valuedDamage = randno.nextInt(15 - MIN_DAMAGE + 1) + MIN_DAMAGE;
-        } else {
-            valuedDamage = randno.nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE;
-        }
-        assert(valuedDamage >= 1 && valuedDamage <= MAX_DAMAGE);
-        return valuedDamage;
+    public void setDamage(int newDamage){
+        assert(newDamage >= 1 & newDamage <= MAX_DAMAGE);
+        this.damage = newDamage;
     }
 
     /**

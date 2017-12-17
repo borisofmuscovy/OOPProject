@@ -5,12 +5,12 @@ import java.util.Random;
 import java.util.Set;
 
 public class Backpack extends InventoryItem{
-    final long ID;
+    private final long ID;
     HashMap<Long, String> backpackContent = new HashMap<Long, String>();
 
     public Backpack(int value, Monster holder, float weight){
         super(value, holder, weight);
-        ID = setBackpackID();
+        this.ID = setBackpackID();
 
     }
 
@@ -49,7 +49,7 @@ public class Backpack extends InventoryItem{
 
     public void removeBackpackContent(InventoryItem item) throws IllegalArgumentException{
         if(!(backpackContent.containsKey(item.getID())))
-            throw new IllegalArgumentException("There no such item in the backpack");
+            throw new IllegalArgumentException("There's no such item in the backpack");
         else
             backpackContent.remove(item.getID());
 

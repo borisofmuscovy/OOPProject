@@ -10,7 +10,7 @@ public class Weapon extends InventoryItem {
     final int MIN_DAMAGE = 1;
     int MAX_DAMAGE = 20;
     static List<Long> existingIDs = new ArrayList<Long>();
-    final long ID;
+    private final long ID;
 
     /**
      * Constructor of weapon object

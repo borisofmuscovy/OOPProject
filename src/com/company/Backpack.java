@@ -44,7 +44,7 @@ public class Backpack extends InventoryItem{
 
     public void addBackpackContent(InventoryItem item) throws IllegalArgumentException{
         if((this.getTotalWeight() + item.getWeight()) > this.getCapacity())
-            throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
+            throw new IllegalArgumentException("You cannot add this item. It's too heavy!i9i99999999ioo099");
         if(backpackContent.containsValue(item.getID()))
             throw new IllegalArgumentException("This item is already in the backpack!");
         if(item instanceof Weapon)

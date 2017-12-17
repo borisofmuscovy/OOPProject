@@ -86,7 +86,7 @@ public class Backpack extends InventoryItem{
     }
 
     public InventoryItem getTheHeaviest() throws IllegalArgumentException{
-        if(backpackContent.isEmpty())
+        if(getBackpackContent().isEmpty())
             throw new IllegalArgumentException();
         TreeMap<Float, InventoryItem> weightOfItems = new TreeMap<>();
         for(InventoryItem key:backpackContent.keySet())
@@ -95,7 +95,7 @@ public class Backpack extends InventoryItem{
     }
 
     public InventoryItem getTheLightest()throws IllegalArgumentException{
-        if(backpackContent.isEmpty())
+        if(getBackpackContent().isEmpty())
             throw new IllegalArgumentException();
         TreeMap<Float, InventoryItem> weightOfItems = new TreeMap<>();
         for(InventoryItem key:backpackContent.keySet())

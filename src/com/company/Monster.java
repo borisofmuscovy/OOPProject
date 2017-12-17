@@ -5,6 +5,7 @@ import be.kuleuven.cs.som.annotate.Immutable;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.List;
+import java.util.Arrays;
 
 
 /**
@@ -28,7 +29,7 @@ public class Monster {
     private static int MAX_PROTECTION;
     private static final int MIN_PROTECTION;
     private int carryingCapacity;
-    private List<InventoryItem> inventory;
+    private ArrayList<Object> inventory = new ArrayList<Object>(Arrays.asList(null, null, null));
     private int anchors;
 
     static {
@@ -64,7 +65,7 @@ public class Monster {
         hp = startHP;
         MAX_HP = hp;
         this.carryingCapacity = this.getStrength() * 12;
-        this.inventory = new ArrayList<InventoryItem>(anchors);
+        this.inventory = new ArrayList<Object>(anchors);
     }
 
     /**
@@ -278,7 +279,7 @@ public class Monster {
 
     public float getTotalCarriedWeight() {
         float totalCarriedWeight = 0;
-        for (InventoryItem anItem : this.inventory) {
+        for (Object anItem : this.inventory) {
             if (anItem != null) {
                 totalCarriedWeight += anItem.getWeight();
             }
@@ -290,20 +291,21 @@ public class Monster {
         return this.carryingCapacity;
     }
 
-    public List<InventoryItem> getInventoryContents(){
+    public ArrayList<InventoryItem> getInventoryContents(){
         return this.inventory;
     }
 
 
     public void equip(InventoryItem item){
         try {
-            for (int i=0;i<this.inventory.size();i++){
+            for (int i=0;i<this.getInventoryContents().size();i++){
                 //any item to be equipped (put into inventory) must not put total weight above maximum,
                 // and there must be a free position in the inventory (assuming inventory fixed to 3 slots)
                 if ( (this.getInventoryContents().get(i) == null) &&
                         !( (this.getTotalCarriedWeight() + item.getWeight()) > this.getCarryingCapacity() ) ){
                     this.getInventoryContents().set(i, item);
                     item.setHolder(this);
+                    System.out.println(this.getName() + "has picked up an item.");
                 } else {
                     throw new IllegalStateException();
                 }

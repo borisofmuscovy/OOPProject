@@ -11,6 +11,7 @@ public class Main {
         Alice.equip(SKULLCRUSHER);
         Purse Gucci = new Purse(10, 1, 20, 50);
         Alice.equip(Gucci);
+        System.out.println(Alice.getInventoryContents());
 
         if (Math.random() < 0.5){
             while (Bob.isAlive() && Alice.isAlive()) {

@@ -1,8 +1,8 @@
 package com.company;
 
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Set;
+import org.omg.PortableInterceptor.INACTIVE;
+
+import java.util.*;
 
 public class Backpack extends InventoryItem{
     private final long ID;
@@ -44,7 +44,7 @@ public class Backpack extends InventoryItem{
 
     public void addBackpackContent(InventoryItem item) throws IllegalArgumentException{
         if((this.getTotalWeight() + item.getWeight()) > this.getCapacity())
-            throw new IllegalArgumentException("You cannot add this item. It's too heavy!i9i99999999ioo099");
+            throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
         if(backpackContent.containsValue(item.getID()))
             throw new IllegalArgumentException("This item is already in the backpack!");
         if(item instanceof Weapon)
@@ -85,5 +85,29 @@ public class Backpack extends InventoryItem{
         return backpackValue;
     }
 
+    public InventoryItem getTheHeaviest() throws IllegalArgumentException{
+        if(backpackContent.isEmpty())
+            throw new IllegalArgumentException();
+        TreeMap<Float, InventoryItem> weightOfItems = new TreeMap<>();
+        for(InventoryItem key:backpackContent.keySet())
+            weightOfItems.put(key.getWeight(), key);
+        return weightOfItems.get(weightOfItems.lastKey());
+    }
+
+    public InventoryItem getTheLightest()throws IllegalArgumentException{
+        if(backpackContent.isEmpty())
+            throw new IllegalArgumentException();
+        TreeMap<Float, InventoryItem> weightOfItems = new TreeMap<>();
+        for(InventoryItem key:backpackContent.keySet())
+            weightOfItems.put(key.getWeight(), key);
+        return weightOfItems.get(weightOfItems.firstKey());
+    }
+
+    public void transferContent(InventoryItem item, Backpack other)throws IllegalArgumentException{
+        if((other.getTotalWeight() + item.getWeight()) > other.getCapacity())
+            throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
+        this.removeBackpackContent(item);
+        other.addBackpackContent(item);
+    }
 
 }

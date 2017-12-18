@@ -9,7 +9,7 @@ import java.math.RoundingMode;
 public abstract class InventoryItem {
 
     public int ID;
-    public float value;
+    public int value;
     public float weight;
     public Monster holder;
 
@@ -31,19 +31,17 @@ public abstract class InventoryItem {
      * @throws IllegalArgumentException If weight of the weapon is smaller than zero
      *                                  | weight < 0
      */
-    public InventoryItem(float weight, float value, Monster holder) throws IllegalArgumentException {
+    public InventoryItem(int value, Monster holder, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
+        if( weight < 0)
+            throw new IllegalArgumentException();
+        this.weight = weight;
         this.value = value;
         this.holder = holder;
-        this.weight = weight;
+
     }
 
-    public InventoryItem(float weight, float value) throws IllegalArgumentException {
-        assert (!(value < 0));
-        this.value = value;
-        this.holder = null;
-        this.weight = weight;
-    }
+    public abstract long getID();
 
     /**
      * Sets new value of the item
@@ -52,7 +50,7 @@ public abstract class InventoryItem {
      * @pre Value of the item cannot be lower than zero
      * | !(newValue < 0)
      */
-    public void setValue(float newValue) {
+    public void setValue(int newValue) {
         assert !(newValue < 0);
         this.value = newValue;
     }
@@ -61,7 +59,7 @@ public abstract class InventoryItem {
      * Gets value of an item
      * @return this.value
      */
-    public float getValue() {
+    public int getValue() {
         return this.value;
     }
 

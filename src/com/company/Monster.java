@@ -279,7 +279,7 @@ public class Monster {
 
     public float getTotalCarriedWeight() {
         float totalCarriedWeight = 0;
-        for (Object anItem : this.inventory) {
+        for (InventoryItem anItem : this.inventory) {
             if (anItem != null) {
                 totalCarriedWeight += anItem.getWeight();
             }

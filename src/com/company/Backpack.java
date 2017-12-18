@@ -1,15 +1,20 @@
 package com.company;
 
-import java.util.Random;
+import org.omg.PortableInterceptor.INACTIVE;
+
+import java.util.*;
 
 public class Backpack extends InventoryItem{
-    final long ID;
+    private final long ID;
+    private final float capacity;
 
-    public Backpack(float value, float weight, Monster holder){
-        super(value, weight, holder);
-        ID = setBackpackID();
+    HashMap<InventoryItem, String> backpackContent = new HashMap<InventoryItem, String>();
+
+    public Backpack(int value, Monster holder, float weight, float capacity){
+        super(value, holder, weight);
+        this.ID = setBackpackID();
+        this.capacity = capacity;
     }
-
 
     /**
      * Method setting odd ID of a backpack of long type
@@ -21,11 +26,88 @@ public class Backpack extends InventoryItem{
         while(i == 1){
             Random ID = new Random();
             backpackID = ID.nextLong();
-            if(backpackID % 2 != 0)
+            if(backpackID % 2 != 0 && backpackID >= 0)
                 i = 0;
             else
                 i =1;
         }
         return backpackID;
     }
+
+    public long getID(){
+        return this.ID;
+    }
+
+    public float getCapacity(){
+        return this.capacity;
+    }
+
+    public void addBackpackContent(InventoryItem item) throws IllegalArgumentException{
+        if((this.getTotalWeight() + item.getWeight()) > this.getCapacity())
+            throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
+        if(backpackContent.containsValue(item.getID()))
+            throw new IllegalArgumentException("This item is already in the backpack!");
+        if(item instanceof Weapon)
+            this.backpackContent.put(item, "Weapon");
+        if(item instanceof Purse)
+            this.backpackContent.put(item, "Purse");
+        if(item instanceof Backpack)
+            this.backpackContent.put(item, "Backpack");
+    }
+
+    public void removeBackpackContent(InventoryItem item) throws IllegalArgumentException{
+        if(!(backpackContent.containsKey(item)))
+            throw new IllegalArgumentException("There's no such item in the backpack");
+        else
+            backpackContent.remove(item);
+
+    }
+
+    public Set getBackpackContent(){
+            return backpackContent.entrySet();
+    }
+
+    float totalBackpackWeight;
+    public float getTotalWeight(){
+        for(InventoryItem key: backpackContent.keySet()){
+            totalBackpackWeight += key.getWeight();
+        }
+        totalBackpackWeight += this.getWeight();
+        return totalBackpackWeight;
+
+    }
+    int backpackValue;
+    public int getTotalValue(){
+        for(InventoryItem key: backpackContent.keySet()){
+            backpackValue += key.getValue();
+        }
+        backpackValue += this.getValue();
+        return backpackValue;
+    }
+
+    public InventoryItem getTheHeaviest() throws IllegalArgumentException{
+        if(getBackpackContent().isEmpty())
+            throw new IllegalArgumentException();
+        TreeMap<Float, InventoryItem> weightOfItems = new TreeMap<>();
+        for(InventoryItem key:backpackContent.keySet())
+            weightOfItems.put(key.getWeight(), key);
+        return weightOfItems.get(weightOfItems.lastKey());
+    }
+
+    public InventoryItem getTheLightest()throws IllegalArgumentException{
+        if(getBackpackContent().isEmpty())
+            throw new IllegalArgumentException();
+        TreeMap<Float, InventoryItem> weightOfItems = new TreeMap<>();
+        for(InventoryItem key:backpackContent.keySet())
+            weightOfItems.put(key.getWeight(), key);
+        return weightOfItems.get(weightOfItems.firstKey());
+    }
+
+    public void transferContent(InventoryItem item, Backpack other)throws IllegalArgumentException{
+        if((other.getTotalWeight() + item.getWeight()) > other.getCapacity())
+            throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
+        this.removeBackpackContent(item);
+        other.addBackpackContent(item);
+    }
+
 }

@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         Monster Bob = new Monster("Bob", 40);
         Monster Alice = new Monster("Alice", 40);
-        Weapon SKULLCRUSHER = new Weapon(2, 10, 10);
+        Weapon SKULLCRUSHER = new Weapon(2, 10, 10, null);
         Alice.equip(SKULLCRUSHER);
         Purse Gucci = new Purse(10, 1, 20, 50);
         Alice.equip(Gucci);
@@ -34,6 +34,12 @@ public class Main {
         } else {
             System.out.println("Everybody is dead!");
         }
+
+    //Code below is only for testing purposes
+        Backpack Pocket = new Backpack(20, null, 25, 70);
+        Pocket.addBackpackContent(Gucci);
+        Pocket.addBackpackContent(SKULLCRUSHER);
+        System.out.println(Pocket.getTheLightest());
 
     }
 }

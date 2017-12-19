@@ -175,7 +175,12 @@ public class Monster {
      */
     private int hitDamage() {
         int momentaryStrength = ((this.getStrength() - 5) / 3);
-        return (this.getDamage() + momentaryStrength);
+        if (this.getInventoryContents().get("Right") instanceof Weapon) {
+            Weapon right = (Weapon) this.getInventoryContents().get("Right");
+            return (this.getDamage() + momentaryStrength + right.getDamage());
+        } else {
+            return (this.getDamage() + momentaryStrength);
+        }
     }
 
 
@@ -303,7 +308,7 @@ public class Monster {
 
     public void equip(InventoryItem item){
         try {
-            if (this.getInventoryContents().size() < 3
+            if (this.getInventoryContents().size() <= 3
                     && !((this.getTotalCarriedWeight() + item.getWeight()) > this.getCarryingCapacity()) ){
                 if (this.getInventoryContents().get("Left") == null) {
                     this.getInventoryContents().put("Left", item);
@@ -315,12 +320,13 @@ public class Monster {
                     throw new java.lang.Error("Somehow the backpack contents are full and yet not full!");
                 }
                 item.setHolder(this);
-                System.out.println(this.getName() + "has picked up an item.");
+                System.out.println(this.getName() + " has picked up an item of type " + item.getClass());
             } else {
                     throw new IllegalStateException();
             }
         } catch (IllegalStateException e) {
         System.out.println(this.getName() + " cannot equip item since all their anchors are full!");
+        System.out.println(this.getInventoryContents().size());
         }
     }
 
@@ -333,6 +339,7 @@ public class Monster {
                     if (entry.getValue() == item) {
                         item.setHolder(null);
                         entry.setValue(null);
+                        System.out.println(this.getName() + " has dropped an item of type " + item.getClass());
                     }
                 }
             } else {
@@ -434,7 +441,7 @@ public class Monster {
                 } else {
                     genVal = this.getHP();
                 }
-                // compare generated value to opponent protection
+                // compare generated value to opponent protection and hit if satisfactory
 
                 if (genVal >= opponent.getProtection()){
                     int damagedHP = opponent.getHP() - this.hitDamage();

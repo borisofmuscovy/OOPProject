@@ -33,14 +33,22 @@ public abstract class InventoryItem {
      */
     public InventoryItem(int value, Monster holder, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
-        if( weight < 0)
+        if (weight < 0)
             throw new IllegalArgumentException();
         this.weight = weight;
         this.value = value;
         this.holder = holder;
-
     }
 
+
+    public InventoryItem(int value, float weight) throws IllegalArgumentException {
+        assert (!(value < 0));
+        if (weight < 0)
+            throw new IllegalArgumentException();
+        this.weight = weight;
+        this.value = value;
+        this.holder = null;
+    }
     public abstract long getID();
 
     /**

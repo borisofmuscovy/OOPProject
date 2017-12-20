@@ -1,26 +1,45 @@
 package com.company;
 
-import org.omg.PortableInterceptor.INACTIVE;
-
 import java.util.*;
+
+class WeightComparator implements Comparator<InventoryItem> {
+    public int compare(InventoryItem item1, InventoryItem item2) {
+        return Float.compare(item1.getWeight(), item2.getWeight());
+    }
+}
 
 public class Backpack extends InventoryItem{
     private final long ID;
     private final float capacity;
-
-    HashMap<InventoryItem, String> backpackContent = new HashMap<InventoryItem, String>();
+    private float backpackValue;
+//    HashMap<InventoryItem, String> backpackContent = new HashMap<InventoryItem, String>();
+    private SortedSet<InventoryItem> backpackContent = new TreeSet<>(new WeightComparator());
 
     public Backpack(int value, Monster holder, float weight, float capacity){
         super(value, holder, weight);
-        this.ID = setBackpackID();
+        this.ID = generateBackpackID();
         this.capacity = capacity;
+        this.holder = holder;
+    }
+
+    public Backpack(int value, float weight, float capacity){
+        super (value, weight);
+        this.ID = generateBackpackID();
+        this.capacity = capacity;
+        this.holder = null;
+    }
+
+
+    public SortedSet<InventoryItem> getBackpackContents(){
+        return this.backpackContent;
+        //TODO: return a copy in a public method instead!!!
     }
 
     /**
      * Method setting odd ID of a backpack of long type
      * @return  backpackID
      */
-    public long setBackpackID(){
+    public long generateBackpackID(){
         long backpackID = 0;
         int i = 1;
         while(i == 1){
@@ -42,72 +61,112 @@ public class Backpack extends InventoryItem{
         return this.capacity;
     }
 
-    public void addBackpackContent(InventoryItem item) throws IllegalArgumentException{
-        if((this.getTotalWeight() + item.getWeight()) > this.getCapacity())
-            throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
-        if(backpackContent.containsValue(item.getID()))
-            throw new IllegalArgumentException("This item is already in the backpack!");
-        if(item instanceof Weapon)
-            this.backpackContent.put(item, "Weapon");
-        if(item instanceof Purse)
-            this.backpackContent.put(item, "Purse");
-        if(item instanceof Backpack)
-            this.backpackContent.put(item, "Backpack");
+    public boolean canContain(InventoryItem item){
+        if ((this.getContentsWeight() + item.getWeight()) > this.getCapacity()){
+            return false;
+        } else {
+            return true;
+        }
     }
 
-    public void removeBackpackContent(InventoryItem item) throws IllegalArgumentException{
-        if(!(backpackContent.containsKey(item)))
-            throw new IllegalArgumentException("There's no such item in the backpack");
-        else
-            backpackContent.remove(item);
+    public void add(InventoryItem item) throws IllegalArgumentException{
+        try {
+            if (!canContain(item)){
+                throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
+            } else if (this.backpackContent.contains(item)) {
+                throw new IllegalArgumentException("This item is already in the backpack!");
+            } else {
+                this.backpackContent.add(item);
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public void remove(InventoryItem item) throws IllegalArgumentException{
+        try {
+            if (!this.backpackContent.contains(item)){
+                throw new IllegalArgumentException("There's no such item in the backpack");
+            } else {
+                this.backpackContent.remove(item);
+            }
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
 
     }
 
-    public Set getBackpackContent(){
-            return backpackContent.entrySet();
+    public float getContentsWeight(){
+        float contentsWeight = 0;
+        for(InventoryItem item : this.backpackContent ){
+            contentsWeight += item.getWeight();
+        }
+        return contentsWeight;
     }
 
-    float totalBackpackWeight;
     public float getTotalWeight(){
-        for(InventoryItem key: backpackContent.keySet()){
-            totalBackpackWeight += key.getWeight();
+        float totalBackpackWeight = 0;
+        for(InventoryItem item : this.backpackContent ){
+            totalBackpackWeight += item.getWeight();
         }
         totalBackpackWeight += this.getWeight();
         return totalBackpackWeight;
 
     }
-    int backpackValue;
-    public int getTotalValue(){
-        for(InventoryItem key: backpackContent.keySet()){
-            backpackValue += key.getValue();
+
+    public float getTotalValue(){
+        for(InventoryItem item : this.backpackContent){
+            backpackValue += item.getValue();
         }
         backpackValue += this.getValue();
         return backpackValue;
     }
+//
+//    public InventoryItem getHeaviest() throws IllegalArgumentException{
+//        if(this.backpackContent.isEmpty())
+//            throw new IllegalArgumentException();
+//        TreeMap<Float, InventoryItem> weightOfItems = new TreeMap<>();
+//        for(InventoryItem item : this.backpackContent)
+//            weightOfItems.put(item.getWeight(), item);
+//        return weightOfItems.get(weightOfItems.lastKey());
+//    }
 
-    public InventoryItem getTheHeaviest() throws IllegalArgumentException{
-        if(getBackpackContent().isEmpty())
-            throw new IllegalArgumentException();
-        TreeMap<Float, InventoryItem> weightOfItems = new TreeMap<>();
-        for(InventoryItem key:backpackContent.keySet())
-            weightOfItems.put(key.getWeight(), key);
-        return weightOfItems.get(weightOfItems.lastKey());
+    public InventoryItem getHeaviest() throws IllegalStateException{
+        try {
+            if (this.backpackContent.isEmpty()) {
+                throw new IllegalStateException("Backpack is empty so there is no heaviest item.");
+            } else {
+                return this.backpackContent.last();
+            }
+        } catch (IllegalStateException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
-    public InventoryItem getTheLightest()throws IllegalArgumentException{
-        if(getBackpackContent().isEmpty())
-            throw new IllegalArgumentException();
-        TreeMap<Float, InventoryItem> weightOfItems = new TreeMap<>();
-        for(InventoryItem key:backpackContent.keySet())
-            weightOfItems.put(key.getWeight(), key);
-        return weightOfItems.get(weightOfItems.firstKey());
+    public InventoryItem getLightest() throws IllegalStateException{
+        try {
+            if(this.backpackContent.isEmpty()) {
+                throw new IllegalStateException("Backpack is empty so there is no lightest item.");
+            } else {
+                return this.backpackContent.first();
+            }
+        } catch (IllegalStateException e){
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
     public void transferContent(InventoryItem item, Backpack other)throws IllegalArgumentException{
-        if((other.getTotalWeight() + item.getWeight()) > other.getCapacity())
-            throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
-        this.removeBackpackContent(item);
-        other.addBackpackContent(item);
+        try {
+            if(other.canContain(item)) {
+                throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
+            } else {
+                this.remove(item);
+                other.add(item);
+            }
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
     }
-
 }

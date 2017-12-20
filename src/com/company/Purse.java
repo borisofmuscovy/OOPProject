@@ -31,8 +31,8 @@ public class Purse extends InventoryItem {
         this.Torn = false;
     }
 
-    public Purse(int value, float weight, float content, float capacity){
-        super(value, null ,weight);
+    public Purse(int value, float weight, float content, float capacity) {
+        super(value, weight);
         this.ID = setPurseID();
         assert(content <= capacity);
         this.content = content;

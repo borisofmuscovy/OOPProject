@@ -175,8 +175,8 @@ public class Monster {
      */
     private int hitDamage() {
         int momentaryStrength = ((this.getStrength() - 5) / 3);
-        if (this.getInventoryContents().get("Right") instanceof Weapon) {
-            Weapon right = (Weapon) this.getInventoryContents().get("Right");
+        if (this.inventory.get("Right") instanceof Weapon) {
+            Weapon right = (Weapon) this.inventory.get("Right");
             return (this.getDamage() + momentaryStrength + right.getDamage());
         } else {
             return (this.getDamage() + momentaryStrength);
@@ -219,6 +219,7 @@ public class Monster {
     }
 
     /**
+     * Checks if prime.
      * @param   n
      *          The number to be checked
      * @return  True if the number is a prime number and false otherwise
@@ -289,7 +290,7 @@ public class Monster {
 
     public float getTotalCarriedWeight() {
         float totalCarriedWeight = 0;
-        for (Map.Entry<String,InventoryItem> entry : this.getInventoryContents().entrySet()) {
+        for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
             if (entry.getValue() != null) {
                 totalCarriedWeight += entry.getValue().getValue();
             }
@@ -303,21 +304,35 @@ public class Monster {
 
     public Map<String, InventoryItem> getInventoryContents(){
         return this.inventory;
+        //TODO: return copy for a public getter!!!
+    }
+
+    /**
+     * Checks if the monster is physically capable of carrying the extra weight of an item.
+     * @param item
+     * @return
+     */
+    protected boolean canCarry(InventoryItem item){
+        if (((this.getTotalCarriedWeight() + item.getWeight()) > this.getCarryingCapacity())
+                && (this.inventory.size() + 1 > 3)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 
-    public void equip(InventoryItem item){
+    public void equip(InventoryItem item) {
         try {
-            if (this.getInventoryContents().size() <= 3
-                    && !((this.getTotalCarriedWeight() + item.getWeight()) > this.getCarryingCapacity()) ){
-                if (this.getInventoryContents().get("Left") == null) {
-                    this.getInventoryContents().put("Left", item);
-                } else if (this.getInventoryContents().get("Right") == null) {
-                    this.getInventoryContents().put("Right", item);
-                } else if (this.getInventoryContents().get("Back") == null) {
-                    this.getInventoryContents().put("Back", item);
+            if (this.canCarry(item)) {
+                if (this.inventory.get("Left") == null) {
+                    this.inventory.put("Left", item);
+                } else if (this.inventory.get("Right") == null) {
+                    this.inventory.put("Right", item);
+                } else if (this.inventory.get("Back") == null) {
+                    this.inventory.put("Back", item);
                 } else {
-                    throw new java.lang.Error("Somehow the backpack contents are full and yet not full!");
+                    throw new java.lang.Error("Somehow the anchor contents are full and yet not full!");
                 }
                 item.setHolder(this);
                 System.out.println(this.getName() + " has picked up an item of type " + item.getClass());
@@ -325,8 +340,8 @@ public class Monster {
                     throw new IllegalStateException();
             }
         } catch (IllegalStateException e) {
-        System.out.println(this.getName() + " cannot equip item since all their anchors are full!");
-        System.out.println(this.getInventoryContents().size());
+        System.out.println(this.getName() + " cannot pick up " + item.getClass() + ", " +
+                "inventory full.");
         }
     }
 
@@ -334,8 +349,8 @@ public class Monster {
     public void unequip(InventoryItem item){
         // drop or unequip from inventory. cannot drop weapons, sets holder to null
         try {
-            if (this.getInventoryContents().containsValue(item) && !(item instanceof Weapon)) {
-                for (Map.Entry<String,InventoryItem> entry : this.getInventoryContents().entrySet()){
+            if (this.inventory.containsValue(item) && !(item instanceof Weapon)) {
+                for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()){
                     if (entry.getValue() == item) {
                         item.setHolder(null);
                         entry.setValue(null);
@@ -353,22 +368,13 @@ public class Monster {
     public void trade(Monster other, InventoryItem item) {
         try {
             //first determine if this monster trying to trade has the item in question
-            if (!this.getInventoryContents().containsValue(item)){
+            if (!this.inventory.containsValue(item)){
                 throw new IllegalStateException();
-            } else if (item instanceof Purse){
+            } else if ((item instanceof Purse) || (item instanceof Weapon) || (item instanceof Backpack)) {
                 //if the item is a purse, we must check whether the other monster has a purse already
-                for (Map.Entry<String,InventoryItem> entry : other.getInventoryContents().entrySet()){
-                    if (entry.getValue() instanceof Purse) {
-                        throw new IllegalStateException();
-                    } else {
-                        item.setHolder(other);
-                        entry.setValue(item);
-                    }
-                }
-            } else if (item instanceof Weapon){//if the item is a weapon, we simply check if the inventory of the other monster is full
-                if (other.getInventoryContents().size() >= 3) {
+                if (!other.canCarry(item)) {
                     throw new IllegalAccessException();
-                } else {
+                    } else {
                     for (Map.Entry<String,InventoryItem> entry : other.getInventoryContents().entrySet()){
                         if (entry.getValue() == null) {
                             item.setHolder(other);
@@ -376,8 +382,8 @@ public class Monster {
                         }
                     }
                 }
-            } else if (item instanceof Backpack) {
-                //TODO
+            } else {
+                // trying to trade some other object that we don't explicitly expect
                 throw new UnsupportedOperationException();
             }
         } catch (IllegalStateException e1) {
@@ -388,26 +394,15 @@ public class Monster {
         }
     }
 
-    public float getTotalInventoryValue(){
+    public float getTotalInventoryValue() {
         float totalValue = 0;
-        for (Map.Entry<String,InventoryItem> entry : this.getInventoryContents().entrySet()) {
+        for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
             if (entry.getValue() != null) {
                 totalValue += entry.getValue().getValue();
             }
         }
         return totalValue;
     }
-
-
-
-
-    public void attachWeapon(){}
-
-    public void deleteWeapon(){}
-
-    public void exchangeWeapon(){}
-
-    public void getWeapons(){}
 
     /**
      * Make sure that no of weapons that not exceed allowed no of anchors
@@ -425,7 +420,7 @@ public class Monster {
      *          |  if !this.isAlive()
      * @throws  IllegalArgumentException
      *          If oponent monster dies during the battle
-     *          |!opponen.isAlive()
+     *          |!opponent.isAlive()
      */
     public String hit(Monster opponent) throws IllegalArgumentException, IllegalStateException{
         try {
@@ -456,7 +451,7 @@ public class Monster {
             return (opponent.getName() + " has been slain! The mortal blow has been dealt by " + this.getName()
                     + " dealing " + this.hitDamage() + " damage!");
         } catch (IllegalStateException e) {
-            return null;
+            return (this.getName() + " kicked the dead body of " + opponent.getName());
         }
     }
 

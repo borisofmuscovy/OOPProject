@@ -4,6 +4,9 @@ import java.util.*;
 
 class WeightComparator implements Comparator<InventoryItem> {
     public int compare(InventoryItem item1, InventoryItem item2) {
+        if (item1.getWeight() == item2.getWeight()) {
+            return 0;
+        }
         return Float.compare(item1.getWeight(), item2.getWeight());
     }
 }
@@ -12,7 +15,6 @@ public class Backpack extends InventoryItem{
     private final long ID;
     private final float capacity;
     private float backpackValue;
-//    HashMap<InventoryItem, String> backpackContent = new HashMap<InventoryItem, String>();
     private SortedSet<InventoryItem> backpackContent = new TreeSet<>(new WeightComparator());
 
     public Backpack(int value, Monster holder, float weight, float capacity){
@@ -69,26 +71,32 @@ public class Backpack extends InventoryItem{
         }
     }
 
-    public void add(InventoryItem item) throws IllegalArgumentException{
+    public void add(InventoryItem... items) throws IllegalArgumentException{
         try {
-            if (!canContain(item)){
-                throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
-            } else if (this.backpackContent.contains(item)) {
-                throw new IllegalArgumentException("This item is already in the backpack!");
-            } else {
-                this.backpackContent.add(item);
+            for (int i=0; i < items.length;i++){
+                InventoryItem item = items[i];
+                if (!canContain(item)){
+                    throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
+                } else if (this.backpackContent.contains(item)) {
+                    throw new IllegalArgumentException("This item is already in the backpack!");
+                } else {
+                    this.backpackContent.add(item);
+                }
             }
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
         }
     }
 
-    public void remove(InventoryItem item) throws IllegalArgumentException{
+    public void remove(InventoryItem... items) throws IllegalArgumentException{
         try {
-            if (!this.backpackContent.contains(item)){
-                throw new IllegalArgumentException("There's no such item in the backpack");
-            } else {
-                this.backpackContent.remove(item);
+            for (int i=0; i < items.length;i++){ 
+                InventoryItem item = items[i];
+                if (!this.backpackContent.contains(item)){
+                    throw new IllegalArgumentException("There's no such item in the backpack");
+                } else {
+                    this.backpackContent.remove(item);
+                }
             }
         } catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
@@ -121,15 +129,6 @@ public class Backpack extends InventoryItem{
         backpackValue += this.getValue();
         return backpackValue;
     }
-//
-//    public InventoryItem getHeaviest() throws IllegalArgumentException{
-//        if(this.backpackContent.isEmpty())
-//            throw new IllegalArgumentException();
-//        TreeMap<Float, InventoryItem> weightOfItems = new TreeMap<>();
-//        for(InventoryItem item : this.backpackContent)
-//            weightOfItems.put(item.getWeight(), item);
-//        return weightOfItems.get(weightOfItems.lastKey());
-//    }
 
     public InventoryItem getHeaviest() throws IllegalStateException{
         try {

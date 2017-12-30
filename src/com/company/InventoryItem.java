@@ -80,14 +80,6 @@ public abstract class InventoryItem {
         this.holder = holder;
     }
 
-    /**
-     * Change the holder of an item to another monster
-     * @param other
-     *        Another monster who will hold the item.
-     */
-    public void changeHolder(Monster other){
-        this.holder = other;
-    }
 
     /**
      * Gets holder of the item.

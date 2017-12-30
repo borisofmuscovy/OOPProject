@@ -345,18 +345,22 @@ public class Monster {
         }
     }
 
+    public void disown(InventoryItem item) {
+        if (this.inventory.containsValue(item)) {
+            for (Map.Entry<String, InventoryItem> entry : this.inventory.entrySet()) {
+                if (entry.getValue() == item) {
+                    item.setHolder(null);
+                    entry.setValue(null);
+                }
+            }
+        }
+    }
 
     public void unequip(InventoryItem item){
         // drop or unequip from inventory. cannot drop weapons, sets holder to null
         try {
-            if (this.inventory.containsValue(item) && !(item instanceof Weapon)) {
-                for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()){
-                    if (entry.getValue() == item) {
-                        item.setHolder(null);
-                        entry.setValue(null);
-                        System.out.println(this.getName() + " has dropped an item of type " + item.getClass());
-                    }
-                }
+            if (!(item instanceof Weapon)) {
+                this.disown(item);
             } else {
                 throw new IllegalArgumentException();
             }
@@ -377,6 +381,8 @@ public class Monster {
                     } else {
                     for (Map.Entry<String,InventoryItem> entry : other.getInventoryContents().entrySet()){
                         if (entry.getValue() == null) {
+                            // we have to eject item from inventory and eject ownership
+                            this.disown(item);
                             item.setHolder(other);
                             entry.setValue(item);
                         }

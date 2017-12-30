@@ -11,7 +11,7 @@ public abstract class InventoryItem {
     public int ID;
     public int value;
     public float weight;
-    public Monster holder;
+    public Object holder;
 
     {
         value = 0;
@@ -76,16 +76,15 @@ public abstract class InventoryItem {
      * @param holder
      *        Monster who holds the item.
      */
-    public void setHolder(Monster holder){
+    public void setHolder(Object holder){
         this.holder = holder;
     }
-
 
     /**
      * Gets holder of the item.
      * @return  this.holder
      */
-    public Monster getHolder(){
+    public Object getHolder(){
         return this.holder;
     }
 

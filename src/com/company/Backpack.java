@@ -71,6 +71,17 @@ public class Backpack extends InventoryItem{
         }
     }
 
+    public void setHolderRecursively(){
+        for(InventoryItem item : this.backpackContent) {
+            if (item instanceof Backpack) {
+                item.setHolder(this);
+                ((Backpack) item).setHolderRecursively();
+            } else {
+                item.setHolder(this);
+            }
+        }
+    }
+
     public void add(InventoryItem... items) throws IllegalArgumentException{
         try {
             for (int i=0; i < items.length;i++){
@@ -90,7 +101,7 @@ public class Backpack extends InventoryItem{
 
     public void remove(InventoryItem... items) throws IllegalArgumentException{
         try {
-            for (int i=0; i < items.length;i++){ 
+            for (int i=0; i < items.length;i++){
                 InventoryItem item = items[i];
                 if (!this.backpackContent.contains(item)){
                     throw new IllegalArgumentException("There's no such item in the backpack");

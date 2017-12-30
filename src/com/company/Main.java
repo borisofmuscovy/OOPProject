@@ -2,6 +2,10 @@ package com.company;
 
 public class Main {
 
+    public static void print(Object object) {
+        System.out.println(object);
+    }
+
     public static void main(String[] args) {
         Monster Bob = new Monster("Bob", 40);
         Monster Alice = new Monster("Alice", 40);
@@ -48,13 +52,22 @@ public class Main {
     //Code below is only for testing purposes
         Backpack Pocket = new Backpack(20, Alice, 25, 100);
         Backpack Pouch = new Backpack(20, Bob, 25, 100);
+        Weapon bonemasher = new Weapon(5, 10, 12, null);
         Pocket.add(Gucci, SKULLCRUSHER);
+        Pouch.add(bonemasher);
+        print(bonemasher.getHolder());
         //Pouch.add(Gucci);
         System.out.println(Pouch.getBackpackContents());
         System.out.println(Pocket.getBackpackContents());
         Pocket.add(Yves);
         System.out.println(Pocket.getBackpackContents());
         System.out.println(Pocket.getLightest());
+        Pocket.add(Pouch);
+        print(Pocket.getBackpackContents());
+        Pocket.setHolderRecursively();
+        print(Pocket.getHolder());
+        print(Pouch.getHolder());
+        print(bonemasher.getHolder());
 
     }
 }

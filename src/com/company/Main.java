@@ -65,8 +65,8 @@ public class Main {
         Pocket.add(Pouch);
         print(Pocket.getBackpackContents());
         Pocket.setHolderRecursively();
-        print(Pocket.getHolder());
         print(Pouch.getHolder());
+        print(Pouch.getIndirectHolder());
         print(bonemasher.getHolder());
 
     }

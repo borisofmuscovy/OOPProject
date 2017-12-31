@@ -167,7 +167,7 @@ public class Backpack extends InventoryItem{
         }
     }
 
-    public void transferContent(InventoryItem item, Backpack other)throws IllegalArgumentException{
+    public void transferContent(InventoryItem item, Backpack other) throws IllegalArgumentException{
         try {
             if(other.canContain(item)) {
                 throw new IllegalArgumentException("You cannot add this item. It's too heavy!");

@@ -31,7 +31,7 @@ public abstract class InventoryItem {
      * @throws IllegalArgumentException If weight of the weapon is smaller than zero
      *                                  | weight < 0
      */
-    public InventoryItem(int value, Monster holder, float weight) throws IllegalArgumentException {
+    public InventoryItem(int value, Object holder, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
         if (weight < 0)
             throw new IllegalArgumentException();
@@ -86,6 +86,21 @@ public abstract class InventoryItem {
      */
     public Object getHolder(){
         return this.holder;
+    }
+
+    public Object getIndirectHolder(){
+        try{
+            if (this.holder instanceof Monster) {
+                return this.getHolder();
+            } else if (this.holder instanceof Backpack) {
+                return ((Backpack) this.holder).getIndirectHolder();
+            } else {
+                throw new IllegalAccessException("Found item with holder type not monster or backpack.");
+            }
+        } catch (IllegalAccessException e) {
+            System.out.println(e.getMessage());
+            return null;
+        }
     }
 
 

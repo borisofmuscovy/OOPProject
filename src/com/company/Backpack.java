@@ -90,6 +90,8 @@ public class Backpack extends InventoryItem{
                     throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
                 } else if (this.backpackContent.contains(item)) {
                     throw new IllegalArgumentException("This item is already in the backpack!");
+                } else if (item.getHolder()!=null) {
+                    throw new IllegalArgumentException("Item already being held by someone else.");
                 } else {
                     this.backpackContent.add(item);
                 }
@@ -112,7 +114,19 @@ public class Backpack extends InventoryItem{
         } catch (IllegalArgumentException e){
             System.out.println(e.getMessage());
         }
+    }
 
+    public void transferContent(InventoryItem item, Backpack other) throws IllegalArgumentException{
+        try {
+            if(other.canContain(item)) {
+                throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
+            } else {
+                this.remove(item);
+                other.add(item);
+            }
+        } catch (IllegalArgumentException e){
+            System.out.println(e.getMessage());
+        }
     }
 
     public float getContentsWeight(){
@@ -167,16 +181,4 @@ public class Backpack extends InventoryItem{
         }
     }
 
-    public void transferContent(InventoryItem item, Backpack other) throws IllegalArgumentException{
-        try {
-            if(other.canContain(item)) {
-                throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
-            } else {
-                this.remove(item);
-                other.add(item);
-            }
-        } catch (IllegalArgumentException e){
-            System.out.println(e.getMessage());
-        }
-    }
 }

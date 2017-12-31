@@ -88,28 +88,28 @@ public class Purse extends InventoryItem {
     /**
      * Adds content to the purse
      * If content of the purse exceeds its capacity, the purse is torn
-     * @param dukats
-     *        Number of dukats to be added to the purse
+     * @param ducats
+     *        Number of ducats to be added to the purse
      */
-    public void addContent(float dukats){
+    public void addContent(float ducats){
         if(this.Torn == true)
             setContent(0);
         else
-            setContent(this.content + dukats);
+            setContent(this.content + ducats);
         if(this.content > this.capacity)
             tearThePurse();
     }
 
     /**
-     * Removes dukats from the purse
-     * @param dukats
-     *        Number of dukats to be removed from the purse
+     * Removes ducats from the purse
+     * @param ducats
+     *        Number of ducats to be removed from the purse
      */
-    public void removeContent(float dukats){
+    public void removeContent(float ducats){
         if(this.Torn == true)
             setContent(0);
         else
-            setContent(this.content - dukats);
+            setContent(this.content - ducats);
     }
 
     /**
@@ -117,12 +117,12 @@ public class Purse extends InventoryItem {
      * If the new content of one of the pursee exceeds its capacity, the purse is torn
      * @param other
      *        Other purse
-     * @param dukats
-     *        Number of dukats to be transferred
+     * @param ducats
+     *        Number of ducats to be transferred
      */
-    public void transferContent(Purse other, float dukats){
-        setContent(this.content - dukats);
-        setContent(other.content + dukats);
+    public void transferContent(Purse other, float ducats){
+        setContent(this.content - ducats);
+        setContent(other.content + ducats);
         if(this.content > this.capacity)
             this.tearThePurse();
         if(other.content > other.capacity)

@@ -314,7 +314,7 @@ public class Monster {
      */
     protected boolean canCarry(InventoryItem item){
         if (((this.getTotalCarriedWeight() + item.getWeight()) > this.getCarryingCapacity())
-                && (this.inventory.size() + 1 > 3)) {
+                && (this.inventory.size() + 1 > 3) && (this.inventory.containsValue(item))) {
             return false;
         } else {
             return true;
@@ -327,15 +327,25 @@ public class Monster {
             if (this.canCarry(item)) {
                 if (this.inventory.get("Left") == null) {
                     this.inventory.put("Left", item);
+                    item.setHolder(this);
+                    System.out.println(this.getName() + " has picked up an item of type " + item.getClass() +
+                    " with their left hand.");
+                    return;
                 } else if (this.inventory.get("Right") == null) {
                     this.inventory.put("Right", item);
+                    item.setHolder(this);
+                    System.out.println(this.getName() + " has picked up an item of type " + item.getClass() +
+                    " with their right hand.");
+                    return;
                 } else if (this.inventory.get("Back") == null) {
                     this.inventory.put("Back", item);
+                    item.setHolder(this);
+                    System.out.println(this.getName() + " has picked up an item of type " + item.getClass() +
+                    " stowing it on their back.");
+                    return;
                 } else {
                     throw new java.lang.Error("Somehow the anchor contents are full and yet not full!");
                 }
-                item.setHolder(this);
-                System.out.println(this.getName() + " has picked up an item of type " + item.getClass());
             } else {
                     throw new IllegalStateException();
             }
@@ -385,6 +395,7 @@ public class Monster {
                             this.disown(item);
                             item.setHolder(other);
                             entry.setValue(item);
+                            return;
                         }
                     }
                 }

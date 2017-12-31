@@ -44,10 +44,10 @@ public class Main {
 //            System.out.println("Everybody is dead!");
 //        }
 
-//        Alice.unequip(Gucci);
-//        System.out.println(Alice.getInventoryContents());
-//        Alice.unequip(SKULLCRUSHER);
-//        System.out.println(Alice.getInventoryContents());
+        Alice.unequip(Gucci);
+        System.out.println(Alice.getInventoryContents());
+        Alice.unequip(SKULLCRUSHER);
+        System.out.println(Alice.getInventoryContents());
 
     //Code below is only for testing purposes
         Backpack Pocket = new Backpack(20, Alice, 25, 100);
@@ -68,6 +68,8 @@ public class Main {
         print(Pouch.getHolder());
         print(Pouch.getIndirectHolder());
         print(bonemasher.getHolder());
-
+        Bob.unequip(Pouch);
+        print(Pouch.getHolder());
+        print(Bob.getInventoryContents());
     }
 }

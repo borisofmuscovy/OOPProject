@@ -1,4 +1,4 @@
-package com.company;
+package com.Monsters;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -22,16 +22,15 @@ public class Weapon extends InventoryItem {
      *        Describes value of the weapon
      * @param damage
      *        Describes damage cause by the weapon
-     * @param holder
-     *        Monster that holds the weapon
      */
-    public Weapon(float weight, int value, int damage, Monster holder){
-        super(value, holder, weight);
+    public Weapon(float weight, int value, int damage){
+        super(value, weight);
         this.setValue(value);
         assert(damage >= 1 & damage <= MAX_DAMAGE);
         this.damage = damage;
         this.weight = setWeight(weight);
         this.ID = generateWeaponID();
+        this.holder = null;
     }
     /**
      * Method setting unique, odd ID of a weapon of long type

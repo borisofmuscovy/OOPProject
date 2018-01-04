@@ -1,4 +1,4 @@
-package com.company;
+package com.Monsters;
 
 import java.util.Random;
 

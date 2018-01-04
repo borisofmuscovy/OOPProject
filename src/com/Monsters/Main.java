@@ -2,10 +2,6 @@ package com.Monsters;
 
 public class Main {
 
-    public static void print(Object object) {
-        System.out.println(object);
-    }
-
     public static String Battle(Monster Monster1, Monster Monster2) {
         if (Math.random() < 0.5){
             while (Monster1.isAlive() && Monster2.isAlive()) {

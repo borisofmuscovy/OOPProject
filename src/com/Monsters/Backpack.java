@@ -22,6 +22,7 @@ public class Backpack extends InventoryItem{
         this.ID = generateBackpackID();
         this.capacity = capacity;
         this.holder = holder;
+        holder.equip(this);
     }
 
     public Backpack(int value, float weight, float capacity){
@@ -33,8 +34,7 @@ public class Backpack extends InventoryItem{
 
 
     public SortedSet<InventoryItem> getBackpackContents(){
-        return this.backpackContent;
-        //TODO: return a copy in a public method instead!!!
+        return Collections.unmodifiableSortedSet(this.backpackContent);
     }
 
     /**
@@ -94,6 +94,7 @@ public class Backpack extends InventoryItem{
                     throw new IllegalArgumentException("Item already being held by someone else.");
                 } else {
                     this.backpackContent.add(item);
+                    this.setHolderRecursively();
                 }
             }
         } catch (IllegalArgumentException e) {
@@ -116,13 +117,16 @@ public class Backpack extends InventoryItem{
         }
     }
 
-    public void transferContent(InventoryItem item, Backpack other) throws IllegalArgumentException{
+    public void transfer(Backpack other, InventoryItem... items) throws IllegalArgumentException{
         try {
-            if(other.canContain(item)) {
-                throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
-            } else {
-                this.remove(item);
-                other.add(item);
+            for (int i=0; i < items.length;i++){
+                InventoryItem item = items[i];
+                if(other.canContain(item)) {
+                    throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
+                } else {
+                    this.remove(item);
+                    other.add(item);
+                }
             }
         } catch (IllegalArgumentException e){
             System.out.println(e.getMessage());

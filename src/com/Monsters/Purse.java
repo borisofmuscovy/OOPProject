@@ -85,6 +85,9 @@ public class Purse extends InventoryItem {
             this.content = newContent;
     }
 
+    public float getContent(){
+        return this.content;
+    }
     /**
      * Adds content to the purse
      * If content of the purse exceeds its capacity, the purse is torn

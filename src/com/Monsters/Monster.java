@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 
 /**
@@ -301,8 +302,11 @@ public class Monster {
     }
 
     public Map<String, InventoryItem> getInventoryContents(){
+        return Collections.unmodifiableMap(this.inventory);
+    }
+
+    private Map<String, InventoryItem> obtainInventoryContents(){
         return this.inventory;
-        //TODO: return copy for a public getter!!!
     }
 
     /**
@@ -322,7 +326,7 @@ public class Monster {
 
     public void equip(InventoryItem item) {
         try {
-            if (this.canCarry(item)) {
+            if ((this.canCarry(item)) && (item.getHolder()==null)) {
                 if (this.inventory.get("Left") == null) {
                     this.inventory.put("Left", item);
                     item.setHolder(this);
@@ -348,12 +352,11 @@ public class Monster {
                     throw new IllegalStateException();
             }
         } catch (IllegalStateException e) {
-        System.out.println(this.getName() + " cannot pick up " + item.getClass() + ", " +
-                "inventory full.");
+        System.out.println(this.getName() + " cannot pick up " + item.getClass());
         }
     }
 
-    public void disown(InventoryItem item) {
+    private void disown(InventoryItem item) {
         if (this.inventory.containsValue(item)) {
             for (Map.Entry<String, InventoryItem> entry : this.inventory.entrySet()) {
                 if (entry.getValue() == item) {
@@ -367,7 +370,7 @@ public class Monster {
     public void unequip(InventoryItem item){
         // drop or unequip from inventory. cannot drop weapons, sets holder to null
         try {
-            if (!(item instanceof Weapon)) {
+            if (!(item instanceof Weapon)) { //add check for ownership of item here
                 this.disown(item);
             } else {
                 throw new IllegalArgumentException();
@@ -377,29 +380,36 @@ public class Monster {
         }
     }
 
-    public void trade(Monster other, InventoryItem item) {
+    public void trade(Monster other, InventoryItem... items) {
         try {
-            //first determine if this monster trying to trade has the item in question
-            if (!this.inventory.containsValue(item)){
-                throw new IllegalStateException();
-            } else if ((item instanceof Purse) || (item instanceof Weapon) || (item instanceof Backpack)) {
-                //if the item is a purse, we must check whether the other monster has a purse already
-                if (!other.canCarry(item)) {
-                    throw new IllegalAccessException();
-                    } else {
-                    for (Map.Entry<String,InventoryItem> entry : other.getInventoryContents().entrySet()){
-                        if (entry.getValue() == null) {
-                            // we have to eject item from inventory and eject ownership
-                            this.disown(item);
-                            item.setHolder(other);
-                            entry.setValue(item);
-                            return;
+            for (int i=0; i < items.length;i++){
+                InventoryItem item = items[i];
+                //first determine if this monster trying to trade has the item in question
+                if (!this.inventory.containsValue(item)){
+                    throw new IllegalStateException();
+                } else if ((item instanceof Purse) || (item instanceof Weapon) || (item instanceof Backpack)) {
+                    //if the item is a purse, we must check whether the other monster has a purse already
+                    if (!other.canCarry(item)) {
+                        throw new IllegalAccessException();
+                        } else {
+                        for (Map.Entry<String,InventoryItem> entry : other.obtainInventoryContents().entrySet()){
+                            if (entry.getValue() == null) {
+                                // we have to eject item from inventory and eject ownership
+                                this.disown(item);
+                                item.setHolder(other);
+                                entry.setValue(item);
+                                return;
+                            } else if (entry.getValue() instanceof Backpack) {
+                                this.disown(item);
+                                item.setHolder(other);
+                                ((Backpack) entry.getValue()).add(item);
+                            }
                         }
                     }
+                } else {
+                    // trying to trade some other object that we don't explicitly expect
+                    throw new UnsupportedOperationException();
                 }
-            } else {
-                // trying to trade some other object that we don't explicitly expect
-                throw new UnsupportedOperationException();
             }
         } catch (IllegalStateException e1) {
             System.out.println(this.getName() + " tried to trade an item they do not possess.");

@@ -1,5 +1,7 @@
 package com.Monsters;
 
+import java.util.Map;
+
 public class Main {
 
     public static String Battle(Monster Monster1, Monster Monster2) {
@@ -35,15 +37,14 @@ public class Main {
         System.out.println("This is Part 1 of the project.");
         Monster Bob = new Monster("Bob", 40);
         Monster Alice = new Monster("Alice", 40);
-        System.out.println(Bob);
-        System.out.println(Alice);
-        Weapon SKULLCRUSHER = new Weapon(2, 10, 10);
-        Alice.equip(SKULLCRUSHER);
+
+        Weapon Skullcrusher = new Weapon(2, 10, 10);
+        Alice.equip(Skullcrusher);
         System.out.println(Alice.getInventoryContents());
-        Alice.trade(Bob, SKULLCRUSHER);
+        Alice.trade(Bob, Skullcrusher);
         System.out.println("Alice" + Alice.getInventoryContents());
         System.out.println("Bob" + Bob.getInventoryContents());
-        System.out.println(SKULLCRUSHER.getHolder());
+        System.out.println(Skullcrusher.getHolder());
         Battle(Alice, Bob);
         System.out.println("END PART 1\n");
     }
@@ -54,11 +55,38 @@ public class Main {
         Monster Alice = new Monster("Alice", 40);
         System.out.println(Bob);
         System.out.println(Alice);
+
         Purse Gucci = new Purse(10, 1, 20, 50);
         Purse Yves = new Purse(20, 1, 30, 70);
+
+        Weapon Bonemasher = new Weapon(5, 5, 10);
+        Weapon Skullcrusher = new Weapon(5, 5, 10);
+
         Alice.equip(Gucci);
+        Alice.equip(Bonemasher);
         Bob.equip(Yves);
+        Bob.equip(Skullcrusher);
+
         Battle(Alice, Bob);
+        if (Bob.isAlive()) {
+            for (Map.Entry<String,InventoryItem> entry : Alice.getInventoryContents().entrySet()) {
+                if (entry.getValue() instanceof Weapon) {
+                    Alice.trade(Bob, entry.getValue());
+                } else if (entry.getValue() instanceof Purse) {
+                    ((Purse) entry.getValue()).transferContent(Yves, ((Purse) entry.getValue()).getContent());
+                }
+            }
+            System.out.println(Bob.getInventoryContents());
+        } else if (Alice.isAlive()) {
+            for (Map.Entry<String,InventoryItem> entry : Bob.getInventoryContents().entrySet()) {
+                if (entry.getValue() instanceof Weapon) {
+                    Bob.trade(Alice, entry.getValue());
+                } else if (entry.getValue() instanceof Purse) {
+                    ((Purse) entry.getValue()).transferContent(Gucci, ((Purse) entry.getValue()).getContent());
+                }
+            }
+            System.out.println(Alice.getInventoryContents());
+        }
         System.out.println("END PART 2\n");
     }
 
@@ -71,15 +99,16 @@ public class Main {
 
         Weapon Stick = new Weapon(2, 10, 12);
         Alice.equip(Stick);
+        Weapon Rock = new Weapon(2, 10, 12);
+        Bob.equip(Rock);
 
-        System.out.println(Bob);
         System.out.println(Bob.getInventoryContents());
-        System.out.println(Alice);
         System.out.println(Alice.getInventoryContents());
 
         Backpack Versace = new Backpack(20, 25, 100);
-        Weapon SKULLCRUSHER = new Weapon(2, 10, 10);
-        Versace.add(SKULLCRUSHER);
+        Weapon Skullcrusher = new Weapon(2, 10, 10);
+        Versace.add(Skullcrusher);
+
         Purse Gucci = new Purse(10, 1, 20, 50);
         Purse Yves = new Purse(20, 1, 30, 70);
         Versace.add(Gucci, Yves);
@@ -87,11 +116,18 @@ public class Main {
         Bob.unequip(BobsBackpack);
         Bob.equip(Versace);
 
-        String Winner = Battle(Bob, Alice);
+        Battle(Bob, Alice);
 
-//        if (Winner == "Bob") {
-//            Alice.trade
-//        }
+        if (Bob.isAlive()) {
+            Alice.trade(Bob, Alice.getInventoryContents().get("Left"));
+            Alice.trade(Bob, Alice.getInventoryContents().get("Right"));
+            Alice.trade(Bob, Alice.getInventoryContents().get("Back"));
+        } else if (Alice.isAlive()) {
+            Bob.trade(Alice, Bob.getInventoryContents().get("Left"));
+            Bob.trade(Alice, Bob.getInventoryContents().get("Right"));
+            Bob.trade(Alice, Bob.getInventoryContents().get("Back"));
+        }
+
         System.out.println("END PART 3\n");
     }
 
@@ -99,28 +135,5 @@ public class Main {
         Part1();
         Part2();
         Part3();
-
-    //Code below is only for testing purposes
-//        Backpack Pocket = new Backpack(20, Alice, 25, 100);
-//        Backpack Pouch = new Backpack(20, Bob, 25, 100);
-//        Weapon bonemasher = new Weapon(5, 10, 12, null);
-//        Pocket.add(Gucci, SKULLCRUSHER);
-//        Pouch.add(bonemasher);
-//        print(bonemasher.getHolder());
-//        //Pouch.add(Gucci);
-//        System.out.println(Pouch.getBackpackContents());
-//        System.out.println(Pocket.getBackpackContents());
-//        Pocket.add(Yves);
-//        System.out.println(Pocket.getBackpackContents());
-//        System.out.println(Pocket.getLightest());
-//        Pocket.add(Pouch);
-//        print(Pocket.getBackpackContents());
-//        Pocket.setHolderRecursively();
-//        print(Pouch.getHolder());
-//        print(Pouch.getIndirectHolder());
-//        print(bonemasher.getHolder());
-//        Bob.unequip(Pouch);
-//        print(Pouch.getHolder());
-//        print(Bob.getInventoryContents());
     }
 }

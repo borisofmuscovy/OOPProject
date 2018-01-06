@@ -49,13 +49,18 @@ public class Monster {
     }
 
     /**
-     * Initialise a named monster with a given number of hitpoints.
+     * Initialise a named monster with a given number of hit points.
      *
      * @param Name
      *        The name of the monster. Must start with a capital letter, can contain lowercase, uppercase letters, numbers
      *        and the ' character.
      * @param startHP
      *        The health points value the monster starts with. This is the maximum HP of the monster unless changed explicitly.
+     * @pre    The given name must be a valid name for a monster
+     *         | isValidName(name)
+     * @throws IllegalArgumentException
+     *          The given name is not a valid name for a monster.
+     *          | ! isValidName(name)
      *
      */
     public Monster(String Name, int startHP) throws IllegalArgumentException{
@@ -127,6 +132,11 @@ public class Monster {
         return this.strength;
     }
 
+    /**
+     * Sets strength of a monster ti a given new strength
+     * @param newStrength
+     *          The new strength for this monster
+     */
     protected void setStrength(int newStrength){
         this.strength = newStrength;
     }
@@ -184,17 +194,19 @@ public class Monster {
 
 
     /**
-     * Returns the protection value.
+     * Returns the protection value for this monster.
      * @return  protection
+     *          | this.protection
      */
     public int getProtection() { return this.protection; }
 
     /**
      * Generates a protection factor which is a prime number between the allowed minimum and maximum protection values
      * @return  protection
-     * @pre     The protection is represented as a prime number between MIN_PROTECTION and MAX_PROTECTION
-     *          | isPrime(initialProtectionFactor)
+     * @pre     The protection value is between MIN_PROTECTION and MAX_PROTECTION
      *          | MIN_PROTECTION < initialProtectionFactor <MAX_PROTECTION
+     * @pre     The protection value is a prime number
+     *          | isPrime(initialProtectionFactor)
      */
     private int generateProtectionFactor() {
         ArrayList<Integer> primeList = new ArrayList<Integer>();
@@ -218,7 +230,7 @@ public class Monster {
     }
 
     /**
-     * Checks if prime.
+     * Checks if a number is a prime number.
      * @param   n
      *          The number to be checked
      * @return  True if the number is a prime number and false otherwise
@@ -263,17 +275,17 @@ public class Monster {
             } else {
                 this.hp = newHP;
             }
-
     }
 
     /**
+     * Returns the maximum value of hitpoints a monster can have
      * @return  MAX_HP
      *          | this.MAX_HP
      */
     public int getMAX_HP() { return this.MAX_HP; }
 
     /**
-     * Sets the ceiling for allowed HP values.
+     * Sets the new maximum hitpoint value/
      * @param newMAX_HP
      *        The new HP ceiling.
      * @post The new HP ceiling will always equal the provided value.
@@ -312,6 +324,7 @@ public class Monster {
     /**
      * Checks if the monster is physically capable of carrying the extra weight of an item.
      * @param item
+     *        
      * @return
      */
     protected boolean canCarry(InventoryItem item){

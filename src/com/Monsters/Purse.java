@@ -1,5 +1,9 @@
 package com.Monsters;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
+import be.kuleuven.cs.som.annotate.Raw;
+
 import java.util.Random;
 
 public class Purse extends InventoryItem {
@@ -11,16 +15,17 @@ public class Purse extends InventoryItem {
 
 
     /**
-     * Constructor of purse object
-     * Value of intialized content cannot be bigger than purses capacity
-     * @param value
-     *        Sets value of the purse
-     * @param holder
-     *        Monster that carries the purse
-     * @param content
-     *        Sets content of the purse at given time
-     * @param capacity
-     *        Describes maximum capacity of the purse
+     * Initialized a purse with weight, value, content, capacity and holder
+     * @pre     Content cannot be bigger than capacity
+     *          | content >= capacityy
+     * @param   value
+     *          Sets value of the purse
+     * @param   holder
+     *          Monster that carries the purse
+     * @param   content
+     *          Sets content of the purse at given time
+     * @param   capacity
+     *          Describes maximum capacity of the purse
      */
     public Purse(int value, float weight, float content, float capacity, Monster holder){
         super(value, holder, weight);
@@ -31,6 +36,17 @@ public class Purse extends InventoryItem {
         this.Torn = false;
     }
 
+    /**
+     * Initialized a purse with weight, value, content and capacity
+     * @pre     Content cannot be bigger than capacity
+     *          | content >= capacity
+     * @param   value
+     *          Sets value of the purse
+     * @param   content
+     *          Sets content of the purse at given time
+     * @param   capacity
+     *          Describes maximum capacity of the purse
+     */
     public Purse(int value, float weight, float content, float capacity) {
         super(value, weight);
         this.ID = setPurseID();
@@ -44,8 +60,8 @@ public class Purse extends InventoryItem {
      * Fibonacci series generator
      * @param   number
      *          Number indicating how many fibonacci numbers are going to be generated
-     * @return  long[] fibonacciSeries
-     *          Array containing fibonacci numbers of type long
+     * @return  Array containing fibonacci numbers of type long
+     *          |long[] fibonacciSeries
      */
     private static int[] fibonacci(int number) {
         int[] fibonacciSeries = new int[number];
@@ -58,10 +74,12 @@ public class Purse extends InventoryItem {
     }
 
     /**
-     *  Method returning random long number from fibonacci series
-     * @return  purseID
-     *          Random long from the fibonacciSeries array
+     * Method returning random long number from fibonacci series created using fibonacci()
+     * @return  Random long from the fibonacciSeries array
+     *          | purseID
      */
+    @Raw
+    @Immutable
     public long setPurseID(){
         int n = 25;
         int[] fibonacciSeries = fibonacci(n);
@@ -70,14 +88,23 @@ public class Purse extends InventoryItem {
         return purseID;
     }
 
+    /**
+     * Returns ID of this purse
+     * @return  ID of this purse
+     *          | this.ID
+     */
+    @Raw
+    @Override
     public long getID(){
         return this.ID;
     }
+
     /**
      * Sets new value of the content of a purse
      * @param newContent
      *        Describes new content of a purse
      */
+    @Basic
     public void setContent(float newContent){
         if(this.Torn == true)
             setContent(0);
@@ -85,14 +112,27 @@ public class Purse extends InventoryItem {
             this.content = newContent;
     }
 
+    /**
+     * Returns content of this purse
+     * @return  Content of this purse
+     *          | this.content
+     */
+    @Basic
     public float getContent(){
         return this.content;
     }
+
+
     /**
      * Adds content to the purse
-     * If content of the purse exceeds its capacity, the purse is torn
-     * @param ducats
-     *        Number of ducats to be added to the purse
+     * @pre     To add ducats to this purse, purse cannot be torn
+     *          this.Torn != true
+     * @param   ducats
+     *          Number of ducats to be added to the purse
+     * @post    If the content of the purse after addition of the ducats exceeds its capacity
+     *              this purse is torn
+     *          |If (this.content > this.capacity)
+     *              then tearThePurse()
      */
     public void addContent(float ducats){
         if(this.Torn == true)
@@ -117,12 +157,17 @@ public class Purse extends InventoryItem {
 
     /**
      * Transfers money from one purse to the other
-     * If the new content of one of the pursee exceeds its capacity, the purse is torn
-     * @param other
-     *        Other purse
-     * @param ducats
-     *        Number of ducats to be transferred
+     * @param   other
+     *          Other purse
+     * @param   ducats
+     *          Number of ducats to be transferred
+     * @post     If the new content of one of the purses exceeds its capacity, the purse is torn
+     *           |  if(this.content > this.capacity)
+     *           |      then this.tearThePurse();
+     *           |  if(other.content > other.capacity)
+     *           |      then other.tearThePurse();
      */
+
     public void transferContent(Purse other, float ducats){
         setContent(this.content - ducats);
         setContent(other.content + ducats);
@@ -141,6 +186,8 @@ public class Purse extends InventoryItem {
 
     /**
      * Method to destroy the purse
+     * @post    The purse is torn
+     *          | this.Torn = true
      */
     public void tearThePurse(){
         this.value = 0;
@@ -150,6 +197,8 @@ public class Purse extends InventoryItem {
 
     /**
      *  Method indicating that purse is torn.
+     *  @return true if purse is torn, false otherwise
+     *          | this.Torn
      */
     public boolean isTorn(){
         return this.Torn;

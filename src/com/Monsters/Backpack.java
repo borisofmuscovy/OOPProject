@@ -1,7 +1,13 @@
 package com.Monsters;
 
+import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Raw;
+
 import java.util.*;
 
+/**
+ *
+ */
 class WeightComparator implements Comparator<InventoryItem> {
     public int compare(InventoryItem item1, InventoryItem item2) {
         if (item1.getWeight() == item2.getWeight()) {
@@ -11,12 +17,26 @@ class WeightComparator implements Comparator<InventoryItem> {
     }
 }
 
+/**
+ * Class of backpacks
+ */
 public class Backpack extends InventoryItem{
     private final long ID;
     private final float capacity;
     private float backpackValue;
     private SortedSet<InventoryItem> backpackContent = new TreeSet<>(new WeightComparator());
 
+    /**
+     * Initialize new backpack with value, holder, weight and capacity
+     * @param   value
+     *          The value of this new backpack
+     * @param   holder
+     *          The holder of this new backpack
+     * @param   weight
+     *          The weight of this new backpack
+     * @param   capacity
+     *          The capacity of this new backpack
+     */
     public Backpack(int value, Monster holder, float weight, float capacity){
         super(value, holder, weight);
         this.ID = generateBackpackID();
@@ -25,6 +45,15 @@ public class Backpack extends InventoryItem{
         holder.equip(this);
     }
 
+    /**
+     * Initialize new backpack with value, wieght and capacity
+     * @param   value
+     *          The value of this new backpack
+     * @param   weight
+     *          The weight of this new backpack
+     * @param   capacity
+     *          The capacity of this new backpack
+     */
     public Backpack(int value, float weight, float capacity){
         super (value, weight);
         this.ID = generateBackpackID();
@@ -32,13 +61,22 @@ public class Backpack extends InventoryItem{
         this.holder = null;
     }
 
-
+    /**
+     * Returns the sorted set of content od the backpack
+     * @return  backpackContent
+     *          | Collections.unmodifiableSortedSet(this.backpackContent)
+     */
+    @Basic
     public SortedSet<InventoryItem> getBackpackContents(){
         return Collections.unmodifiableSortedSet(this.backpackContent);
     }
 
     /**
      * Method setting odd ID of a backpack of long type
+     * @pre     Backpack ID has to be an odd number
+     *          | backpackID % 2 != 0
+     * @pre     BackpackID has to be a number bigger than 0
+     *          | backpackID >= 0
      * @return  backpackID
      */
     public long generateBackpackID(){
@@ -55,14 +93,33 @@ public class Backpack extends InventoryItem{
         return backpackID;
     }
 
+    /**
+     * Returns ID of this backpack
+     * @return  ID
+     *          | this.ID
+     */
+    @Raw
+    @Override
     public long getID(){
         return this.ID;
     }
 
+    /**
+     * Returns capacity of this backpack
+     * @return  capacity of this backpack
+     *          | this.capacity
+     */
     public float getCapacity(){
         return this.capacity;
     }
 
+    /**
+     * Checks if an item with given weight can be added to the backpack
+     * @param   item
+     *          Item to be added to tbe backpack
+     * @return  true if weight of backpack with new item does not exceed backpack's capacity, false otherwise
+     *          |   this.getContentsWeight() + item.getWeight()) > this.getCapacity()
+     */
     public boolean canContain(InventoryItem item){
         if ((this.getContentsWeight() + item.getWeight()) > this.getCapacity()){
             return false;
@@ -71,6 +128,12 @@ public class Backpack extends InventoryItem{
         }
     }
 
+    /**
+     * For items contained in the backpack, sets backpack holder as items holder
+     * @post    If item is contained in a backpack, it has the same holder as the backpack
+     *          | for(InventoryItem item: this.backpackContent)
+     *              item.getHolder == this.getHolder
+     */
     public void setHolderRecursively(){
         for(InventoryItem item : this.backpackContent) {
             if (item instanceof Backpack) {
@@ -82,6 +145,18 @@ public class Backpack extends InventoryItem{
         }
     }
 
+    /**
+     * Adds multiple items to a backpack
+     * @param   items
+     *          Items to be added to a backpack
+     * @post    The item is placed in the backpack and new holder of the item is set
+     *          | this.backpackContent.add(item)
+     *          | this.setHolderRecursively()
+     * @throws  IllegalArgumentException
+     *          Throws an exception of the item to be added is to heavy or the item is already in the backpack
+     *          or the item already has different holder
+     *          | (!canContain(item)) || this.backpackContent.contains(item)) || item.getHolder()!=null
+     */
     public void add(InventoryItem... items) throws IllegalArgumentException{
         try {
             for (int i=0; i < items.length;i++){
@@ -102,6 +177,16 @@ public class Backpack extends InventoryItem{
         }
     }
 
+    /**
+     * Removes multiple items from this backpack
+     * @param   items
+     *          Items to be removed
+     * @throws  IllegalArgumentException
+     *          Throws an exception if item to be removed is not contained in the backpack
+     *          | !this.backpackContent.contains(item)
+     * @post    The item is removed from the backpack
+     *          | this.backpackContent.remove(item)
+     */
     public void remove(InventoryItem... items) throws IllegalArgumentException{
         try {
             for (int i=0; i < items.length;i++){
@@ -117,11 +202,25 @@ public class Backpack extends InventoryItem{
         }
     }
 
+    /**
+     * Transfers multiple items from this backpack to another
+     * @param   other
+     *          Backpack to which items are transferred
+     * @param   items
+     *          Items to be transferred to other backpack
+     * @throws  IllegalArgumentException
+     *          Throws illegal argument exception if item is too heavy to be transferres;
+     *          Capacity of other backpack would be exceeded
+     *          | ! other.canContain(item)
+     * @post    Items are removed from this backpack and put in other backpack
+     *          | this.remove(item)
+     *          |  other.add(item)
+     */
     public void transfer(Backpack other, InventoryItem... items) throws IllegalArgumentException{
         try {
             for (int i=0; i < items.length;i++){
                 InventoryItem item = items[i];
-                if(other.canContain(item)) {
+                if(!other.canContain(item)) {
                     throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
                 } else {
                     this.remove(item);
@@ -133,6 +232,11 @@ public class Backpack extends InventoryItem{
         }
     }
 
+    /**
+     * Returns weight of items contained in the backpack
+     * @return  total weight of items from the backpack
+     *          | contentsWeight
+     */
     public float getContentsWeight(){
         float contentsWeight = 0;
         for(InventoryItem item : this.backpackContent ){
@@ -141,6 +245,11 @@ public class Backpack extends InventoryItem{
         return contentsWeight;
     }
 
+    /**
+     * Returns total weight of the backpack
+     * @return  weight of the backpack and of the items contained in it
+     *          | totalBackpackWeight
+     */
     public float getTotalWeight(){
         float totalBackpackWeight = 0;
         for(InventoryItem item : this.backpackContent ){
@@ -151,6 +260,11 @@ public class Backpack extends InventoryItem{
 
     }
 
+    /**
+     * Returns total value of the backpack and of the items contained in it
+     * @return  value of the backpack and of the items contained in it
+     *          | backpackValue
+     */
     public float getTotalValue(){
         for(InventoryItem item : this.backpackContent){
             backpackValue += item.getValue();
@@ -159,6 +273,14 @@ public class Backpack extends InventoryItem{
         return backpackValue;
     }
 
+    /**
+     * Returns the heaviest item from the backpack
+     * @return  The heaviest item from the backpack
+     *          | this.backpackContent.last()
+     * @throws  IllegalStateException
+     *          Throws an exception if backpack is empty
+     *          | this.backpackContent.isEmpty()
+     */
     public InventoryItem getHeaviest() throws IllegalStateException{
         try {
             if (this.backpackContent.isEmpty()) {
@@ -172,6 +294,14 @@ public class Backpack extends InventoryItem{
         }
     }
 
+    /**
+     * Returns the lightest item from the backpack
+     * @return  The lightest item from the backpack
+     *          | this.backpackContent.first()
+     * @throws  IllegalStateException
+     *          Throws an exception if backpack is empty
+     *          | this.backpackContent.isEmpty()
+     */
     public InventoryItem getLightest() throws IllegalStateException{
         try {
             if(this.backpackContent.isEmpty()) {

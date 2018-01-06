@@ -128,6 +128,7 @@ public class Monster {
      * @return  strength
      *          | this.strength
      */
+    @Basic
     public int getStrength(){
         return this.strength;
     }
@@ -137,10 +138,16 @@ public class Monster {
      * @param newStrength
      *          The new strength for this monster
      */
+    @Basic
     protected void setStrength(int newStrength){
         this.strength = newStrength;
     }
 
+    /**
+     * Returns maximum damage that can be caused by a monster
+     * @return Maximum value of damage
+     *         | MAX_DAMAGE
+     */
     protected static int getMAX_DAMAGE() {
         return MAX_DAMAGE;
     }
@@ -152,6 +159,7 @@ public class Monster {
      * @post    If the new maximum damage is more than or equal 1, the maximum damage value will equal to the new value.
      *          | if (newMAX_DAMAGE => 1) { MAX_DAMAGE = newMAX_DAMAGE }
      */
+    @Basic
     public static void setMAX_DAMAGE(int newMAX_DAMAGE) {
         if (newMAX_DAMAGE >= 1) {
             MAX_DAMAGE = newMAX_DAMAGE;
@@ -163,6 +171,7 @@ public class Monster {
      * @return  damage
      *          | this.damage
      */
+    @Basic
     public int getDamage(){
         return this.damage;
     }
@@ -192,12 +201,12 @@ public class Monster {
         }
     }
 
-
     /**
      * Returns the protection value for this monster.
      * @return  protection
      *          | this.protection
      */
+    @Basic
     public int getProtection() { return this.protection; }
 
     /**
@@ -254,6 +263,7 @@ public class Monster {
      * @return      The integer hp if and only if the monster isAlive.
      *              | this.hp
      */
+    @Basic
     public int getHP() {
         return this.hp;
     }
@@ -268,6 +278,7 @@ public class Monster {
      *          The new HP is equal to or less than 0, which means the monster is dead.
      *          | if (newHP <= 0) { Death() }
      */
+    @Basic
     private void setHP(int newHP) throws IllegalArgumentException {
             if (newHP <= 0) {
                 this.Death();
@@ -298,7 +309,11 @@ public class Monster {
 
     //all of the following inventory code deals with anchors only for now, no support for looking into backpacks
 
-
+    //METHOD getTotalCarriedWeight seems to get total value not weight
+    /**
+     * Returns total weight of items carried by a monster
+     * @return  total weight of the items carried by a monster
+     */
     public float getTotalCarriedWeight() {
         float totalCarriedWeight = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
@@ -309,14 +324,32 @@ public class Monster {
         return totalCarriedWeight;
     }
 
+    /**
+     * Returns maximum weight of items that monster can carry
+     * @return  carrying capacity of a monster
+     *          | this.carryingCapacity
+     */
+    @Basic
     public int getCarryingCapacity(){
         return this.carryingCapacity;
     }
 
+    /**
+     * Returns items that are present in monster's inventory
+     * @return  monster's inventory items
+     *          | this.inventory
+     */
+    @Basic
     public Map<String, InventoryItem> getInventoryContents(){
         return Collections.unmodifiableMap(this.inventory);
     }
 
+    /**
+     * Returns items that are present in monster's inventory
+     * @return this monster's inventory items
+     *          | this.inventory
+     */
+    @Basic
     private Map<String, InventoryItem> obtainInventoryContents(){
         return this.inventory;
     }
@@ -324,8 +357,8 @@ public class Monster {
     /**
      * Checks if the monster is physically capable of carrying the extra weight of an item.
      * @param item
-     *        
-     * @return
+     *        An item to be checked if can be held by a monster
+     * @return  True is monster can carry the item, false otherwise
      */
     protected boolean canCarry(InventoryItem item){
         if (((this.getTotalCarriedWeight() + item.getWeight()) > this.getCarryingCapacity())
@@ -336,8 +369,26 @@ public class Monster {
         }
     }
 
-
-    public void equip(InventoryItem item) {
+    /**
+     * Adds an item to this monster's inventory
+     * @param item
+     *        Item to be added
+     * @pre   Monster is capable of carrying the item
+     *        |this.canCarry(item)
+     * @pre   The item does not have a holder
+     *        | item.getHolder() == null
+     * @pre   Monster has to have a free anchor to add the item
+     *        | this.inventory.get("Left") == null ||this.inventory.get("Right") == null
+     *              || this.inventory.get("Back") == null
+     * @throws IllegalStateException
+     *         Throws an exception if item is too heavy, it already has a holder or none of the anchors is empty
+     *         | ! this.canCarry(item) || item.getHolder() != null ||
+     *         (this.inventory.get("Left") != null && this.inventory.get("Right") != null
+     *              && this.inventory.get("Back") != null)
+     * @post    Item is added to the inventory to the empty anchor
+     *          | this.inventory.put(anchor, item)
+     */
+    public void equip(InventoryItem item) throws IllegalStateException{
         try {
             if ((this.canCarry(item)) && (item.getHolder()==null)) {
                 if (this.inventory.get("Left") == null) {
@@ -369,6 +420,17 @@ public class Monster {
         }
     }
 
+    /**
+     * Deletes an item from monster's inventory
+     * @param item
+     *        Item to be deleted from inventory
+     * @pre   Monster contains the item in its inventory
+     *        this.inventory.containsValue(item)
+     * @post  Item is deleted from monster's inventory
+     *        | entry.setValue(null)??
+     * @post  Holder of an item is set to null
+     *        | item.getHolder == null
+     */
     private void disown(InventoryItem item) {
         if (this.inventory.containsValue(item)) {
             for (Map.Entry<String, InventoryItem> entry : this.inventory.entrySet()) {
@@ -380,7 +442,21 @@ public class Monster {
         }
     }
 
-    public void unequip(InventoryItem item){
+    /**
+     * Delete an item from monster's inventory
+     * @param   item
+     *          Item to be deleted from monster's inventory
+     *
+     * @throws  IllegalArgumentException
+     *          throws an exception if monster tris to drop a weapon
+     *          | if (item instance of Weapon)
+     *          |       then throw new IllegalArgumentException
+     * @throws  IllegalArgumentException
+     *          throws an exception if monster does not hold a weapon it tries to drop
+     *          | ! this.inventory.contains(item)
+     *          |       then throw new IllegalArgumentException
+     */
+    public void unequip(InventoryItem item) throws IllegalArgumentException{
         // drop or unequip from inventory. cannot drop weapons, sets holder to null
         try {
             if (!(item instanceof Weapon)) { //add check for ownership of item here
@@ -393,7 +469,32 @@ public class Monster {
         }
     }
 
-    public void trade(Monster other, InventoryItem... items) {
+    /**
+     * Exchange/trade of several items between monsters
+     * @param   other
+     *          Monster with which this monster trades
+     * @param   items
+     *          Items to be traded
+     * @pre     Monster can trade only items contained in its inventory
+     *          | this.inventory.containsValue(item)
+     * @pre     Monster can trade items only if the other monster has capacity to take them
+     *          | other.canCarry(item)
+     * @post    Items traded are deleted from this monster inventory and added to other monster inventory
+     *          | this.disown(item)
+     *          | entry.setValue(item);
+     * @post    Holder of an item changes
+     *          | item.setHolder(other)
+     * @throws  IllegalAccessException
+     *          Throws an exception if other monster is not able to carry the item because of its weight or other monster's inventory is full
+     *          | !other.canCarry(item)
+     * @throws  IllegalStateException
+     *          Throws an exception if monster is trying to trade an item it does not possess
+     *          | !this.inventory.containsValue(item)
+     * @throws  UnsupportedOperationException
+     *          Throws an exception if monster tries to trade something that is not a Purse, Backpack or Weapon
+     *          | (!(item instanceof Purse) && !(item instanceof Weapon) && !(item instanceof Backpack))
+     */
+    public void trade(Monster other, InventoryItem... items) throws IllegalAccessException, IllegalStateException, UnsupportedOperationException{
         try {
             for (int i=0; i < items.length;i++){
                 InventoryItem item = items[i];
@@ -432,6 +533,10 @@ public class Monster {
         }
     }
 
+    /**
+     * Returns total value of this monster's inventory items
+     * @return  totalValue
+     */
     public float getTotalInventoryValue() {
         float totalValue = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
@@ -443,12 +548,13 @@ public class Monster {
     }
 
     /**
-     * Make sure that no of weapons that not exceed allowed no of anchors
-     * @return
+     * Returns total value of weapons contained in Monster's inventory
+     * @return totalValueofWeapons
      */
     public int totalValueofWeapons(){
         return 1;
     }
+
     /**
      * Method representing battle of the monsters.
      * @param   opponent
@@ -457,7 +563,7 @@ public class Monster {
      *          If the isAlive is false (monster has no HP) it cannot take part in the battle.
      *          |  if !this.isAlive()
      * @throws  IllegalArgumentException
-     *          If oponent monster dies during the battle
+     *          If opponent monster dies during the battle
      *          |!opponent.isAlive()
      */
     public String hit(Monster opponent) throws IllegalArgumentException, IllegalStateException{

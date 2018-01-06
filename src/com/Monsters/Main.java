@@ -33,7 +33,7 @@ public class Main {
         }
     }
 
-    public static void Part1() {
+    public static void Part1() throws IllegalAccessException{
         System.out.println("This is Part 1 of the project.");
         Monster Bob = new Monster("Bob", 40);
         Monster Alice = new Monster("Alice", 40);
@@ -49,7 +49,7 @@ public class Main {
         System.out.println("END PART 1\n");
     }
 
-    public static void Part2(){
+    public static void Part2() throws IllegalAccessException{
         System.out.println("This is Part 2 of the project.");
         Monster Bob = new Monster("Bob", 40);
         Monster Alice = new Monster("Alice", 40);
@@ -90,7 +90,7 @@ public class Main {
         System.out.println("END PART 2\n");
     }
 
-    public static void Part3(){
+    public static void Part3() throws IllegalAccessException{
         System.out.println("This is Part 3 of the project.");
         Monster Bob = new Monster("Bob", 40);
         Monster Alice = new Monster("Alice", 40);
@@ -131,7 +131,7 @@ public class Main {
         System.out.println("END PART 3\n");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IllegalAccessException{
         Part1();
         Part2();
         Part3();

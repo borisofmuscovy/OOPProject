@@ -1,4 +1,6 @@
 package com.Monsters;
+import be.kuleuven.cs.som.annotate.Basic;
+
 import java.text.DecimalFormat;
 import java.math.RoundingMode;
 
@@ -19,17 +21,20 @@ public abstract class InventoryItem {
     }
 
     /**
-     * Constructor of inventory item: purse or weapon
-     * Initializes item ID depending on item type:
-     * Random odd long for weapons
-     * Random number from fibonacci series for purses
+     * Initialized new inventory item: weapon, purse or backpack with value, holder and weight
      *
-     * @param value Parameter describing value of the purse no smaller than zero
-     *              | !(value < 0)
-     * @param holder
-     *        Monster that carries the inventory
-     * @throws IllegalArgumentException If weight of the weapon is smaller than zero
-     *                                  | weight < 0
+     * @pre     Value of the item cannot be smaller than 0
+     *          | !(value < 0)
+     * @param   value
+     *          Parameter describing value of the purse no smaller than zero
+     * @param   weight
+     *          Weight of the inventory item
+     * @param   holder
+     *          Monster that carries the inventory
+     * @throws  IllegalArgumentException
+     *          Throws an exception if weight of the item is smaller than zero
+     *          |  if weight < 0
+     *          |       then throw new IllegalArgumentException
      */
     public InventoryItem(int value, Object holder, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
@@ -41,6 +46,20 @@ public abstract class InventoryItem {
     }
 
 
+    /**
+     * Initialized new inventory item: weapon, purse or backpack with value and weight
+     *
+     * @pre     Value of the item cannot be smaller than 0
+     *          | !(value < 0)
+     * @param   value
+     *          Parameter describing value of the purse no smaller than zero
+     * @param   weight
+     *          Weight of the inventory item
+     * @throws  IllegalArgumentException
+     *          Throws an exception if weight of the item is smaller than zero
+     *          |  if weight < 0
+     *          |       then throw new IllegalArgumentException
+     */
     public InventoryItem(int value, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
         if (weight < 0)
@@ -49,24 +68,34 @@ public abstract class InventoryItem {
         this.value = value;
         this.holder = null;
     }
+
+    /**
+     * Returns the ID of inventory item
+     */
+    @Basic
     public abstract long getID();
 
     /**
      * Sets new value of the item
-     * @param newValue Sets new value of the item not lower than 0
-     *                 this.value = newValue
-     * @pre Value of the item cannot be lower than zero
-     * | !(newValue < 0)
+     * @param   newValue
+     *          Value to be set as new Value
+     * @pre     Value of the item cannot be lower than zero
+     *          | !(newValue < 0)
+     * @post    Value of this item corresponds to newValue
+     *          | this.value = newValue
      */
+    @Basic
     public void setValue(int newValue) {
         assert !(newValue < 0);
         this.value = newValue;
     }
 
     /**
-     * Gets value of an item
-     * @return this.value
+     * Gets value of this item
+     * @return  value of this item
+     *          | this.value
      */
+    @Basic
     public int getValue() {
         return this.value;
     }
@@ -76,18 +105,28 @@ public abstract class InventoryItem {
      * @param holder
      *        Monster who holds the item.
      */
+    @Basic
     public void setHolder(Object holder){
         this.holder = holder;
     }
 
     /**
      * Gets holder of the item.
-     * @return  this.holder
+     * @return  holder of this item
+     *          | this.holder
      */
+    @Basic
     public Object getHolder(){
         return this.holder;
     }
 
+    /**
+     * Returns indirect holder of this item
+     * E.g. if the item is contained in a backpack, returns holder of this backpack
+     * @return  Holder of the item
+     *          | this.holder
+     */
+    @Basic
     public Object getIndirectHolder(){
         try{
             if (this.holder instanceof Monster) {
@@ -103,16 +142,15 @@ public abstract class InventoryItem {
         }
     }
 
-
     /**
      * Method setting weight of an item
      * @param   weight
      *          | Non-negative float
-     * @return  weight
      * @throws  IllegalArgumentException
      *          Thrown if the weight of the item is about to be smaller than 0
      *          | weight < 0
      */
+    @Basic
     public float setWeight(float weight) throws IllegalArgumentException{
         DecimalFormat df = new DecimalFormat("#.##");
         df.setRoundingMode(RoundingMode.CEILING);
@@ -124,8 +162,10 @@ public abstract class InventoryItem {
 
     /**
      * Gets weight of an item
-     * @return  this.weight
+     * @return  weight of an item
+     *          | this.weight
      */
+    @Basic
     public float getWeight(){
         return this.weight;
     }

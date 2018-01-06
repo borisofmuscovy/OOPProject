@@ -16,7 +16,7 @@ public abstract class InventoryItem {
     protected long ID;
     protected int value;
     protected float weight;
-    protected Object holder;
+    protected Object holder = null;
     static List<Long> existingIDs = new ArrayList<Long>();
 
 

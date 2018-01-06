@@ -40,8 +40,8 @@ public class Backpack extends InventoryItem{
         super(value, holder, weight);
         this.ID = generateID();
         this.capacity = capacity;
-        this.holder = holder;
         holder.equip(this);
+        this.holder = holder;
     }
 
     /**

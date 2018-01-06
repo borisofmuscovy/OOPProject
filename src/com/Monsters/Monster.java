@@ -2,11 +2,7 @@ package com.Monsters;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Collections;
+import java.util.*;
 
 
 /**
@@ -30,21 +26,16 @@ public class Monster {
     private static int MAX_PROTECTION;
     private static final int MIN_PROTECTION;
     private int carryingCapacity;
-    private Map<String,InventoryItem> inventory;
+    private Map<String,InventoryItem> inventory = new HashMap<String, InventoryItem>();
+    private ArrayList<String> anchorDefaults = new ArrayList<String>(Arrays.asList("Left", "Right", "Back"));
+    private int anchors;
+
 
     static {
         MIN_DAMAGE = 1;
         MAX_DAMAGE = 20;
         MIN_PROTECTION = 1;
         MAX_PROTECTION = 40;
-    }
-
-    {
-        Alive = true;
-        inventory = new HashMap<String, InventoryItem>();
-        inventory.put("Left", null);
-        inventory.put("Right", null);
-        inventory.put("Back", null);
     }
 
     /**
@@ -70,9 +61,49 @@ public class Monster {
         this.damage = generateDamage();
         this.strength = (int) (new Random().nextGaussian() + 10);
         this.protection = generateProtectionFactor();
-        hp = startHP;
-        MAX_HP = hp;
+        this.hp = startHP;
+        this.MAX_HP = hp;
         this.carryingCapacity = this.getStrength() * 12;
+        this.Alive = true;
+        this.inventory.put("Left", null);
+        this.inventory.put("Right", null);
+        this.inventory.put("Back", null);
+    }
+
+    public Monster(String Name, int startHP, InventoryItem... items) throws IllegalArgumentException{
+        if (!isValidName(Name)){
+            throw new IllegalArgumentException();
+        }
+        this.name = Name;
+        this.damage = generateDamage();
+        this.strength = (int) (new Random().nextGaussian() + 10);
+        this.protection = generateProtectionFactor();
+        this.hp = startHP;
+        this.MAX_HP = hp;
+        this.carryingCapacity = this.getStrength() * 12;
+        this.Alive = true;
+        if (items.length > 3) {
+            this.anchors = items.length;
+            for (int i = 0;i < this.anchors;i++){
+                items[i].setHolder(this);
+                if (i <= 2) {
+                    this.inventory.put(anchorDefaults.get(i), items[i]);
+                } else {
+                    this.inventory.put("Appendage" + i, items[i]);
+                }
+            }
+        } else {
+            this.anchors = 3;
+            int emptyAnchorNo = anchors - items.length;
+            for (int i = 0; i < anchors; i++) {
+                if (i <= items.length) {
+                    items[i].setHolder(this);
+                    this.inventory.put(anchorDefaults.get(i), items[i]);
+                } else {
+                    this.inventory.put(anchorDefaults.get(i), null);
+                }
+            }
+        }
     }
 
     /**
@@ -362,8 +393,9 @@ public class Monster {
      * @return  True is monster can carry the item, false otherwise
      */
     protected boolean canCarry(InventoryItem item){
-        if (((this.getTotalCarriedWeight() + item.getWeight()) > this.getCarryingCapacity())
-                && (this.inventory.size() + 1 > 3) && (this.inventory.containsValue(item))) {
+        if (((this.getTotalCarriedWeight() + item.getWeight()) > this.carryingCapacity)
+                && (this.inventory.size() + 1 > 3)
+                && (this.inventory.containsValue(item))) {
             return false;
         } else {
             return true;
@@ -391,33 +423,26 @@ public class Monster {
      */
     public void equip(InventoryItem item) throws IllegalStateException{
         try {
-            if ((this.canCarry(item)) && (item.getHolder()==null)) {
-                if (this.inventory.get("Left") == null) {
-                    this.inventory.put("Left", item);
-                    item.setHolder(this);
-                    System.out.println(this.getName() + " has picked up an item of type " + item.getClass() +
-                    " with their left hand.");
-                    return;
-                } else if (this.inventory.get("Right") == null) {
-                    this.inventory.put("Right", item);
-                    item.setHolder(this);
-                    System.out.println(this.getName() + " has picked up an item of type " + item.getClass() +
-                    " with their right hand.");
-                    return;
-                } else if (this.inventory.get("Back") == null) {
-                    this.inventory.put("Back", item);
-                    item.setHolder(this);
-                    System.out.println(this.getName() + " has picked up an item of type " + item.getClass() +
-                    " stowing it on their back.");
-                    return;
-                } else {
-                    throw new java.lang.Error("Somehow the anchor contents are full and yet not full!");
+            if (this.canCarry(item)) {
+                for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()){
+                    if (entry.getValue() == null) {
+                        item.setHolder(this);
+                        entry.setValue(item);
+                        return;
+                    }
+                }
+                for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
+                    if (entry.getValue() instanceof Backpack) {
+                        item.setHolder(this);
+                        ((Backpack) entry.getValue()).add(item);
+                        return;
+                    }
                 }
             } else {
-                    throw new IllegalStateException();
+                throw new IllegalStateException();
             }
         } catch (IllegalStateException e) {
-        System.out.println(this.getName() + " cannot pick up " + item.getClass());
+            System.out.println(this.getName() + " cannot pick up " + item.getClass());
         }
     }
 
@@ -497,7 +522,9 @@ public class Monster {
             for (int i=0; i < items.length;i++){
                 InventoryItem item = items[i];
                 //first determine if this monster trying to trade has the item in question
-                if (!this.inventory.containsValue(item)){
+                if (item == null) {
+                    continue;
+                } else if (!this.inventory.containsValue(item)){
                     throw new IllegalStateException();
                 } else if (!other.canCarry(item)) {
                     throw new IllegalAccessException();
@@ -588,5 +615,4 @@ public class Monster {
             return (this.getName() + " kicked the dead body of " + opponent.getName());
         }
     }
-
-}
+        }

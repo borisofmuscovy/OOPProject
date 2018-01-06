@@ -108,11 +108,16 @@ public class Purse extends InventoryItem {
      *        Describes new content of a purse
      */
     @Basic
-    public void setContent(float newContent){
-        if(this.Torn)
-            setContent(0);
-        else
-            this.content = newContent;
+    public void setContent(float newContent) {
+        try{
+            if(this.Torn) {
+                throw new IllegalAccessException("Cannot do anything to a torn purse.");
+            } else {
+                this.content = newContent;
+            }
+        } catch (IllegalAccessException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     /**
@@ -138,7 +143,7 @@ public class Purse extends InventoryItem {
      *              then tearThePurse()
      */
     public void addContent(float ducats){
-        if(this.Torn == true)
+        if(this.Torn)
             setContent(0);
         else
             setContent(this.content + ducats);
@@ -152,7 +157,7 @@ public class Purse extends InventoryItem {
      *        Number of ducats to be removed from the purse
      */
     public void removeContent(float ducats){
-        if(this.Torn == true)
+        if(this.Torn)
             setContent(0);
         else
             setContent(this.content - ducats);

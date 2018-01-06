@@ -76,7 +76,7 @@ public class Monster {
         }
         this.name = Name;
         this.damage = generateDamage();
-        this.strength = (int) (new Random().nextGaussian() + 10);
+        this.strength = (int) (new Random().nextGaussian() * 30 + 10);
         this.protection = generateProtectionFactor();
         this.hp = startHP;
         this.MAX_HP = hp;
@@ -152,6 +152,7 @@ public class Monster {
      */
     private void Death(){
         this.Alive = false;
+        this.hp = 0;
     }
 
     /**

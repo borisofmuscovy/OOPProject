@@ -142,7 +142,7 @@ public class Backpack extends InventoryItem{
                     throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
                 } else if (this.backpackContent.contains(item)) {
                     throw new IllegalArgumentException("This item is already in the backpack!");
-                } else if (item.getHolder()!=null) {
+                } else if ((item.getHolder()!=null) && !(item instanceof Weapon)) {
                     throw new IllegalArgumentException("Item already being held by someone else.");
                 } else {
                     this.backpackContent.add(item);
@@ -170,7 +170,10 @@ public class Backpack extends InventoryItem{
                 InventoryItem item = items[i];
                 if (!this.backpackContent.contains(item)){
                     throw new IllegalArgumentException("There's no such item in the backpack");
+                } else if (item instanceof Weapon) {
+                    throw new IllegalArgumentException("Cannot drop weapons.");
                 } else {
+                    item.setHolder(null);
                     this.backpackContent.remove(item);
                 }
             }
@@ -200,7 +203,8 @@ public class Backpack extends InventoryItem{
                 if(!other.canContain(item)) {
                     throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
                 } else {
-                    this.remove(item);
+                    this.backpackContent.remove(item);
+                    item.setHolder(other);
                     other.add(item);
                 }
             }

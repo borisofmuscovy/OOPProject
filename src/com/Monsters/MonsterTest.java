@@ -11,7 +11,7 @@ class MonsterTest {
 
     @org.junit.jupiter.api.Test
     void multiEquip(){
-        Weapon Skullcrusher = new Weapon(10, 10, 30);
+        Weapon Skullcrusher = new Weapon(10, 10, 20);
         Purse Gucci = new Purse(20, 5, 2, 30);
         Monster John = new Monster("John", 40, Skullcrusher, Gucci);
         assertTrue((John.getInventoryContents().get("Left") == Skullcrusher)
@@ -20,10 +20,10 @@ class MonsterTest {
 
     @org.junit.jupiter.api.Test
     void oneExtraAnchor(){
-        Weapon Skullcrusher = new Weapon(10, 10, 30);
+        Weapon Skullcrusher = new Weapon(10, 10, 20);
         Purse Gucci = new Purse(20, 5, 2, 30);
         Backpack Kipling = new Backpack(15, 5, 60);
-        Weapon Thrasher = new Weapon(3, 10, 24);
+        Weapon Thrasher = new Weapon(3, 10, 20);
         Monster John = new Monster("John", 40, Skullcrusher, Gucci, Kipling, Thrasher);
         assertTrue((John.getInventoryContents().get("Left") == Skullcrusher)
                 && (John.getInventoryContents().get("Right") == Gucci)

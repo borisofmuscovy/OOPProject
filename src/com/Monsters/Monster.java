@@ -53,22 +53,22 @@ public class Monster {
      *          | ! isValidName(name)
      *
      */
-    public Monster(String Name, int startHP) throws IllegalArgumentException{
-        if (!isValidName(Name)){
-            throw new IllegalArgumentException();
-            }
-        this.name = Name;
-        this.damage = generateDamage();
-        this.strength = (int) (new Random().nextGaussian() + 10);
-        this.protection = generateProtectionFactor();
-        this.hp = startHP;
-        this.MAX_HP = hp;
-        this.carryingCapacity = this.getStrength() * 12;
-        this.Alive = true;
-        this.inventory.put("Left", null);
-        this.inventory.put("Right", null);
-        this.inventory.put("Back", null);
-    }
+//    public Monster(String Name, int startHP) throws IllegalArgumentException{
+//        if (!isValidName(Name)){
+//            throw new IllegalArgumentException();
+//            }
+//        this.name = Name;
+//        this.damage = generateDamage();
+//        this.strength = (int) (new Random().nextGaussian() + 10);
+//        this.protection = generateProtectionFactor();
+//        this.hp = startHP;
+//        this.MAX_HP = hp;
+//        this.carryingCapacity = this.getStrength() * 12;
+//        this.Alive = true;
+//        this.inventory.put("Left", null);
+//        this.inventory.put("Right", null);
+//        this.inventory.put("Back", null);
+//    }
 
     public Monster(String Name, int startHP, InventoryItem... items) throws IllegalArgumentException{
         if (!isValidName(Name)){
@@ -82,6 +82,7 @@ public class Monster {
         this.MAX_HP = hp;
         this.carryingCapacity = this.getStrength() * 12;
         this.Alive = true;
+        int j = 1;
         if (items.length > 3) {
             this.anchors = items.length;
             for (int i = 0;i < this.anchors;i++){
@@ -89,14 +90,15 @@ public class Monster {
                 if (i <= 2) {
                     this.inventory.put(anchorDefaults.get(i), items[i]);
                 } else {
-                    this.inventory.put("Appendage" + i, items[i]);
+                    this.inventory.put("Appendage" + j, items[i]);
+                    j++;
                 }
             }
         } else {
             this.anchors = 3;
             int emptyAnchorNo = anchors - items.length;
             for (int i = 0; i < anchors; i++) {
-                if (i <= items.length) {
+                if (i < items.length) {
                     items[i].setHolder(this);
                     this.inventory.put(anchorDefaults.get(i), items[i]);
                 } else {

@@ -18,7 +18,7 @@ public class Main {
         }
 
         if (Monster2.isAlive()) {
-            System.out.println(Monster2.getName() + " has Protection " + Monster2.getProtection() + ", Strength " +
+            System.out.println(Monster2.getName() + " hDas Protection " + Monster2.getProtection() + ", Strength " +
                     Monster2.getStrength() + ", Damage " + Monster2.getDamage()
                     + " and their maximum HP is " + Monster2.getMAX_HP() + ".");
             return Monster2.getName();
@@ -35,8 +35,8 @@ public class Main {
 
     public static void Part1() throws IllegalAccessException{
         System.out.println("This is Part 1 of the project.");
-        Monster Bob = new Monster("Bob", 40);
-        Monster Alice = new Monster("Alice", 40);
+        Monster Bob = new Monster("Bob", 30);
+        Monster Alice = new Monster("Alice", 30);
 
         Weapon Skullcrusher = new Weapon(2, 10, 10);
         Alice.equip(Skullcrusher);
@@ -51,8 +51,8 @@ public class Main {
 
     public static void Part2() throws IllegalAccessException{
         System.out.println("This is Part 2 of the project.");
-        Monster Bob = new Monster("Bob", 40);
-        Monster Alice = new Monster("Alice", 40);
+        Monster Bob = new Monster("Bob", 30);
+        Monster Alice = new Monster("Alice", 30);
         System.out.println(Bob);
         System.out.println(Alice);
 
@@ -92,8 +92,8 @@ public class Main {
 
     public static void Part3() throws IllegalAccessException{
         System.out.println("This is Part 3 of the project.");
-        Monster Bob = new Monster("Bob", 40);
-        Monster Alice = new Monster("Alice", 40);
+        Monster Bob = new Monster("Bob", 30);
+        Monster Alice = new Monster("Alice", 30);
 
         Backpack BobsBackpack = new Backpack(10, Bob, 15, 30);
         Backpack AlicesBackpack = new Backpack(10, Alice, 12, 32);

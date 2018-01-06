@@ -6,9 +6,35 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 class MonsterTest {
-
     Monster Bob = new Monster("Bob", 40);
     Monster Alice = new Monster("Alice", 40);
+
+    @org.junit.jupiter.api.Test
+    void multiEquip(){
+        Weapon Skullcrusher = new Weapon(10, 10, 30);
+        Purse Gucci = new Purse(20, 5, 2, 30);
+        Monster John = new Monster("John", 40, Skullcrusher, Gucci);
+        assertTrue((John.getInventoryContents().get("Left") == Skullcrusher)
+                && (John.getInventoryContents().get("Right") == Gucci));
+    }
+
+    @org.junit.jupiter.api.Test
+    void oneExtraAnchor(){
+        Weapon Skullcrusher = new Weapon(10, 10, 30);
+        Purse Gucci = new Purse(20, 5, 2, 30);
+        Backpack Kipling = new Backpack(15, 5, 60);
+        Weapon Thrasher = new Weapon(3, 10, 24);
+        Monster John = new Monster("John", 40, Skullcrusher, Gucci, Kipling, Thrasher);
+        assertTrue((John.getInventoryContents().get("Left") == Skullcrusher)
+                && (John.getInventoryContents().get("Right") == Gucci)
+                && (John.getInventoryContents().get("Back") == Kipling)
+                && (John.getInventoryContents().get("Appendage1") == Thrasher));
+    }
+
+    @org.junit.jupiter.api.Test
+    void emptyMultiEquip(){
+        Monster John = new Monster("John", 40);
+    }
 
     @org.junit.jupiter.api.Test
     void nameExceptionTest() {

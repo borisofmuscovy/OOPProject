@@ -3,6 +3,9 @@ import be.kuleuven.cs.som.annotate.Basic;
 
 import java.text.DecimalFormat;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 /**
  * Abstract class of Inventory Items
@@ -10,15 +13,12 @@ import java.math.RoundingMode;
  */
 public abstract class InventoryItem {
 
-    public int ID;
-    public int value;
-    public float weight;
-    public Object holder;
+    protected long ID;
+    protected int value;
+    protected float weight;
+    protected Object holder;
+    static List<Long> existingIDs = new ArrayList<Long>();
 
-    {
-        value = 0;
-        weight = 0;
-    }
 
     /**
      * Initialized new inventory item: weapon, purse or backpack with value, holder and weight
@@ -74,6 +74,34 @@ public abstract class InventoryItem {
      */
     @Basic
     public abstract long getID();
+
+    protected boolean checkValidID(long ID) {
+        if (existingIDs.contains(ID)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    /**
+     * Method setting odd unique ID of an item
+     * @pre     ID has to be an odd number
+     *          | ID % 2 != 0
+     * @pre     ID has to be a number bigger than 0
+     *          | ID > 0
+     * @return  ID
+     */
+    protected long generateID(){
+        while(true) {
+            if ((ID % 2 != 0) && (ID > 0) && (checkValidID(ID))){
+                existingIDs.add(ID);
+                return ID;
+            } else {
+                Random newID = new Random();
+                ID = newID.nextLong();
+            }
+        }
+    }
 
     /**
      * Sets new value of the item

@@ -12,8 +12,6 @@ public class Weapon extends InventoryItem {
     int damage;
     final int MIN_DAMAGE = 1;
     int MAX_DAMAGE = 20;
-    static List<Long> existingIDs = new ArrayList<Long>();
-    private final long ID;
 
     /**
      * Initializes weapon with its weight, value and damage
@@ -32,25 +30,8 @@ public class Weapon extends InventoryItem {
         assert(damage >= 1 & damage <= MAX_DAMAGE);
         this.damage = damage;
         this.weight = setWeight(weight);
-        this.ID = generateWeaponID();
+        this.ID = generateID();
         this.holder = null;
-    }
-    /**
-     * Method setting unique, odd ID of a weapon of long type
-     * @pre     weaponID has to be unique
-     *          | !existingIDs.contains(weaponID)
-     * @pre     weaponID has to be odd number bigger than 0
-     *          | (weaponID % 2 != 0 && (weaponID >= 0)
-     * @return  weaponID
-     */
-    public long generateWeaponID(){
-        while(true){
-            long weaponID = ThreadLocalRandom.current().nextLong(10000);
-            if( (weaponID % 2 != 0) && (!existingIDs.contains(weaponID)) && (weaponID >= 0) ){
-                existingIDs.add(weaponID);
-                return weaponID;
-            }
-        }
     }
 
     /**

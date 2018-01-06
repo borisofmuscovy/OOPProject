@@ -21,7 +21,6 @@ class WeightComparator implements Comparator<InventoryItem> {
  * Class of backpacks
  */
 public class Backpack extends InventoryItem{
-    private final long ID;
     private final float capacity;
     private float backpackValue;
     private SortedSet<InventoryItem> backpackContent = new TreeSet<>(new WeightComparator());
@@ -39,7 +38,7 @@ public class Backpack extends InventoryItem{
      */
     public Backpack(int value, Monster holder, float weight, float capacity){
         super(value, holder, weight);
-        this.ID = generateBackpackID();
+        this.ID = generateID();
         this.capacity = capacity;
         this.holder = holder;
         holder.equip(this);
@@ -56,7 +55,7 @@ public class Backpack extends InventoryItem{
      */
     public Backpack(int value, float weight, float capacity){
         super (value, weight);
-        this.ID = generateBackpackID();
+        this.ID = generateID();
         this.capacity = capacity;
         this.holder = null;
     }
@@ -69,28 +68,6 @@ public class Backpack extends InventoryItem{
     @Basic
     public SortedSet<InventoryItem> getBackpackContents(){
         return Collections.unmodifiableSortedSet(this.backpackContent);
-    }
-
-    /**
-     * Method setting odd ID of a backpack of long type
-     * @pre     Backpack ID has to be an odd number
-     *          | backpackID % 2 != 0
-     * @pre     BackpackID has to be a number bigger than 0
-     *          | backpackID >= 0
-     * @return  backpackID
-     */
-    public long generateBackpackID(){
-        long backpackID = 0;
-        int i = 1;
-        while(i == 1){
-            Random ID = new Random();
-            backpackID = ID.nextLong();
-            if(backpackID % 2 != 0 && backpackID >= 0)
-                i = 0;
-            else
-                i =1;
-        }
-        return backpackID;
     }
 
     /**

@@ -96,6 +96,7 @@ public class Main {
         Monster Alice = new Monster("Alice", 40);
 
         Backpack BobsBackpack = new Backpack(10, Bob, 15, 30);
+        Backpack AlicesBackpack = new Backpack(10, Alice, 12, 32);
 
         Weapon Stick = new Weapon(2, 10, 12);
         Alice.equip(Stick);
@@ -119,13 +120,11 @@ public class Main {
         Battle(Bob, Alice);
 
         if (Bob.isAlive()) {
-            Alice.trade(Bob, Alice.getInventoryContents().get("Left"));
-            Alice.trade(Bob, Alice.getInventoryContents().get("Right"));
-            Alice.trade(Bob, Alice.getInventoryContents().get("Back"));
+            Alice.trade(Bob, Alice.getInventoryContents().get("Left"), Alice.getInventoryContents().get("Right"),
+                    Alice.getInventoryContents().get("Back"));
         } else if (Alice.isAlive()) {
-            Bob.trade(Alice, Bob.getInventoryContents().get("Left"));
-            Bob.trade(Alice, Bob.getInventoryContents().get("Right"));
-            Bob.trade(Alice, Bob.getInventoryContents().get("Back"));
+            Bob.trade(Alice, Bob.getInventoryContents().get("Left"), Bob.getInventoryContents().get("Right"),
+                    Bob.getInventoryContents().get("Back"));
         }
 
         System.out.println("END PART 3\n");

@@ -13,7 +13,7 @@ import java.util.Collections;
  * A class of Monsters involving their names, health points, protection, strength and damage values,
  * as well as the ability to engage each other in deadly combat.
  *
- * @version 0.1
+ * @version 0.3
  * @author Boris Shilov & Alicja Ochman
  */
 public class Monster {
@@ -31,7 +31,6 @@ public class Monster {
     private static final int MIN_PROTECTION;
     private int carryingCapacity;
     private Map<String,InventoryItem> inventory;
-    private int anchors;
 
     static {
         MIN_DAMAGE = 1;
@@ -68,8 +67,7 @@ public class Monster {
             throw new IllegalArgumentException();
             }
         this.name = Name;
-        changeDamage();
-        this.anchors = 2;
+        this.damage = generateDamage();
         this.strength = (int) (new Random().nextGaussian() + 10);
         this.protection = generateProtectionFactor();
         hp = startHP;
@@ -176,15 +174,18 @@ public class Monster {
         return this.damage;
     }
 
+    private int generateDamage() {
+        Random randno = new Random();
+        return (randno.nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE);
+    }
+
     /**
      * Re-roll the damage of the monster.
      * @post The new damage value will be a random number between the MIN_DAMAGE value and the MAX_DAMAGE value.
      *       | newDamage == rand(MIN_DAMAGE:MAX_DAMAGE)
      */
-
-    private void changeDamage() {
-        Random randno = new Random();
-        this.damage = randno.nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE;
+    public void changeDamage() {
+        this.damage = generateDamage();
     }
 
     /**
@@ -490,9 +491,6 @@ public class Monster {
      * @throws  IllegalStateException
      *          Throws an exception if monster is trying to trade an item it does not possess
      *          | !this.inventory.containsValue(item)
-     * @throws  UnsupportedOperationException
-     *          Throws an exception if monster tries to trade something that is not a Purse, Backpack or Weapon
-     *          | (!(item instanceof Purse) && !(item instanceof Weapon) && !(item instanceof Backpack))
      */
     public void trade(Monster other, InventoryItem... items) throws IllegalAccessException, IllegalStateException, UnsupportedOperationException{
         try {
@@ -501,28 +499,20 @@ public class Monster {
                 //first determine if this monster trying to trade has the item in question
                 if (!this.inventory.containsValue(item)){
                     throw new IllegalStateException();
-                } else if ((item instanceof Purse) || (item instanceof Weapon) || (item instanceof Backpack)) {
-                    //if the item is a purse, we must check whether the other monster has a purse already
-                    if (!other.canCarry(item)) {
-                        throw new IllegalAccessException();
-                        } else {
-                        for (Map.Entry<String,InventoryItem> entry : other.obtainInventoryContents().entrySet()){
-                            if (entry.getValue() == null) {
-                                // we have to eject item from inventory and eject ownership
-                                this.disown(item);
-                                item.setHolder(other);
-                                entry.setValue(item);
-                                return;
-                            } else if (entry.getValue() instanceof Backpack) {
-                                this.disown(item);
-                                item.setHolder(other);
-                                ((Backpack) entry.getValue()).add(item);
-                            }
+                } else if (!other.canCarry(item)) {
+                    throw new IllegalAccessException();
+                } else {
+                    for (Map.Entry<String,InventoryItem> entry : other.obtainInventoryContents().entrySet()){
+                        if (entry.getValue() == null) {
+                            this.disown(item);
+                            item.setHolder(other);
+                            entry.setValue(item);
+                        } else if (entry.getValue() instanceof Backpack) {
+                            this.disown(item);
+                            item.setHolder(other);
+                            ((Backpack) entry.getValue()).add(item);
                         }
                     }
-                } else {
-                    // trying to trade some other object that we don't explicitly expect
-                    throw new UnsupportedOperationException();
                 }
             }
         } catch (IllegalStateException e1) {

@@ -8,7 +8,6 @@ import java.util.Random;
 
 public class Purse extends InventoryItem {
     float content;
-    final long ID;
     final float capacity;
     float totalValue;
     private boolean Torn;
@@ -29,7 +28,7 @@ public class Purse extends InventoryItem {
      */
     public Purse(int value, float weight, float content, float capacity, Monster holder){
         super(value, holder, weight);
-        this.ID = setPurseID();
+        this.ID = generateID();
         assert(content <= capacity);
         this.content = content;
         this.capacity = capacity;
@@ -49,7 +48,7 @@ public class Purse extends InventoryItem {
      */
     public Purse(int value, float weight, float content, float capacity) {
         super(value, weight);
-        this.ID = setPurseID();
+        this.ID = generateID();
         assert(content <= capacity);
         this.content = content;
         this.capacity = capacity;
@@ -80,11 +79,15 @@ public class Purse extends InventoryItem {
      */
     @Raw
     @Immutable
-    public long setPurseID(){
-        int n = 25;
+    protected long generateID(){
+        long purseID = 0;
+        int n = 1000;
         int[] fibonacciSeries = fibonacci(n);
         Random r = new Random();
-        long purseID = (long) fibonacciSeries[r.nextInt(fibonacciSeries.length-1)];
+        while (purseID <= 0) {
+            purseID = (long) fibonacciSeries[r.nextInt(fibonacciSeries.length-1)];
+        }
+        existingIDs.add(purseID);
         return purseID;
     }
 
@@ -106,7 +109,7 @@ public class Purse extends InventoryItem {
      */
     @Basic
     public void setContent(float newContent){
-        if(this.Torn == true)
+        if(this.Torn)
             setContent(0);
         else
             this.content = newContent;

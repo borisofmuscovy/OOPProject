@@ -96,7 +96,6 @@ public class Purse extends InventoryItem {
      * @return  ID of this purse
      *          | this.ID
      */
-    @Raw
     @Override
     public long getID(){
         return this.ID;

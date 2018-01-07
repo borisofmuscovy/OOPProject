@@ -103,7 +103,11 @@ public class Backpack extends InventoryItem{
      *          |   this.getContentsWeight() + item.getWeight()) > this.getCapacity()
      */
     public boolean canContain(InventoryItem item){
-        if ((this.getContentsWeight() + item.getWeight()) > this.getCapacity()){
+        if (((this.getContentsWeight() + item.getWeight()) > this.getCapacity())
+                && (!(item instanceof Backpack))){
+            return false;
+        } else if ((item instanceof Backpack) &&
+                ((this.getContentsWeight() + ((Backpack) item).getTotalWeight()) > this.getCapacity())) {
             return false;
         } else {
             return true;

@@ -57,6 +57,16 @@ class BackpackTest {
                 && Kipling.getBackpackContents().contains(Gucci));
     }
 
+    @Test
+    void willNotPickUpBackpackWithHeavyContents(){
+        Backpack Kipling1 = new Backpack(15, 5, 15);
+        Backpack Kipling2 = new Backpack(15, 5, 60);
+        Weapon Skullcrusher = new Weapon(11, 10, 20);
+        Kipling2.add(Skullcrusher);
+        Kipling1.add(Kipling2);
+        assertFalse(Kipling1.getBackpackContents().contains(Kipling2));
+    }
+
 
     @Test
     void getContentsWeightSameWeight() {

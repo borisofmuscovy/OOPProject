@@ -571,9 +571,17 @@ public class Monster {
      * Returns total value of weapons contained in Monster's inventory
      * @return totalValueofWeapons
      */
-    public int totalValueofWeapons(){
-        return 1;
+    public int totalValueofWeapons(){ //for now this implementation returns value of weapons in anchors only
+        int totalAnchorWeaponValue = 0;
+        for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
+            if (entry.getValue() instanceof Weapon) {
+                totalAnchorWeaponValue += entry.getValue().getValue();
+            }
+        }
+        return totalAnchorWeaponValue;
     }
+
+//    public Map<String, Weapon> getAllCarriedWeapons
 
     /**
      * Method representing battle of the monsters.

@@ -9,8 +9,6 @@ import java.util.*;
  *
  */
 class WeightComparator implements Comparator<InventoryItem> {
-    // TODO: sort this out. use https://docs.oracle.com/javase/tutorial/collections/interfaces/order.html
-    // bottom of page
     @Override
     public int compare(InventoryItem item1, InventoryItem item2) {
         //if items being compared have the same weight, the one with the higher ID will be considered bigger
@@ -226,11 +224,7 @@ public class Backpack extends InventoryItem{
      *          | contentsWeight
      */
     public float getContentsWeight(){
-        float contentsWeight = 0;
-        for(InventoryItem item : this.backpackContent ){
-            contentsWeight += item.getWeight();
-        }
-        return contentsWeight;
+        return totalContainedWeight(0);
     }
 
     /**
@@ -239,13 +233,19 @@ public class Backpack extends InventoryItem{
      *          | totalBackpackWeight
      */
     public float getTotalWeight(){
-        float totalBackpackWeight = 0;
-        for(InventoryItem item : this.backpackContent ){
-            totalBackpackWeight += item.getWeight();
-        }
-        totalBackpackWeight += this.getWeight();
-        return totalBackpackWeight;
+        return totalContainedWeight(this.getWeight());
+    }
 
+    private float totalContainedWeight(float totalWeight){
+        for(InventoryItem item : this.backpackContent) {
+            if (item instanceof Backpack) {
+                totalWeight += item.getWeight();
+                totalWeight = ((Backpack) item).totalContainedWeight(totalWeight);
+            } else {
+                totalWeight += item.getWeight();
+            }
+        }
+        return totalWeight;
     }
 
     /**
@@ -254,11 +254,19 @@ public class Backpack extends InventoryItem{
      *          | backpackValue
      */
     public float getTotalValue(){
-        for(InventoryItem item : this.backpackContent){
-            backpackValue += item.getValue();
+        return totalContainedValue(this.getValue());
+    }
+
+    private float totalContainedValue(float totalValue){
+        for(InventoryItem item : this.backpackContent) {
+            if (item instanceof Backpack) {
+                totalValue += item.getValue();
+                totalValue = ((Backpack) item).totalContainedValue(totalValue);
+            } else {
+                totalValue += item.getValue();
+            }
         }
-        backpackValue += this.getValue();
-        return backpackValue;
+        return totalValue;
     }
 
     /**

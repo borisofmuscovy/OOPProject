@@ -75,11 +75,43 @@ class BackpackTest {
     }
 
     @Test
-    void getTotalWeight() {
+    void getTotalWeight(){
+        Weapon Skullcrusher1 = new Weapon(10, 10, 20);
+        Weapon Skullcrusher2 = new Weapon(10, 10, 20);
+        Weapon Skullcrusher3 = new Weapon(10, 10, 20);
+        Purse Dolce = new Purse(20, 6, 2, 30);
+        Backpack Kipling1 = new Backpack(15, 5, 60);
+        Backpack Kipling2 = new Backpack(15, 5, 60);
+        Backpack Kipling3 = new Backpack(15, 5, 60);
+        Kipling1.add(Skullcrusher1);
+        Kipling2.add(Skullcrusher2);
+        Kipling3.add(Skullcrusher3);
+        Kipling2.add(Kipling3);
+        Kipling1.add(Kipling2);
+        Kipling1.add(Dolce);
+        float trueTotalWeight = Skullcrusher1.getWeight() + Skullcrusher2.getWeight() + Skullcrusher3.getWeight()
+                + Kipling1.getWeight() + Kipling2.getWeight() + Kipling3.getWeight() + Dolce.getWeight();
+        assertEquals(Kipling1.getTotalWeight(), trueTotalWeight);
     }
 
     @Test
-    void getTotalValue() {
+    void getTotalValue(){
+        Weapon Skullcrusher1 = new Weapon(10, 10, 20);
+        Weapon Skullcrusher2 = new Weapon(10, 10, 20);
+        Weapon Skullcrusher3 = new Weapon(10, 10, 20);
+        Purse Dolce = new Purse(20, 6, 2, 30);
+        Backpack Kipling1 = new Backpack(15, 5, 60);
+        Backpack Kipling2 = new Backpack(15, 5, 60);
+        Backpack Kipling3 = new Backpack(15, 5, 60);
+        Kipling1.add(Skullcrusher1);
+        Kipling2.add(Skullcrusher2);
+        Kipling3.add(Skullcrusher3);
+        Kipling2.add(Kipling3);
+        Kipling1.add(Kipling2);
+        Kipling1.add(Dolce);
+        float trueTotalValue = Skullcrusher1.getValue() + Skullcrusher2.getValue() + Skullcrusher3.getValue()
+                + Kipling1.getValue() + Kipling2.getValue() + Kipling2.getValue() + Dolce.getValue();
+        assertEquals(Kipling1.getTotalValue(), trueTotalValue);
     }
 
     @Test

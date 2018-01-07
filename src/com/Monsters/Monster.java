@@ -353,7 +353,7 @@ public class Monster {
         float totalCarriedWeight = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
             if (entry.getValue() != null) {
-                totalCarriedWeight += entry.getValue().getValue();
+                totalCarriedWeight += entry.getValue().getWeight();
             }
         }
         return totalCarriedWeight;

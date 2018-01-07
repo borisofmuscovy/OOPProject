@@ -1,6 +1,6 @@
 package com.Monsters;
 
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +9,7 @@ class MonsterTest {
     Monster Bob = new Monster("Bob", 40);
     Monster Alice = new Monster("Alice", 40);
 
-    @org.junit.jupiter.api.Test
+    @Test
     void multiEquip(){
         Weapon Skullcrusher = new Weapon(10, 10, 20);
         Purse Gucci = new Purse(20, 5, 2, 30);
@@ -18,7 +18,7 @@ class MonsterTest {
                 && (John.getInventoryContents().get("Right") == Gucci));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void oneExtraAnchor(){
         Weapon Skullcrusher = new Weapon(10, 10, 20);
         Purse Gucci = new Purse(20, 5, 2, 30);
@@ -31,17 +31,27 @@ class MonsterTest {
                 && (John.getInventoryContents().get("Appendage1") == Thrasher));
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void emptyMultiEquip(){
         Monster John = new Monster("John", 40);
     }
 
-    @org.junit.jupiter.api.Test
-    void nameExceptionTest() {
-        Assertions.assertThrows(IllegalArgumentException.class, () -> {new Monster("&", 40);});
+    @Test
+    void getTotalCarriedWeightSimple() {
+        Weapon Skullcrusher = new Weapon(10, 10, 20);
+        Purse Gucci = new Purse(20, 5, 2, 30);
+        Weapon Thrasher = new Weapon(3, 10, 20);
+        Monster John = new Monster("John", 40, Skullcrusher, Gucci, Thrasher);
+        float trueWeight = Skullcrusher.getWeight() + Gucci.getWeight() + Thrasher.getWeight();
+        assertTrue(trueWeight == John.getTotalCarriedWeight());
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
+    void nameExceptionTest() {
+        assertThrows(IllegalArgumentException.class, () -> {new Monster("&", 40);});
+    }
+
+    @Test
     void isAlive() {
         assertTrue(Bob.isAlive());
     }
@@ -68,7 +78,7 @@ class MonsterTest {
         assertTrue(Alice.getHP() > oldHealth);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void setMAX_DAMAGE() {
         int oldDamage = Monster.getMAX_DAMAGE();
         Monster.setMAX_DAMAGE(31);
@@ -76,14 +86,14 @@ class MonsterTest {
     }
 
 
-    @org.junit.jupiter.api.Test
+    @Test
     void setMAX_HP() {
         int oldHealth = Bob.getMAX_HP();
         Bob.setMAX_HP(50);
         assertTrue(Bob.getMAX_HP() != oldHealth);
     }
 
-    @org.junit.jupiter.api.Test
+    @Test
     void hit() {
         int oldHealth = Alice.getHP();
         Bob.hit(Alice);

@@ -27,7 +27,7 @@ public class Monster {
     private static final int MIN_PROTECTION;
     private int carryingCapacity;
     private Map<String,InventoryItem> inventory = new HashMap<String, InventoryItem>();
-    private ArrayList<String> anchorDefaults = new ArrayList<String>(Arrays.asList("Left", "Right", "Back"));
+    private static ArrayList<String> anchorDefaults = new ArrayList<String>(Arrays.asList("Left", "Right", "Back"));
     private int anchors;
 
 
@@ -358,7 +358,9 @@ public class Monster {
     public float getTotalCarriedWeight() {
         float totalCarriedWeight = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
-            if (entry.getValue() != null) {
+            if (entry.getValue() instanceof Backpack) {
+                totalCarriedWeight += (((Backpack) entry.getValue()).getTotalWeight());
+            } else if (entry.getValue() != null) {
                 totalCarriedWeight += entry.getValue().getWeight();
             }
         }

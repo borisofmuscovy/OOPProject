@@ -119,4 +119,20 @@ class MonsterTest {
          assertEquals(trueTotalValue, John.getTotalInventoryValue());
     }
 
+    @Test
+    void getTotalCarriedWeight(){
+        Weapon Skullcrusher1 = new Weapon(5, 10, 20);
+        Weapon Skullcrusher2 = new Weapon(5, 10, 20);
+        Weapon Skullcrusher3 = new Weapon(5, 10, 20);
+        Purse Dolce = new Purse(20, 6, 2, 30);
+        Backpack Kipling1 = new Backpack(15, 5, 60);
+        Backpack Kipling2 = new Backpack(5, 5, 60);
+        Monster John = new Monster("John", 40, Kipling1, Skullcrusher1, Dolce);
+        Kipling2.add(Skullcrusher2, Skullcrusher3);
+        John.equip(Kipling2);
+        float trueTotalWeight = Skullcrusher1.getWeight() + Skullcrusher2.getWeight() + Skullcrusher3.getWeight()
+                + Dolce.getWeight() + Kipling1.getWeight() + Kipling2.getWeight();
+        assertEquals(trueTotalWeight, John.getTotalCarriedWeight());
+    }
+
 }

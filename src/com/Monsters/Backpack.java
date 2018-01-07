@@ -9,11 +9,18 @@ import java.util.*;
  *
  */
 class WeightComparator implements Comparator<InventoryItem> {
+    // TODO: sort this out. use https://docs.oracle.com/javase/tutorial/collections/interfaces/order.html
+    // bottom of page
+    @Override
     public int compare(InventoryItem item1, InventoryItem item2) {
+        //if items being compared have the same weight, the one with the higher ID will be considered bigger
         if (item1.getWeight() == item2.getWeight()) {
-            return 0;
+            return (Long.compare(item1.getID(), item2.getID()));
+        } else if (item1.getWeight() > item2.getWeight()) {
+            return 1;
+        } else {
+            return -1;
         }
-        return Float.compare(item1.getWeight(), item2.getWeight());
     }
 }
 

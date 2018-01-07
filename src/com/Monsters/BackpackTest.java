@@ -58,7 +58,7 @@ class BackpackTest {
     }
 
     @Test
-    void willNotPickUpBackpackWithHeavyContents(){
+    void willNotAddBackpackWithHeavyContents(){
         Backpack Kipling1 = new Backpack(15, 5, 15);
         Backpack Kipling2 = new Backpack(15, 5, 60);
         Weapon Skullcrusher = new Weapon(11, 10, 20);

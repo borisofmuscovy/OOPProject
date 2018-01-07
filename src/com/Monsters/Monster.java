@@ -442,7 +442,6 @@ public class Monster {
                 }
                 for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
                     if (entry.getValue() instanceof Backpack) {
-                        item.setHolder(this);
                         ((Backpack) entry.getValue()).add(item);
                         return;
                     }
@@ -566,7 +565,9 @@ public class Monster {
     public float getTotalInventoryValue() {
         float totalValue = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
-            if (entry.getValue() != null) {
+            if (entry.getValue() instanceof Backpack) {
+                totalValue += (((Backpack) entry.getValue()).getTotalValue());
+            } else if (entry.getValue() != null) {
                 totalValue += entry.getValue().getValue();
             }
         }

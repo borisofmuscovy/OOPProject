@@ -39,7 +39,6 @@ public class Weapon extends InventoryItem {
      * @return  ID of this weapon
      *          | this.ID
      */
-    @Raw
     @Override
     public long getID(){
         return this.ID;

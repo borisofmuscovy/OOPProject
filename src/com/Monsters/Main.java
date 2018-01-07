@@ -18,7 +18,7 @@ public class Main {
         }
 
         if (Monster2.isAlive()) {
-            System.out.println(Monster2.getName() + " hDas Protection " + Monster2.getProtection() + ", Strength " +
+            System.out.println(Monster2.getName() + " has Protection " + Monster2.getProtection() + ", Strength " +
                     Monster2.getStrength() + ", Damage " + Monster2.getDamage()
                     + " and their maximum HP is " + Monster2.getMAX_HP() + ".");
             return Monster2.getName();

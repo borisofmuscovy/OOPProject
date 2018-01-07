@@ -80,7 +80,6 @@ public class Backpack extends InventoryItem{
      * @return  ID
      *          | this.ID
      */
-    @Raw
     @Override
     public long getID(){
         return this.ID;
@@ -91,6 +90,7 @@ public class Backpack extends InventoryItem{
      * @return  capacity of this backpack
      *          | this.capacity
      */
+    @Basic
     public float getCapacity(){
         return this.capacity;
     }

@@ -191,7 +191,7 @@ public class Monster {
      * @post    If the new maximum damage is more than or equal 1, the maximum damage value will equal to the new value.
      *          | if (newMAX_DAMAGE => 1) { MAX_DAMAGE = newMAX_DAMAGE }
      */
-    @Basic
+
     public static void setMAX_DAMAGE(int newMAX_DAMAGE) {
         if (newMAX_DAMAGE >= 1) {
             MAX_DAMAGE = newMAX_DAMAGE;
@@ -208,6 +208,12 @@ public class Monster {
         return this.damage;
     }
 
+    /**
+     * Generates damage cause be monster
+     * @return random number between MIN_DAMAGE and MAX_DAMAGE
+     *         | nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE)
+     */
+    @Basic
     private int generateDamage() {
         Random randno = new Random();
         return (randno.nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE);
@@ -592,7 +598,7 @@ public class Monster {
      *          |  if !this.isAlive()
      * @throws  IllegalArgumentException
      *          If opponent monster dies during the battle
-     *          |!opponent.isAlive()
+     *          | !opponent.isAlive()
      */
     public String hit(Monster opponent) throws IllegalArgumentException, IllegalStateException{
         try {

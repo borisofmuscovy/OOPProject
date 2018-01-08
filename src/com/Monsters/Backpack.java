@@ -27,7 +27,6 @@ class WeightComparator implements Comparator<InventoryItem> {
  */
 public class Backpack extends InventoryItem{
     private final float capacity;
-    private float backpackValue;
     private SortedSet<InventoryItem> backpackContent = new TreeSet<>(new WeightComparator());
 
     /**

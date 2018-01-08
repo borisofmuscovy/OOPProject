@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * A class of Monsters involving their names, health points, protection, strength and damage values,
  * as well as the ability to engage each other in deadly combat.
- *
+ * Also available with full commit history at: https://github.com/borisofmuscovy/OOPProject
  * @version 0.3
  * @author Boris Shilov & Alicja Ochman
  */
@@ -28,7 +28,7 @@ public class Monster {
     private int carryingCapacity;
     private Map<String,InventoryItem> inventory = new HashMap<String, InventoryItem>();
     private static ArrayList<String> anchorDefaults = new ArrayList<String>(Arrays.asList("Left", "Right", "Back"));
-    private int anchors;
+    private final int anchors;
 
 
     static {
@@ -404,9 +404,9 @@ public class Monster {
      * @return  True is monster can carry the item, false otherwise
      */
     protected boolean canCarry(InventoryItem item){
-        if (((this.getTotalCarriedWeight() + item.getWeight()) > this.carryingCapacity)
-                && (this.inventory.size() + 1 > 3)
-                && (this.inventory.containsValue(item))) {
+        if ((this.getTotalCarriedWeight() + item.getWeight()) > this.carryingCapacity){
+            return false;
+        } else if (this.inventory.containsValue(item)){
             return false;
         } else {
             return true;

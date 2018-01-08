@@ -9,7 +9,7 @@ import java.util.Random;
 
 /**
  * Abstract class of Inventory Items
- * Superclass of weapons ans purses
+ * Superclass of weapons and purses
  */
 public abstract class InventoryItem {
 

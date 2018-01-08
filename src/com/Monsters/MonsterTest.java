@@ -127,12 +127,35 @@ class MonsterTest {
         Purse Dolce = new Purse(20, 6, 2, 30);
         Backpack Kipling1 = new Backpack(15, 5, 60);
         Backpack Kipling2 = new Backpack(5, 5, 60);
-        Monster John = new Monster("John", 40, Kipling1, Skullcrusher1, Dolce);
-        Kipling2.add(Skullcrusher2, Skullcrusher3);
-        John.equip(Kipling2);
         float trueTotalWeight = Skullcrusher1.getWeight() + Skullcrusher2.getWeight() + Skullcrusher3.getWeight()
                 + Dolce.getWeight() + Kipling1.getWeight() + Kipling2.getWeight();
+        Monster John;
+        while (true) {
+            John = new Monster("John", 40);
+            if (John.getCarryingCapacity() > trueTotalWeight) {
+                break;
+            }
+        }
+        John.equip(Kipling1);
+        John.equip(Skullcrusher1);
+        John.equip(Dolce);
+        Kipling2.add(Skullcrusher2, Skullcrusher3);
+        John.equip(Kipling2);
         assertEquals(trueTotalWeight, John.getTotalCarriedWeight());
+    }
+
+    @Test
+    void willNotBeOverEncumbered(){
+        Monster weakling;
+        while (true) {
+            weakling = new Monster("Sam", 40);
+            if (weakling.getCarryingCapacity() < 30) {
+                break;
+            }
+        }
+        Weapon Skullcrusher = new Weapon(35, 10, 20);
+        weakling.equip(Skullcrusher);
+        assertFalse(weakling.getInventoryContents().containsValue(Skullcrusher));
     }
 
 }

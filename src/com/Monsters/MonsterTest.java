@@ -1,9 +1,14 @@
 package com.Monsters;
 
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+
+import org.junit.Test;
+
+import static junit.framework.TestCase.assertEquals;
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertTrue;
 
 class MonsterTest {
     @Test
@@ -45,7 +50,7 @@ class MonsterTest {
 
     @Test
     void nameExceptionTest() {
-        assertThrows(IllegalArgumentException.class, () -> {new Monster("&", 40);});
+       assertThrows(IllegalArgumentException.class, () -> {new Monster("&", 40);});
     }
 
     @Test
@@ -120,11 +125,11 @@ class MonsterTest {
                 break;
             }
         }
-        John.equip(Kipling1);
-        John.equip(Skullcrusher1);
-        John.equip(Dolce);
+        John.addItemToInventory(Kipling1);
+        John.addItemToInventory(Skullcrusher1);
+        John.addItemToInventory(Dolce);
         Kipling2.add(Skullcrusher2, Skullcrusher3);
-        John.equip(Kipling2);
+        John.addItemToInventory(Kipling2);
         int trueTotalValue = Skullcrusher1.getValue() + Skullcrusher2.getValue() + Skullcrusher3.getValue()
                 + Dolce.getValue() + Kipling1.getValue() + Kipling2.getValue();
          assertEquals(trueTotalValue, John.getTotalInventoryValue());
@@ -147,11 +152,11 @@ class MonsterTest {
                 break;
             }
         }
-        John.equip(Kipling1);
-        John.equip(Skullcrusher1);
-        John.equip(Dolce);
+        John.addItemToInventory(Kipling1);
+        John.addItemToInventory(Skullcrusher1);
+        John.addItemToInventory(Dolce);
         Kipling2.add(Skullcrusher2, Skullcrusher3);
-        John.equip(Kipling2);
+        John.addItemToInventory(Kipling2);
         assertEquals(trueTotalWeight, John.getTotalCarriedWeight());
     }
 
@@ -165,7 +170,7 @@ class MonsterTest {
             }
         }
         Weapon Skullcrusher = new Weapon(35, 10, 20);
-        weakling.equip(Skullcrusher);
+        weakling.addItemToInventory(Skullcrusher);
         assertFalse(weakling.getInventoryContents().containsValue(Skullcrusher));
     }
 

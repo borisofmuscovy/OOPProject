@@ -6,10 +6,32 @@ import be.kuleuven.cs.som.annotate.Raw;
 
 import java.util.Random;
 
+/**
+ * The class of Purse, special case of Inventory Item.
+ * Apart from value, weight and holder, Purse also has content and capacity.
+ * @invar   Content of a purse cannot exceed its capacity
+ *          | content <= capacity)
+ */
 public class Purse extends InventoryItem {
+
+    /**
+     * Variable indicating the content of the purse
+     */
     float content;
+
+    /**
+     * Variable indicating the maximum capacity of the purse
+     */
     final float capacity;
+
+    /**
+     * Variable indicating the value of the purse and its contents
+     */
     float totalValue;
+
+    /**
+     * Variable indicating if the purse is destroyed
+     */
     private boolean Torn;
 
 
@@ -77,7 +99,6 @@ public class Purse extends InventoryItem {
      * @return  Random long from the fibonacciSeries array
      *          | purseID
      */
-    @Raw
     @Immutable
     protected long generateID(){
         long purseID = 0;

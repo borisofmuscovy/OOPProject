@@ -8,9 +8,29 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * The class of Weapon, special case of an inventory item.
+ * Apart from weight, value and holder, weapons also have damage.
+ * Weapons can be held by a monsters and used during the battles.
+ *
+ * @invar   Damage has to have a valid value
+ *          | damage >= 1 & damage <= MAX_DAMAGE
+ */
 public class Weapon extends InventoryItem {
+
+    /**
+     * Variable indicating damage that can be cause by a Weapon
+     */
     int damage;
+
+    /**
+     * Minimum damage that can be cause by a weapon
+     */
     final int MIN_DAMAGE = 1;
+
+    /**
+     * Maximum damage that can be cause by a weapon
+     */
     int MAX_DAMAGE = 20;
 
     /**
@@ -27,7 +47,7 @@ public class Weapon extends InventoryItem {
     public Weapon(float weight, int value, int damage){
         super(value, weight);
         this.setValue(value);
-        assert(damage >= 1 & damage <= MAX_DAMAGE);
+        assert(damage >= MIN_DAMAGE & damage <= MAX_DAMAGE);
         this.damage = damage;
         this.weight = setWeight(weight);
         this.ID = generateID();

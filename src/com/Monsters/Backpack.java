@@ -1,14 +1,21 @@
 package com.Monsters;
 
 import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Raw;
 
 import java.util.*;
 
 /**
- *
+ * Class implementing comparison of InventoryItem weights
  */
 class WeightComparator implements Comparator<InventoryItem> {
+    /**
+     * Compares weight of inventory items
+     * @param   item1
+     *          Item to be compared
+     * @param   item2
+     *          Item to be compared
+     * @return  Returns which item is heavier or if they have same weight, which have higher ID value
+     */
     @Override
     public int compare(InventoryItem item1, InventoryItem item2) {
         //if items being compared have the same weight, the one with the higher ID will be considered bigger
@@ -23,10 +30,20 @@ class WeightComparator implements Comparator<InventoryItem> {
 }
 
 /**
- * Class of backpacks
+ * Class of Backpack a special kind of InventoryItem.
+ * In addition to value, holder and weight, each backpack has its capacity.
+ * Other inventory items can be stored in backpacks.
  */
 public class Backpack extends InventoryItem{
+
+    /**
+     * Variable indicating maximum weight of items stored in the backpack
+     */
     private final float capacity;
+
+    /**
+     * Set of items contained in the backpack
+     */
     private SortedSet<InventoryItem> backpackContent = new TreeSet<>(new WeightComparator());
 
     /**
@@ -44,7 +61,7 @@ public class Backpack extends InventoryItem{
         super(value, holder, weight);
         this.ID = generateID();
         this.capacity = capacity;
-        holder.equip(this);
+        holder.addItemToInventory(this);
         this.holder = holder;
     }
 
@@ -280,7 +297,8 @@ public class Backpack extends InventoryItem{
      *          Throws an exception if backpack is empty
      *          | this.backpackContent.isEmpty()
      */
-    public InventoryItem getHeaviest() throws IllegalStateException{
+    public InventoryItem getHeaviestItem() throws IllegalStateException{
+
         try {
             if (this.backpackContent.isEmpty()) {
                 throw new IllegalStateException("Backpack is empty so there is no heaviest item.");
@@ -301,7 +319,7 @@ public class Backpack extends InventoryItem{
      *          Throws an exception if backpack is empty
      *          | this.backpackContent.isEmpty()
      */
-    public InventoryItem getLightest() throws IllegalStateException{
+    public InventoryItem getLightestItem() throws IllegalStateException{
         try {
             if(this.backpackContent.isEmpty()) {
                 throw new IllegalStateException("Backpack is empty so there is no lightest item.");

@@ -8,15 +8,38 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Abstract class of Inventory Items
- * Superclass of weapons and purses
+ * Abstract class of Inventory Items which can be held by Monsters
+ * Superclass of weapons, purses and backpacks
+ * @invar   weight of an item has to be bigger than 0
+ *          | weight > 0
+ * @invar   value must have a proper value
+ *          | !(value < 0)
  */
 public abstract class InventoryItem {
 
+    /**
+     * Variable indicating ID of the item
+     */
     protected long ID;
+
+    /**
+     * Variable indicating value of the item
+     */
     protected int value;
+
+    /**
+     * Variable indicating the weight of the item
+     */
     protected float weight;
+
+    /**
+     * Variable indicating the holder of the item
+     */
     protected Object holder = null;
+
+    /**
+     * List of all IDs that were already assigned to the items
+     */
     static List<Long> existingIDs = new ArrayList<Long>();
 
 

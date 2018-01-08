@@ -9,34 +9,90 @@ import java.util.*;
  * A class of Monsters involving their names, health points, protection, strength and damage values,
  * as well as the ability to engage each other in deadly combat.
  * Also available with full commit history at: https://github.com/borisofmuscovy/OOPProject
+ *
+ * @invar   The name of the monster has to be a valid name
+ *          | isValidName(name)
+ * @invar   The value of protection has to be a valid value
+ *          | isValidProtection(protection)
+ *
  * @version 0.3
  * @author Boris Shilov & Alicja Ochman
  */
 public class Monster {
 
+    /**
+     * Variable indicating Monster's name
+     */
     private final String name;
+
+    /**
+     * Variable indicating Monster's strength
+     */
     private int strength;
+
+    /**
+     * Variable indicating damage that can be cause by Monster
+     */
     private int damage;
+
+    /**
+     * Variable indicating Monster's protection
+     */
     private final int protection;
+
+    /**
+     * Variable indicating number of Monster's hitpoints
+     */
     private int hp;
-    private static int MAX_DAMAGE;
-    private static final int MIN_DAMAGE;
+    /**
+     * Constant indicating maximum damage
+     */
+    private static int MAX_DAMAGE = 20;
+
+    /**
+     * Constant indicating minimum damage
+     */
+    private static final int MIN_DAMAGE = 1;
+
+    /**
+     * Constant indicating maximum hitpoints
+     */
     private int MAX_HP;
+    /**
+     * Variable indicating if the monster is alive
+     */
     private boolean Alive;
-    private static int MAX_PROTECTION;
-    private static final int MIN_PROTECTION;
+
+    /**
+     * Constant indicating maximum protection
+     */
+    private static int MAX_PROTECTION  = 40;
+
+    /**
+     * Constant indicating minimum protection
+     */
+    private static final int MIN_PROTECTION = 1;
+
+    /**
+     * Variable indicating maximum weight of items that can be carried by a monster
+     */
     private int carryingCapacity;
+
+    /**
+     * Collection of items that are in monster's possession
+     */
     private Map<String,InventoryItem> inventory = new HashMap<String, InventoryItem>();
+
+    /**
+     * Anchors of a monster: left hand, right hand and back
+     */
     private static ArrayList<String> anchorDefaults = new ArrayList<String>(Arrays.asList("Left", "Right", "Back"));
+
+    /**
+     * Variable indicating anchors
+     */
     private final int anchors;
 
-
-    static {
-        MIN_DAMAGE = 1;
-        MAX_DAMAGE = 20;
-        MIN_PROTECTION = 1;
-        MAX_PROTECTION = 40;
-    }
 
     /**
      * Initialise a named monster with a given number of hit points.
@@ -77,7 +133,7 @@ public class Monster {
         this.name = Name;
         this.damage = generateDamage();
         this.strength = (int) (new Random().nextGaussian() * 30 + 10);
-        this.protection = generateProtectionFactor();
+        this.protection = setProtection();
         this.hp = startHP;
         this.MAX_HP = hp;
         this.carryingCapacity = this.getStrength() * 12;
@@ -124,10 +180,7 @@ public class Monster {
      *          Name of the monster as a string to be checked.
      * @return  True if and only if the monsters name will begin with an uppercase letter, and will contain only
      *          lower, uppercase characters, numbers and the symbol '.
-     *          | if (Name.matches("[A-Z][a-zA-Z0-9 ']{2,}"))
-     *                  return True
-     *            else
-     *                  return False
+     *          | result == (Name.matches("[A-Z][a-zA-Z0-9 ']{2,}"))
      */
     private boolean isValidName(String Name) {
         if (!Name.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
@@ -148,7 +201,9 @@ public class Monster {
 
     /**
      * Kills the monster by setting Alive to false.
-     * @post    Sets this.Alive to false
+     * @post    Monster is dead and its hitpoints equal 0
+     *          | this.Alive = false
+     *          | this.hp = 0
      */
     private void Death(){
         this.Alive = false;
@@ -157,7 +212,7 @@ public class Monster {
 
     /**
      * Returns the strength of the monster.
-     * @return  strength
+     * @return  Stength of this monster
      *          | this.strength
      */
     @Basic
@@ -167,7 +222,7 @@ public class Monster {
 
     /**
      * Sets strength of a monster ti a given new strength
-     * @param newStrength
+     * @param   newStrength
      *          The new strength for this monster
      */
     @Basic
@@ -230,7 +285,8 @@ public class Monster {
 
     /**
      * Calculates the damage dealt by a single hit using the strength and damage values, according to a set formula.
-     * @return  | damage + ((strength - 5) / 3)
+     * @return  Hit damage of a monster according to formula
+     *          | damage + ((strength - 5) / 3)
      */
     private int hitDamage() {
         int momentaryStrength = ((this.getStrength() - 5) / 3);
@@ -250,41 +306,47 @@ public class Monster {
     @Basic
     public int getProtection() { return this.protection; }
 
+
     /**
-     * Generates a protection factor which is a prime number between the allowed minimum and maximum protection values
-     * @return  protection
-     * @pre     The protection value is between MIN_PROTECTION and MAX_PROTECTION
-     *          | MIN_PROTECTION < initialProtectionFactor <MAX_PROTECTION
-     * @pre     The protection value is a prime number
-     *          | isPrime(initialProtectionFactor)
+     * Generates protection of a monster
+     * @return  protection value to be assigned to monster
+     *          | protectionFactor
+     * @pre     The protection of a monster must be a prime number within range(MIN_PROTECTION, MAX_PROTECTION)
+     *          | assert isValidProtection(protectionFactor)
      */
-    private int generateProtectionFactor() {
-        ArrayList<Integer> primeList = new ArrayList<Integer>();
-        int i;
-        for(i = MIN_PROTECTION; i < MAX_PROTECTION; i++){
-            boolean isPrime = true;
-            for(int j=2; j < i; j++ ){
-                if(i % j ==0){
-                    isPrime = false;
-                    break;
-                }
-            }
-            if(isPrime)
-                primeList.add(i);
-        }
+    public int setProtection(){
+        boolean flag = true;
         Random n = new Random();
-        int initialProtectionFactor = primeList.get(n.nextInt(primeList.size()));
-        assert (isPrime(initialProtectionFactor)
-                && (MIN_PROTECTION <= initialProtectionFactor)
-                && (initialProtectionFactor <= MAX_PROTECTION));
-        return initialProtectionFactor;
+        int protectionFactor = 0;
+        while(flag){
+            protectionFactor = (n.nextInt(MAX_PROTECTION) + 1);
+            if(isPrime(protectionFactor))
+                break;
+        }
+        System.out.println(protectionFactor);
+        assert isValidProtection(protectionFactor);
+        return protectionFactor;
     }
 
+    /**
+     * Checks whether the given protection is a valid protection for a monster
+     * @param   protection
+     *          Protection to be checked
+     * @return  True if protection is higher than MIN_PROTECTION, lower than MAX_PROTECTION and if it is a prime number
+     *          |   result == (protection >= MIN_PROTECTION && protection <= MAX_PROTECTION && isPrime(protection))
+     */
+    public boolean isValidProtection(int protection){
+        if(protection >= MIN_PROTECTION && protection <= MAX_PROTECTION && isPrime(protection))
+            return true;
+        else
+            return false;
+    }
     /**
      * Checks if a number is a prime number.
      * @param   n
      *          The number to be checked
      * @return  True if the number is a prime number and false otherwise
+     *          | result == (n%2 != 0 && n%i != 0)
      *
      */
     private boolean isPrime(int n) {
@@ -338,7 +400,7 @@ public class Monster {
     public int getMAX_HP() { return this.MAX_HP; }
 
     /**
-     * Sets the new maximum hitpoint value/
+     * Sets the new maximum hitpoint value
      * @param newMAX_HP
      *        The new HP ceiling.
      * @post The new HP ceiling will always equal the provided value.
@@ -351,10 +413,9 @@ public class Monster {
 
     //all of the following inventory code deals with anchors only for now, no support for looking into backpacks
 
-    //METHOD getTotalCarriedWeight seems to get total value not weight
     /**
      * Returns total weight of items carried by a monster
-     * @return  total weight of the items carried by a monster
+     * @return  total weight of the items currently carried by a monster
      */
     public float getTotalCarriedWeight() {
         float totalCarriedWeight = 0;
@@ -380,7 +441,8 @@ public class Monster {
 
     /**
      * Returns items that are present in monster's inventory
-     * @return  monster's inventory items
+     *
+     * @return  unmodifiable contents of monster's inventory
      *          | this.inventory
      */
     @Basic
@@ -433,7 +495,7 @@ public class Monster {
      * @post    Item is added to the inventory to the empty anchor
      *          | this.inventory.put(anchor, item)
      */
-    public void equip(InventoryItem item) throws IllegalStateException{
+    public void addItemToInventory(InventoryItem item) throws IllegalStateException{
         try {
             if (this.canCarry(item)) {
                 for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()){
@@ -468,7 +530,7 @@ public class Monster {
      * @post  Holder of an item is set to null
      *        | item.getHolder == null
      */
-    private void disown(InventoryItem item) {
+    private void removeItem(InventoryItem item) {
         if (this.inventory.containsValue(item)) {
             for (Map.Entry<String, InventoryItem> entry : this.inventory.entrySet()) {
                 if (entry.getValue() == item) {
@@ -493,11 +555,11 @@ public class Monster {
      *          | ! this.inventory.contains(item)
      *          |       then throw new IllegalArgumentException
      */
-    public void unequip(InventoryItem item) throws IllegalArgumentException{
-        // drop or unequip from inventory. cannot drop weapons, sets holder to null
+    public void dropItem(InventoryItem item) throws IllegalArgumentException{
+        // drop or dropItem from inventory. cannot drop weapons, sets holder to null
         try {
             if (!(item instanceof Weapon)) { //add check for ownership of item here
-                this.disown(item);
+                this.removeItem(item);
             } else {
                 throw new IllegalArgumentException();
             }
@@ -507,17 +569,17 @@ public class Monster {
     }
 
     /**
-     * Exchange/trade of several items between monsters
+     * Exchange/tradeItem of several items between monsters
      * @param   other
      *          Monster with which this monster trades
      * @param   items
      *          Items to be traded
-     * @pre     Monster can trade only items contained in its inventory
+     * @pre     Monster can tradeItem only items contained in its inventory
      *          | this.inventory.containsValue(item)
-     * @pre     Monster can trade items only if the other monster has capacity to take them
+     * @pre     Monster can tradeItem items only if the other monster has capacity to take them
      *          | other.canCarry(item)
      * @post    Items traded are deleted from this monster inventory and added to other monster inventory
-     *          | this.disown(item)
+     *          | this.removeItem(item)
      *          | entry.setValue(item);
      * @post    Holder of an item changes
      *          | item.setHolder(other)
@@ -525,14 +587,14 @@ public class Monster {
      *          Throws an exception if other monster is not able to carry the item because of its weight or other monster's inventory is full
      *          | !other.canCarry(item)
      * @throws  IllegalStateException
-     *          Throws an exception if monster is trying to trade an item it does not possess
+     *          Throws an exception if monster is trying to tradeItem an item it does not possess
      *          | !this.inventory.containsValue(item)
      */
-    public void trade(Monster other, InventoryItem... items) throws IllegalAccessException, IllegalStateException, UnsupportedOperationException{
+    public void tradeItem(Monster other, InventoryItem... items) throws IllegalAccessException, IllegalStateException, UnsupportedOperationException{
         try {
             for (int i=0; i < items.length;i++){
                 InventoryItem item = items[i];
-                //first determine if this monster trying to trade has the item in question
+                //first determine if this monster trying to tradeItem has the item in question
                 if (item == null) {
                     continue;
                 } else if (!this.inventory.containsValue(item)){
@@ -542,11 +604,11 @@ public class Monster {
                 } else {
                     for (Map.Entry<String,InventoryItem> entry : other.obtainInventoryContents().entrySet()){
                         if (entry.getValue() == null) {
-                            this.disown(item);
+                            this.removeItem(item);
                             item.setHolder(other);
                             entry.setValue(item);
                         } else if (entry.getValue() instanceof Backpack) {
-                            this.disown(item);
+                            this.removeItem(item);
                             item.setHolder(other);
                             ((Backpack) entry.getValue()).add(item);
                         }
@@ -554,9 +616,9 @@ public class Monster {
                 }
             }
         } catch (IllegalStateException e1) {
-            System.out.println(this.getName() + " tried to trade an item they do not possess.");
+            System.out.println(this.getName() + " tried to tradeItem an item they do not possess.");
         } catch (IllegalAccessException e2) {
-            System.out.print(this.getName() + " tried to trade a weapon to " + other.getName() + ", but " +
+            System.out.print(this.getName() + " tried to tradeItem a weapon to " + other.getName() + ", but " +
                     "their inventory was full!");
         }
     }
@@ -579,9 +641,9 @@ public class Monster {
 
     /**
      * Returns total value of weapons contained in Monster's inventory
-     * @return totalValueofWeapons
+     * @return getTotalValueOfWeapons
      */
-    public int totalValueofWeapons(){ //for now this implementation returns value of weapons in anchors only
+    public int getTotalValueOfWeapons(){ //for now this implementation returns value of weapons in anchors only
         int totalAnchorWeaponValue = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
             if (entry.getValue() instanceof Weapon) {

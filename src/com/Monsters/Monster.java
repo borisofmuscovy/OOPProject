@@ -274,8 +274,9 @@ public class Monster {
         }
         Random n = new Random();
         int initialProtectionFactor = primeList.get(n.nextInt(primeList.size()));
-        assert (isPrime(initialProtectionFactor) &&
-                (MIN_PROTECTION <= initialProtectionFactor)&&(initialProtectionFactor <= MAX_PROTECTION));
+        assert (isPrime(initialProtectionFactor)
+                && (MIN_PROTECTION <= initialProtectionFactor)
+                && (initialProtectionFactor <= MAX_PROTECTION));
         return initialProtectionFactor;
     }
 
@@ -288,7 +289,7 @@ public class Monster {
      */
     private boolean isPrime(int n) {
         //check if n is a multiple of 2
-        if (n%2==0) {
+        if ((n%2==0) && n!=2) {
             return false;
         }
         //if not, then just check the odds

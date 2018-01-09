@@ -553,11 +553,25 @@ public class Monster implements Inventorised{
 
 
     public void swap(InventoryItem thisItem, InventoryItem otherItem) throws IllegalStateException{
-        if ((thisItem.getIndirectHolder() != this)
+        if ((thisItem==null) || (otherItem==null)) {
+            throw new IllegalArgumentException();
+        } else if ((thisItem.getIndirectHolder() != this)
                 || (otherItem.getIndirectHolder() != this)) {
             throw new IllegalStateException();
         } else if ((thisItem.getHolder() == this) && (otherItem.getHolder() == this)) {
-            this.inventory.entrySet().iterator()
+            //fetch keys for the swapped items
+            String thisItemLocation = null;
+            String otherItemLocation = null;
+            for (Map.Entry item : this.inventory.entrySet()) {
+                if (item.getValue() == thisItem) {
+                    thisItemLocation = (String) item.getKey();
+                } else if (item.getValue() == otherItem) {
+                    otherItemLocation = (String) item.getKey();
+                }
+            }
+            InventoryItem tempHolder = this.inventory.get(otherItemLocation);
+            this.inventory.put(otherItemLocation, thisItem);
+            this.inventory.put(thisItemLocation, tempHolder);
         }
     }
 

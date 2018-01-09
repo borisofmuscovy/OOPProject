@@ -104,7 +104,7 @@ class MonsterTest {
         Monster Alice = new Monster("Alice", 40);
         int oldHealth = Alice.getHP();
         Bob.hit(Alice);
-        assertTrue(Alice.getHP() <= oldHealth);
+        assertTrue(Alice.getHP() != oldHealth);
     }
 
     @Test
@@ -171,6 +171,16 @@ class MonsterTest {
         Weapon Skullcrusher = new Weapon(35, 10, 20);
         weakling.add(Skullcrusher);
         assertFalse(weakling.getContents().containsValue(Skullcrusher));
+    }
+
+    @Test
+    void swap(){
+        Weapon Skullcrusher = new Weapon(5, 10, 20);
+        Purse Gucci = new Purse(20, 5, 2, 30);
+        Monster John = new Monster("John", 40, Skullcrusher, Gucci);
+        John.swap(Skullcrusher, Gucci);
+        assertTrue((John.getContents().get("Left") == Gucci)
+                && (John.getContents().get("Right") == Skullcrusher));
     }
 
 }

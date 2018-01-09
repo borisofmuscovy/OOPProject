@@ -109,23 +109,6 @@ public class Monster implements Inventorised{
      *          | ! isValidName(name)
      *
      */
-//    public Monster(String Name, int startHP) throws IllegalArgumentException{
-//        if (!isValidName(Name)){
-//            throw new IllegalArgumentException();
-//            }
-//        this.name = Name;
-//        this.damage = generateDamage();
-//        this.strength = (int) (new Random().nextGaussian() + 10);
-//        this.protection = generateProtectionFactor();
-//        this.hp = startHP;
-//        this.MAX_HP = hp;
-//        this.carryingCapacity = this.getStrength() * 12;
-//        this.Alive = true;
-//        this.inventory.put("Left", null);
-//        this.inventory.put("Right", null);
-//        this.inventory.put("Back", null);
-//    }
-
     public Monster(String Name, int startHP, InventoryItem... items) throws IllegalArgumentException{
         if (!isValidName(Name)){
             throw new IllegalArgumentException();
@@ -568,6 +551,16 @@ public class Monster implements Inventorised{
         }
     }
 
+
+    public void swap(InventoryItem thisItem, InventoryItem otherItem) throws IllegalStateException{
+        if ((thisItem.getIndirectHolder() != this)
+                || (otherItem.getIndirectHolder() != this)) {
+            throw new IllegalStateException();
+        } else if ((thisItem.getHolder() == this) && (otherItem.getHolder() == this)) {
+            this.inventory.entrySet().iterator()
+        }
+    }
+
     /**
      * Exchange/transfer of several items between monsters
      * @param   other
@@ -599,19 +592,6 @@ public class Monster implements Inventorised{
                     throw new IllegalStateException();
                 } else if (!other.canContain(item)) {
                     throw new IllegalArgumentException();
-                } else if (other instanceof Monster){
-                    Monster otherMonster = (Monster) other;
-                    for (Map.Entry<String,InventoryItem> entry : otherMonster.inventory.entrySet()){
-                        if (entry.getValue() == null) {
-                            this.removeItem(item);
-                            item.setHolder(other);
-                            entry.setValue(item);
-                        } else if (entry.getValue() instanceof Backpack) {
-                            this.removeItem(item);
-                            item.setHolder(other);
-                            ((Backpack) entry.getValue()).add(item);
-                        }
-                    }
                 } else {
                     this.inventory.entrySet().remove(item);
                     item.setHolder(null);

@@ -98,7 +98,7 @@ public abstract class InventoryItem {
     @Basic
     public abstract long getID();
 
-    protected boolean checkValidID(long ID) {
+    private boolean checkValidID(long ID) {
         if (existingIDs.contains(ID)) {
             return false;
         } else {
@@ -136,7 +136,7 @@ public abstract class InventoryItem {
      *          | this.value = newValue
      */
     @Basic
-    public void setValue(int newValue) {
+    protected void setValue(int newValue) {
         assert !(newValue < 0);
         this.value = newValue;
     }

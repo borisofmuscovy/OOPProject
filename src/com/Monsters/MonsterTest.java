@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertFalse;
@@ -125,12 +124,12 @@ class MonsterTest {
                 break;
             }
         }
-        John.addItemToInventory(Kipling1);
-        John.addItemToInventory(Skullcrusher1);
-        John.addItemToInventory(Dolce);
+        John.add(Kipling1);
+        John.add(Skullcrusher1);
+        John.add(Dolce);
         Kipling2.add(Skullcrusher2, Skullcrusher3);
-        John.addItemToInventory(Kipling2);
-        int trueTotalValue = Skullcrusher1.getValue() + Skullcrusher2.getValue() + Skullcrusher3.getValue()
+        John.add(Kipling2);
+        float trueTotalValue = Skullcrusher1.getValue() + Skullcrusher2.getValue() + Skullcrusher3.getValue()
                 + Dolce.getValue() + Kipling1.getValue() + Kipling2.getValue();
          assertEquals(trueTotalValue, John.getTotalInventoryValue());
     }
@@ -152,11 +151,11 @@ class MonsterTest {
                 break;
             }
         }
-        John.addItemToInventory(Kipling1);
-        John.addItemToInventory(Skullcrusher1);
-        John.addItemToInventory(Dolce);
+        John.add(Kipling1);
+        John.add(Skullcrusher1);
+        John.add(Dolce);
         Kipling2.add(Skullcrusher2, Skullcrusher3);
-        John.addItemToInventory(Kipling2);
+        John.add(Kipling2);
         assertEquals(trueTotalWeight, John.getTotalCarriedWeight());
     }
 
@@ -170,7 +169,7 @@ class MonsterTest {
             }
         }
         Weapon Skullcrusher = new Weapon(35, 10, 20);
-        weakling.addItemToInventory(Skullcrusher);
+        weakling.add(Skullcrusher);
         assertFalse(weakling.getInventoryContents().containsValue(Skullcrusher));
     }
 

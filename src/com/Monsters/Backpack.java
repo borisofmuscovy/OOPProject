@@ -34,7 +34,7 @@ class WeightComparator implements Comparator<InventoryItem> {
  * In addition to value, holder and weight, each backpack has its capacity.
  * Other inventory items can be stored in backpacks.
  */
-public class Backpack extends InventoryItem{
+public class Backpack extends InventoryItem implements Inventorised{
 
     /**
      * Variable indicating maximum weight of items stored in the backpack
@@ -61,7 +61,7 @@ public class Backpack extends InventoryItem{
         super(value, holder, weight);
         this.ID = generateID();
         this.capacity = capacity;
-        holder.addItemToInventory(this);
+        holder.add(this);
         this.holder = holder;
     }
 

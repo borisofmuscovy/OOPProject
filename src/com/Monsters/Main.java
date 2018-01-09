@@ -39,7 +39,7 @@ public class Main {
         Monster Bob = new Monster("Bob", 30);
         Monster Alice = new Monster("Alice", 30);
         Weapon Skullcrusher = new Weapon(2, 10, 10);
-        Alice.addItemToInventory(Skullcrusher);
+        Alice.add(Skullcrusher);
         System.out.println(Alice.getInventoryContents());
         Alice.tradeItem(Bob, Skullcrusher);
         System.out.println("Alice" + Alice.getInventoryContents());
@@ -62,10 +62,10 @@ public class Main {
         Weapon Bonemasher = new Weapon(5, 5, 10);
         Weapon Skullcrusher = new Weapon(5, 5, 10);
 
-        Alice.addItemToInventory(Gucci);
-        Alice.addItemToInventory(Bonemasher);
-        Bob.addItemToInventory(Yves);
-        Bob.addItemToInventory(Skullcrusher);
+        Alice.add(Gucci);
+        Alice.add(Bonemasher);
+        Bob.add(Yves);
+        Bob.add(Skullcrusher);
 
         Battle(Alice, Bob);
         if (Bob.isAlive()) {
@@ -99,9 +99,9 @@ public class Main {
         Backpack AlicesBackpack = new Backpack(10, Alice, 12, 32);
 
         Weapon Stick = new Weapon(2, 10, 12);
-        Alice.addItemToInventory(Stick);
+        Alice.add(Stick);
         Weapon Rock = new Weapon(2, 10, 12);
-        Bob.addItemToInventory(Rock);
+        Bob.add(Rock);
 
         System.out.println(Bob.getInventoryContents());
         System.out.println(Alice.getInventoryContents());
@@ -115,7 +115,7 @@ public class Main {
         Versace.add(Gucci, Yves);
 
         Bob.dropItem(BobsBackpack);
-        Bob.addItemToInventory(Versace);
+        Bob.add(Versace);
 
         Battle(Bob, Alice);
 

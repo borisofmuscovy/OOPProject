@@ -18,7 +18,7 @@ import java.util.*;
  * @version 0.3
  * @author Boris Shilov & Alicja Ochman
  */
-public class Monster {
+public class Monster implements Inventorised{
 
     /**
      * Variable indicating Monster's name
@@ -495,24 +495,27 @@ public class Monster {
      * @post    Item is added to the inventory to the empty anchor
      *          | this.inventory.put(anchor, item)
      */
-    public void addItemToInventory(InventoryItem item) throws IllegalStateException{
+    public void add(InventoryItem... items) throws IllegalStateException{
         try {
-            if (this.canCarry(item)) {
-                for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()){
-                    if (entry.getValue() == null) {
-                        item.setHolder(this);
-                        entry.setValue(item);
-                        return;
+            for (int i=0; i < items.length;i++){
+                InventoryItem item = items[i];
+                if (this.canCarry(item)) {
+                    for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()){
+                        if (entry.getValue() == null) {
+                            item.setHolder(this);
+                            entry.setValue(item);
+                            return;
+                        }
                     }
-                }
-                for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
-                    if (entry.getValue() instanceof Backpack) {
-                        ((Backpack) entry.getValue()).add(item);
-                        return;
+                    for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
+                        if (entry.getValue() instanceof Backpack) {
+                            ((Backpack) entry.getValue()).add(item);
+                            return;
+                        }
                     }
+                } else {
+                    throw new IllegalStateException();
                 }
-            } else {
-                throw new IllegalStateException();
             }
         } catch (IllegalStateException e) {
             System.out.println(this.getName() + " cannot pick up " + item.getClass());
@@ -555,13 +558,16 @@ public class Monster {
      *          | ! this.inventory.contains(item)
      *          |       then throw new IllegalArgumentException
      */
-    public void dropItem(InventoryItem item) throws IllegalArgumentException{
-        // drop or dropItem from inventory. cannot drop weapons, sets holder to null
+    public void remove(InventoryItem... items) throws IllegalArgumentException{
+        // drop od remove from inventory. cannot drop weapons, sets holder to null
         try {
-            if (!(item instanceof Weapon)) { //add check for ownership of item here
-                this.removeItem(item);
-            } else {
-                throw new IllegalArgumentException();
+            for (int i=0; i < items.length;i++){
+                InventoryItem item = items[i];
+                if (!(item instanceof Weapon)) { //add check for ownership of item here
+                    this.removeItem(item);
+                } else {
+                    throw new IllegalArgumentException();
+                }
             }
         } catch (IllegalArgumentException e){
             System.out.println(this.getName() + " cannot drop weapons and cannot drop things they do not own!");

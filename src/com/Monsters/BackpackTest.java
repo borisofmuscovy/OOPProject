@@ -10,7 +10,7 @@ class BackpackTest {
         Weapon Skullcrusher = new Weapon(10, 10, 20);
         Backpack Kipling = new Backpack(15, 5, 60);
         Kipling.add(Skullcrusher);
-        assertTrue(Kipling.getBackpackContents().contains(Skullcrusher));
+        assertTrue(Kipling.getContents().contains(Skullcrusher));
     }
 
     @Test
@@ -19,7 +19,7 @@ class BackpackTest {
         Backpack Kipling = new Backpack(15, 5, 60);
         Kipling.add(Skullcrusher);
         Kipling.remove(Skullcrusher);
-        assertTrue(Kipling.getBackpackContents().contains(Skullcrusher));
+        assertTrue(Kipling.getContents().contains(Skullcrusher));
     }
 
     @Test
@@ -28,7 +28,7 @@ class BackpackTest {
         Backpack Kipling = new Backpack(15, 5, 60);
         Kipling.add(Gucci);
         Kipling.remove(Gucci);
-        assertFalse(Kipling.getBackpackContents().contains(Gucci));
+        assertFalse(Kipling.getContents().contains(Gucci));
     }
 
     @Test
@@ -38,8 +38,8 @@ class BackpackTest {
         Backpack Next = new Backpack(30, 6, 60);
         Kipling.add(Skullcrusher);
         Kipling.transfer(Next, Skullcrusher);
-        assertTrue((!Kipling.getBackpackContents().contains(Skullcrusher))
-                && (Next.getBackpackContents().contains(Skullcrusher)));
+        assertTrue((!Kipling.getContents().contains(Skullcrusher))
+                && (Next.getContents().contains(Skullcrusher)));
     }
 
     @Test
@@ -50,11 +50,11 @@ class BackpackTest {
         Weapon Skullcrusher3 = new Weapon(12, 10, 20);
         Purse Gucci = new Purse(20, 13, 2, 30);
         Kipling.add(Skullcrusher1, Skullcrusher2, Skullcrusher3, Gucci);
-        boolean idiot = Kipling.getBackpackContents().contains(Skullcrusher2);
-        assertTrue(Kipling.getBackpackContents().contains(Skullcrusher1)
-                && Kipling.getBackpackContents().contains(Skullcrusher2)
-                && Kipling.getBackpackContents().contains(Skullcrusher3)
-                && Kipling.getBackpackContents().contains(Gucci));
+        boolean idiot = Kipling.getContents().contains(Skullcrusher2);
+        assertTrue(Kipling.getContents().contains(Skullcrusher1)
+                && Kipling.getContents().contains(Skullcrusher2)
+                && Kipling.getContents().contains(Skullcrusher3)
+                && Kipling.getContents().contains(Gucci));
     }
 
     @Test
@@ -64,7 +64,7 @@ class BackpackTest {
         Weapon Skullcrusher = new Weapon(11, 10, 20);
         Kipling2.add(Skullcrusher);
         Kipling1.add(Kipling2);
-        assertFalse(Kipling1.getBackpackContents().contains(Kipling2));
+        assertFalse(Kipling1.getContents().contains(Kipling2));
     }
 
 

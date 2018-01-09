@@ -40,10 +40,10 @@ public class Main {
         Monster Alice = new Monster("Alice", 30);
         Weapon Skullcrusher = new Weapon(2, 10, 10);
         Alice.add(Skullcrusher);
-        System.out.println(Alice.getInventoryContents());
-        Alice.tradeItem(Bob, Skullcrusher);
-        System.out.println("Alice" + Alice.getInventoryContents());
-        System.out.println("Bob" + Bob.getInventoryContents());
+        System.out.println(Alice.getContents());
+        Alice.transfer(Bob, Skullcrusher);
+        System.out.println("Alice" + Alice.getContents());
+        System.out.println("Bob" + Bob.getContents());
         System.out.println(Skullcrusher.getHolder());
         Battle(Alice, Bob);
         System.out.println("END PART 1\n");
@@ -69,23 +69,23 @@ public class Main {
 
         Battle(Alice, Bob);
         if (Bob.isAlive()) {
-            for (Map.Entry<String,InventoryItem> entry : Alice.getInventoryContents().entrySet()) {
+            for (Map.Entry<String,InventoryItem> entry : Alice.getContents().entrySet()) {
                 if (entry.getValue() instanceof Weapon) {
-                    Alice.tradeItem(Bob, entry.getValue());
+                    Alice.transfer(Bob, entry.getValue());
                 } else if (entry.getValue() instanceof Purse) {
                     ((Purse) entry.getValue()).transferContent(Yves, ((Purse) entry.getValue()).getContent());
                 }
             }
-            System.out.println(Bob.getInventoryContents());
+            System.out.println(Bob.getContents());
         } else if (Alice.isAlive()) {
-            for (Map.Entry<String,InventoryItem> entry : Bob.getInventoryContents().entrySet()) {
+            for (Map.Entry<String,InventoryItem> entry : Bob.getContents().entrySet()) {
                 if (entry.getValue() instanceof Weapon) {
-                    Bob.tradeItem(Alice, entry.getValue());
+                    Bob.transfer(Alice, entry.getValue());
                 } else if (entry.getValue() instanceof Purse) {
                     ((Purse) entry.getValue()).transferContent(Gucci, ((Purse) entry.getValue()).getContent());
                 }
             }
-            System.out.println(Alice.getInventoryContents());
+            System.out.println(Alice.getContents());
         }
         System.out.println("END PART 2\n");
     }
@@ -103,8 +103,8 @@ public class Main {
         Weapon Rock = new Weapon(2, 10, 12);
         Bob.add(Rock);
 
-        System.out.println(Bob.getInventoryContents());
-        System.out.println(Alice.getInventoryContents());
+        System.out.println(Bob.getContents());
+        System.out.println(Alice.getContents());
 
         Backpack Versace = new Backpack(20, 25, 100);
         Weapon Skullcrusher = new Weapon(2, 10, 10);
@@ -114,17 +114,17 @@ public class Main {
         Purse Yves = new Purse(20, 1, 30, 70);
         Versace.add(Gucci, Yves);
 
-        Bob.dropItem(BobsBackpack);
+        Bob.remove(BobsBackpack);
         Bob.add(Versace);
 
         Battle(Bob, Alice);
 
         if (Bob.isAlive()) {
-            Alice.tradeItem(Bob, Alice.getInventoryContents().get("Left"), Alice.getInventoryContents().get("Right"),
-                    Alice.getInventoryContents().get("Back"));
+            Alice.transfer(Bob, Alice.getContents().get("Left"), Alice.getContents().get("Right"),
+                    Alice.getContents().get("Back"));
         } else if (Alice.isAlive()) {
-            Bob.tradeItem(Alice, Bob.getInventoryContents().get("Left"), Bob.getInventoryContents().get("Right"),
-                    Bob.getInventoryContents().get("Back"));
+            Bob.transfer(Alice, Bob.getContents().get("Left"), Bob.getContents().get("Right"),
+                    Bob.getContents().get("Back"));
         }
 
         System.out.println("END PART 3\n");

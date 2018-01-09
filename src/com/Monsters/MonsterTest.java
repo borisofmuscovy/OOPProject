@@ -15,8 +15,8 @@ class MonsterTest {
         Weapon Skullcrusher = new Weapon(10, 10, 20);
         Purse Gucci = new Purse(20, 5, 2, 30);
         Monster John = new Monster("John", 40, Skullcrusher, Gucci);
-        assertTrue((John.getInventoryContents().get("Left") == Skullcrusher)
-                && (John.getInventoryContents().get("Right") == Gucci));
+        assertTrue((John.getContents().get("Left") == Skullcrusher)
+                && (John.getContents().get("Right") == Gucci));
     }
 
     @Test
@@ -26,10 +26,10 @@ class MonsterTest {
         Backpack Kipling = new Backpack(15, 5, 60);
         Weapon Thrasher = new Weapon(3, 10, 20);
         Monster John = new Monster("John", 40, Skullcrusher, Gucci, Kipling, Thrasher);
-        assertTrue((John.getInventoryContents().get("Left") == Skullcrusher)
-                && (John.getInventoryContents().get("Right") == Gucci)
-                && (John.getInventoryContents().get("Back") == Kipling)
-                && (John.getInventoryContents().get("Appendage1") == Thrasher));
+        assertTrue((John.getContents().get("Left") == Skullcrusher)
+                && (John.getContents().get("Right") == Gucci)
+                && (John.getContents().get("Back") == Kipling)
+                && (John.getContents().get("Appendage1") == Thrasher));
     }
 
     @Test
@@ -44,7 +44,7 @@ class MonsterTest {
         Weapon Thrasher = new Weapon(3, 10, 20);
         Monster John = new Monster("John", 40, Skullcrusher, Gucci, Thrasher);
         float trueWeight = Skullcrusher.getWeight() + Gucci.getWeight() + Thrasher.getWeight();
-        assertTrue(trueWeight == John.getTotalCarriedWeight());
+        assertTrue(trueWeight == John.getTotalWeight());
     }
 
     @Test
@@ -131,7 +131,7 @@ class MonsterTest {
         John.add(Kipling2);
         float trueTotalValue = Skullcrusher1.getValue() + Skullcrusher2.getValue() + Skullcrusher3.getValue()
                 + Dolce.getValue() + Kipling1.getValue() + Kipling2.getValue();
-         assertEquals(trueTotalValue, John.getTotalInventoryValue());
+         assertEquals(trueTotalValue, John.getTotalValue());
     }
 
     @Test
@@ -156,7 +156,7 @@ class MonsterTest {
         John.add(Dolce);
         Kipling2.add(Skullcrusher2, Skullcrusher3);
         John.add(Kipling2);
-        assertEquals(trueTotalWeight, John.getTotalCarriedWeight());
+        assertEquals(trueTotalWeight, John.getTotalWeight());
     }
 
     @Test
@@ -170,7 +170,7 @@ class MonsterTest {
         }
         Weapon Skullcrusher = new Weapon(35, 10, 20);
         weakling.add(Skullcrusher);
-        assertFalse(weakling.getInventoryContents().containsValue(Skullcrusher));
+        assertFalse(weakling.getContents().containsValue(Skullcrusher));
     }
 
 }

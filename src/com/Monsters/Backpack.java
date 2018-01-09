@@ -5,31 +5,6 @@ import be.kuleuven.cs.som.annotate.Basic;
 import java.util.*;
 
 /**
- * Class implementing comparison of InventoryItem weights
- */
-class WeightComparator implements Comparator<InventoryItem> {
-    /**
-     * Compares weight of inventory items
-     * @param   item1
-     *          Item to be compared
-     * @param   item2
-     *          Item to be compared
-     * @return  Returns which item is heavier or if they have same weight, which have higher ID value
-     */
-    @Override
-    public int compare(InventoryItem item1, InventoryItem item2) {
-        //if items being compared have the same weight, the one with the higher ID will be considered bigger
-        if (item1.getWeight() == item2.getWeight()) {
-            return (Long.compare(item1.getID(), item2.getID()));
-        } else if (item1.getWeight() > item2.getWeight()) {
-            return 1;
-        } else {
-            return -1;
-        }
-    }
-}
-
-/**
  * Class of Backpack a special kind of InventoryItem.
  * In addition to value, holder and weight, each backpack has its capacity.
  * Other inventory items can be stored in backpacks.
@@ -87,7 +62,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      *          | Collections.unmodifiableSortedSet(this.backpackContent)
      */
     @Basic
-    public SortedSet<InventoryItem> getBackpackContents(){
+    public SortedSet<InventoryItem> getContents(){
         return Collections.unmodifiableSortedSet(this.backpackContent);
     }
 
@@ -119,7 +94,9 @@ public class Backpack extends InventoryItem implements Inventorised{
      *          |   this.getContentsWeight() + item.getWeight()) > this.getCapacity()
      */
     public boolean canContain(InventoryItem item){
-        if (((this.getContentsWeight() + item.getWeight()) > this.getCapacity())
+        if (item == null){
+            return false;
+        } else if (((this.getContentsWeight() + item.getWeight()) > this.getCapacity())
                 && (!(item instanceof Backpack))){
             return false;
         } else if ((item instanceof Backpack) &&
@@ -167,7 +144,7 @@ public class Backpack extends InventoryItem implements Inventorised{
                     throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
                 } else if (this.backpackContent.contains(item)) {
                     throw new IllegalArgumentException("This item is already in the backpack!");
-                } else if ((item.getHolder()!=null) && !(item instanceof Weapon)) {
+                } else if (item.getHolder()!=null) {
                     throw new IllegalArgumentException("Item already being held by someone else.");
                 } else {
                     this.backpackContent.add(item);
@@ -221,15 +198,17 @@ public class Backpack extends InventoryItem implements Inventorised{
      *          | this.remove(item)
      *          |  other.add(item)
      */
-    public void transfer(Backpack other, InventoryItem... items) throws IllegalArgumentException{
+    public void transfer(Inventorised other, InventoryItem... items) throws IllegalArgumentException, IllegalStateException{
         try {
             for (int i=0; i < items.length;i++){
                 InventoryItem item = items[i];
-                if(!other.canContain(item)) {
+                if (!this.backpackContent.contains(item)) {
+                    throw new IllegalStateException("Cannot transfer items not in backpack.");
+                } else if(!other.canContain(item)) {
                     throw new IllegalArgumentException("You cannot add this item. It's too heavy!");
                 } else {
                     this.backpackContent.remove(item);
-                    item.setHolder(other);
+                    item.setHolder(null);
                     other.add(item);
                 }
             }

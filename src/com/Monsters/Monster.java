@@ -323,7 +323,6 @@ public class Monster implements Inventorised{
             if(isPrime(protectionFactor))
                 break;
         }
-        System.out.println(protectionFactor);
         assert isValidProtection(protectionFactor);
         return protectionFactor;
     }
@@ -417,7 +416,7 @@ public class Monster implements Inventorised{
      * Returns total weight of items carried by a monster
      * @return  total weight of the items currently carried by a monster
      */
-    public float getTotalCarriedWeight() {
+    public float getTotalWeight() {
         float totalCarriedWeight = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
             if (entry.getValue() instanceof Backpack) {
@@ -446,18 +445,8 @@ public class Monster implements Inventorised{
      *          | this.inventory
      */
     @Basic
-    public Map<String, InventoryItem> getInventoryContents(){
+    public Map<String, InventoryItem> getContents(){
         return Collections.unmodifiableMap(this.inventory);
-    }
-
-    /**
-     * Returns items that are present in monster's inventory
-     * @return this monster's inventory items
-     *          | this.inventory
-     */
-    @Basic
-    private Map<String, InventoryItem> obtainInventoryContents(){
-        return this.inventory;
     }
 
     /**
@@ -466,8 +455,13 @@ public class Monster implements Inventorised{
      *        An item to be checked if can be held by a monster
      * @return  True is monster can carry the item, false otherwise
      */
-    protected boolean canCarry(InventoryItem item){
-        if ((this.getTotalCarriedWeight() + item.getWeight()) > this.carryingCapacity){
+    public boolean canContain(InventoryItem item){
+        if (item == null) {
+            return false;
+        } else if ((this.getTotalWeight() + item.getWeight()) > this.carryingCapacity){
+            return false;
+        } else if ((item instanceof Backpack) &&
+                ((this.getTotalWeight() + ((Backpack) item).getTotalWeight()) > this.getCarryingCapacity())) {
             return false;
         } else if (this.inventory.containsValue(item)){
             return false;
@@ -478,10 +472,10 @@ public class Monster implements Inventorised{
 
     /**
      * Adds an item to this monster's inventory
-     * @param item
-     *        Item to be added
+     * @param items
+     *        Items to be added
      * @pre   Monster is capable of carrying the item
-     *        |this.canCarry(item)
+     *        |this.canContain(item)
      * @pre   The item does not have a holder
      *        | item.getHolder() == null
      * @pre   Monster has to have a free anchor to add the item
@@ -489,7 +483,7 @@ public class Monster implements Inventorised{
      *              || this.inventory.get("Back") == null
      * @throws IllegalStateException
      *         Throws an exception if item is too heavy, it already has a holder or none of the anchors is empty
-     *         | ! this.canCarry(item) || item.getHolder() != null ||
+     *         | ! this.canContain(item) || item.getHolder() != null ||
      *         (this.inventory.get("Left") != null && this.inventory.get("Right") != null
      *              && this.inventory.get("Back") != null)
      * @post    Item is added to the inventory to the empty anchor
@@ -499,7 +493,7 @@ public class Monster implements Inventorised{
         try {
             for (int i=0; i < items.length;i++){
                 InventoryItem item = items[i];
-                if (this.canCarry(item)) {
+                if (this.canContain(item)) {
                     for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()){
                         if (entry.getValue() == null) {
                             item.setHolder(this);
@@ -518,7 +512,7 @@ public class Monster implements Inventorised{
                 }
             }
         } catch (IllegalStateException e) {
-            System.out.println(this.getName() + " cannot pick up " + item.getClass());
+            System.out.println(this.getName() + " cannot pick up item.");
         }
     }
 
@@ -546,8 +540,8 @@ public class Monster implements Inventorised{
 
     /**
      * Delete an item from monster's inventory
-     * @param   item
-     *          Item to be deleted from monster's inventory
+     * @param   items
+     *          Items to be deleted from monster's inventory
      *
      * @throws  IllegalArgumentException
      *          throws an exception if monster tris to drop a weapon
@@ -570,45 +564,44 @@ public class Monster implements Inventorised{
                 }
             }
         } catch (IllegalArgumentException e){
-            System.out.println(this.getName() + " cannot drop weapons and cannot drop things they do not own!");
+            System.out.println(this.getName() + " cannot drop weapons.");
         }
     }
 
     /**
-     * Exchange/tradeItem of several items between monsters
+     * Exchange/transfer of several items between monsters
      * @param   other
      *          Monster with which this monster trades
      * @param   items
      *          Items to be traded
-     * @pre     Monster can tradeItem only items contained in its inventory
+     * @pre     Monster can transfer only items contained in its inventory
      *          | this.inventory.containsValue(item)
-     * @pre     Monster can tradeItem items only if the other monster has capacity to take them
-     *          | other.canCarry(item)
+     * @pre     Monster can transfer items only if the other monster has capacity to take them
+     *          | other.canContain(item)
      * @post    Items traded are deleted from this monster inventory and added to other monster inventory
-     *          | this.removeItem(item)
+     *          | this.remove(item)
      *          | entry.setValue(item);
      * @post    Holder of an item changes
      *          | item.setHolder(other)
      * @throws  IllegalAccessException
      *          Throws an exception if other monster is not able to carry the item because of its weight or other monster's inventory is full
-     *          | !other.canCarry(item)
+     *          | !other.canContain(item)
      * @throws  IllegalStateException
-     *          Throws an exception if monster is trying to tradeItem an item it does not possess
+     *          Throws an exception if monster is trying to transfer an item it does not possess
      *          | !this.inventory.containsValue(item)
      */
-    public void tradeItem(Monster other, InventoryItem... items) throws IllegalAccessException, IllegalStateException, UnsupportedOperationException{
+    public void transfer(Inventorised other, InventoryItem... items) throws IllegalArgumentException, IllegalStateException{
         try {
             for (int i=0; i < items.length;i++){
                 InventoryItem item = items[i];
-                //first determine if this monster trying to tradeItem has the item in question
-                if (item == null) {
-                    continue;
-                } else if (!this.inventory.containsValue(item)){
+                //first determine if this monster trying to transfer has the item in question
+                if (!this.inventory.containsValue(item)){
                     throw new IllegalStateException();
-                } else if (!other.canCarry(item)) {
-                    throw new IllegalAccessException();
-                } else {
-                    for (Map.Entry<String,InventoryItem> entry : other.obtainInventoryContents().entrySet()){
+                } else if (!other.canContain(item)) {
+                    throw new IllegalArgumentException();
+                } else if (other instanceof Monster){
+                    Monster otherMonster = (Monster) other;
+                    for (Map.Entry<String,InventoryItem> entry : otherMonster.inventory.entrySet()){
                         if (entry.getValue() == null) {
                             this.removeItem(item);
                             item.setHolder(other);
@@ -619,12 +612,17 @@ public class Monster implements Inventorised{
                             ((Backpack) entry.getValue()).add(item);
                         }
                     }
+                } else {
+                    this.inventory.entrySet().remove(item);
+                    item.setHolder(null);
+                    other.add(item);
                 }
-            }
+
+                }
         } catch (IllegalStateException e1) {
-            System.out.println(this.getName() + " tried to tradeItem an item they do not possess.");
-        } catch (IllegalAccessException e2) {
-            System.out.print(this.getName() + " tried to tradeItem a weapon to " + other.getName() + ", but " +
+            System.out.println(this.getName() + " tried to transfer an item they do not possess.");
+        } catch (IllegalArgumentException e2) {
+            System.out.print(this.getName() + " tried to transfer a weapon to " + other + ", but " +
                     "their inventory was full!");
         }
     }
@@ -633,7 +631,7 @@ public class Monster implements Inventorised{
      * Returns total value of this monster's inventory items
      * @return  totalValue
      */
-    public float getTotalInventoryValue() {
+    public float getTotalValue() {
         float totalValue = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
             if (entry.getValue() instanceof Backpack) {

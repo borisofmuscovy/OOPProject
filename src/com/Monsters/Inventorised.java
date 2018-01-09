@@ -1,9 +1,10 @@
 package com.Monsters;
 
 public interface Inventorised {
-    public void add(InventoryItem... items);
-    public void remove(InventoryItem... items);
-    public void transfer(Inventorised other, InventoryItem... items);
-    public float getTotalValue();
-    public float getTotalWeight();
+    void add(InventoryItem... items);
+    void remove(InventoryItem... items);
+    void transfer(Inventorised other, InventoryItem... items) throws IllegalArgumentException, IllegalStateException;
+    boolean canContain(InventoryItem item);
+    float getTotalValue();
+    float getTotalWeight();
 }

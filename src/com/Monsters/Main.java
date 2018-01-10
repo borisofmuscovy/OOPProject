@@ -73,7 +73,7 @@ public class Main {
                 if (entry.getValue() instanceof Weapon) {
                     Alice.transfer(Bob, entry.getValue());
                 } else if (entry.getValue() instanceof Purse) {
-                    ((Purse) entry.getValue()).transferContent(Yves, ((Purse) entry.getValue()).getContent());
+                    ((Purse) entry.getValue()).transfer(Yves, ((Purse) entry.getValue()).getContent());
                 }
             }
             System.out.println(Bob.getContents());
@@ -82,7 +82,7 @@ public class Main {
                 if (entry.getValue() instanceof Weapon) {
                     Bob.transfer(Alice, entry.getValue());
                 } else if (entry.getValue() instanceof Purse) {
-                    ((Purse) entry.getValue()).transferContent(Gucci, ((Purse) entry.getValue()).getContent());
+                    ((Purse) entry.getValue()).transfer(Gucci, ((Purse) entry.getValue()).getContent());
                 }
             }
             System.out.println(Alice.getContents());

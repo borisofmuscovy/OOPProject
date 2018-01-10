@@ -17,17 +17,12 @@ public class Purse extends InventoryItem {
     /**
      * Variable indicating the content of the purse
      */
-    float content;
+    private int content;
 
     /**
      * Variable indicating the maximum capacity of the purse
      */
-    final float capacity;
-
-    /**
-     * Variable indicating the value of the purse and its contents
-     */
-    float totalValue;
+    private final int capacity;
 
     /**
      * Variable indicating if the purse is destroyed
@@ -48,7 +43,7 @@ public class Purse extends InventoryItem {
      * @param   capacity
      *          Describes maximum capacity of the purse
      */
-    public Purse(int value, float weight, float content, float capacity, Monster holder){
+    public Purse(int value, float weight, int content, int capacity, Monster holder){
         super(value, holder, weight);
         this.ID = generateID();
         assert(content <= capacity);
@@ -68,7 +63,7 @@ public class Purse extends InventoryItem {
      * @param   capacity
      *          Describes maximum capacity of the purse
      */
-    public Purse(int value, float weight, float content, float capacity) {
+    public Purse(int value, float weight, int content, int capacity) {
         super(value, weight);
         this.ID = generateID();
         assert(content <= capacity);
@@ -128,7 +123,7 @@ public class Purse extends InventoryItem {
      *        Describes new content of a purse
      */
     @Basic
-    public void setContent(float newContent) {
+    private void setContent(int newContent) {
         try{
             if(this.Torn) {
                 throw new IllegalAccessException("Cannot do anything to a torn purse.");
@@ -146,7 +141,7 @@ public class Purse extends InventoryItem {
      *          | this.content
      */
     @Basic
-    public float getContent(){
+    public int getContent(){
         return this.content;
     }
 
@@ -162,11 +157,12 @@ public class Purse extends InventoryItem {
      *          |If (this.content > this.capacity)
      *              then tearThePurse()
      */
-    public void addContent(float ducats){
+    public void add(int ducats){
         if(this.Torn)
             setContent(0);
         else
             setContent(this.content + ducats);
+            this.setWeight(this.getWeight() + 50*ducats);
         if(this.content > this.capacity)
             tearThePurse();
     }
@@ -176,7 +172,7 @@ public class Purse extends InventoryItem {
      * @param ducats
      *        Number of ducats to be removed from the purse
      */
-    public void removeContent(float ducats){
+    public void remove(int ducats){
         if(this.Torn)
             setContent(0);
         else
@@ -196,9 +192,9 @@ public class Purse extends InventoryItem {
      *           |      then other.tearThePurse();
      */
 
-    public void transferContent(Purse other, float ducats){
-        setContent(this.content - ducats);
-        setContent(other.content + ducats);
+    public void transfer(Purse other, int ducats){
+        this.setContent(this.content - ducats);
+        other.setContent(other.content + ducats);
         if(this.content > this.capacity)
             this.tearThePurse();
         if(other.content > other.capacity)
@@ -208,8 +204,8 @@ public class Purse extends InventoryItem {
     /**
      * Calculates total value of the purse
      */
-    public void totalValue(){
-        this.totalValue = this.getValue() + this.content;
+    public int getTotalValue(){
+        return (this.getValue() + this.content);
     }
 
     /**
@@ -217,7 +213,7 @@ public class Purse extends InventoryItem {
      * @post    The purse is torn
      *          | this.Torn = true
      */
-    public void tearThePurse(){
+    private void tearThePurse(){
         this.value = 0;
         this.content = 0;
         this.Torn = true;
@@ -231,6 +227,5 @@ public class Purse extends InventoryItem {
     public boolean isTorn(){
         return this.Torn;
     }
-
 
 }

@@ -1,6 +1,6 @@
 package com.Monsters;
 
-public interface Inventorised {
+interface Inventorised {
     void add(InventoryItem... items);
     void remove(InventoryItem... items);
     void transfer(Inventorised other, InventoryItem... items) throws IllegalArgumentException, IllegalStateException;

@@ -122,6 +122,7 @@ public class Monster implements Inventorised{
         this.carryingCapacity = this.getStrength() * 12;
         this.Alive = true;
         int j = 1;
+        //defensivise this anchor code
         if (items.length > 3) {
             this.anchors = items.length;
             for (int i = 0;i < this.anchors;i++){
@@ -443,7 +444,7 @@ public class Monster implements Inventorised{
             return false;
         } else if ((this.getTotalWeight() + item.getWeight()) > this.carryingCapacity){
             return false;
-        } else if ((item instanceof Backpack) &&
+        } else if ((item instanceof Inventorised) &&
                 ((this.getTotalWeight() + ((Backpack) item).getTotalWeight()) > this.getCarryingCapacity())) {
             return false;
         } else if (this.inventory.containsValue(item)){

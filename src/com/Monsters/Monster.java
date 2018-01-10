@@ -115,8 +115,8 @@ public class Monster implements Inventorised{
         }
         this.name = Name;
         this.damage = generateDamage();
-        this.strength = (int) (new Random().nextGaussian() * 30 + 10);
-        this.protection = setProtection();
+        this.strength = (int) (new Random().nextGaussian() * 10 + 10);
+        this.protection = generateProtection();
         this.hp = startHP;
         this.MAX_HP = hp;
         this.carryingCapacity = this.getStrength() * 12;
@@ -297,7 +297,7 @@ public class Monster implements Inventorised{
      * @pre     The protection of a monster must be a prime number within range(MIN_PROTECTION, MAX_PROTECTION)
      *          | assert isValidProtection(protectionFactor)
      */
-    public int setProtection(){
+    public int generateProtection(){
         boolean flag = true;
         Random n = new Random();
         int protectionFactor = 0;

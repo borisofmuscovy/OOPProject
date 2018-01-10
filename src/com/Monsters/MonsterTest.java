@@ -100,9 +100,22 @@ class MonsterTest {
 
     @Test
     void hit() {
-        Monster Bob = new Monster("Bob", 40);
+        Monster Bob;
         Monster Alice = new Monster("Alice", 40);
         int oldHealth = Alice.getHP();
+        while (true) {
+            Bob = new Monster("Bob", 40);
+            if (Bob.getDamage() > 20){
+                break;
+            }
+        }
+
+        while (true) {
+            Bob.hit(Alice);
+            if (Alice.getHP() != oldHealth) {
+                break;
+            }
+        }
         Bob.hit(Alice);
         assertTrue(Alice.getHP() != oldHealth);
     }

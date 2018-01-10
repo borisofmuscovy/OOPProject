@@ -65,7 +65,10 @@ public abstract class InventoryItem {
             throw new IllegalArgumentException();
         this.weight = weight;
         this.value = value;
-        this.holder = holder;
+        if(holder instanceof Monster || holder instanceof Backpack)
+            this.holder = holder;
+        else
+            throw new IllegalArgumentException("Holder of the item must be Monster or Backpack");
     }
 
 
@@ -98,7 +101,7 @@ public abstract class InventoryItem {
     @Basic
     public abstract long getID();
 
-    private boolean checkValidID(long ID) {
+    private static boolean checkValidID(long ID) {
         if (existingIDs.contains(ID)) {
             return false;
         } else {
@@ -157,8 +160,11 @@ public abstract class InventoryItem {
      *        Monster who holds the item.
      */
     @Basic
-    public void setHolder(Object holder){
-        this.holder = holder;
+    public void setHolder(Object holder)throws IllegalArgumentException{
+        if(this.holder instanceof Monster || this.holder instanceof Backpack || this.holder == null)
+            this.holder = holder;
+        else
+            throw new IllegalArgumentException("Holder of an item has to be Monster or Backpack");
     }
 
     /**
@@ -168,7 +174,7 @@ public abstract class InventoryItem {
      */
     @Basic
     public Object getHolder(){
-        return this.holder;
+            return this.holder;
     }
 
     /**
@@ -178,8 +184,7 @@ public abstract class InventoryItem {
      *          | this.holder
      */
     @Basic
-    public Object getIndirectHolder(){
-        try{
+    public Object getIndirectHolder() throws IllegalAccessException{
             if (this.holder instanceof Monster) {
                 return this.getHolder();
             } else if (this.holder instanceof Backpack) {
@@ -187,10 +192,6 @@ public abstract class InventoryItem {
             } else {
                 throw new IllegalAccessException("Found item with holder type not monster or backpack.");
             }
-        } catch (IllegalAccessException e) {
-            System.out.println(e.getMessage());
-            return null;
-        }
     }
 
     /**
@@ -203,8 +204,6 @@ public abstract class InventoryItem {
      */
     @Basic
     public float setWeight(float weight) throws IllegalArgumentException{
-        DecimalFormat df = new DecimalFormat("#.##");
-        df.setRoundingMode(RoundingMode.CEILING);
         if(weight < 0)
             throw new IllegalArgumentException();
         else

@@ -57,7 +57,7 @@ public class Monster implements Inventorised{
     /**
      * Constant indicating maximum hitpoints
      */
-    private int MAX_HP;
+    private static int MAX_HP;
     /**
      * Variable indicating if the monster is alive
      */
@@ -113,11 +113,14 @@ public class Monster implements Inventorised{
         if (!isValidName(Name)){
             throw new IllegalArgumentException();
         }
+        if(startHP < 0)
+            throw new IllegalArgumentException("Initial value of hitpoints cannot be lower than 0");
+        else
+            this.hp = startHP;
         this.name = Name;
         this.damage = generateDamage();
         this.strength = (int) (new Random().nextGaussian() * 10 + 10);
         this.protection = generateProtection();
-        this.hp = startHP;
         this.MAX_HP = hp;
         this.carryingCapacity = this.getStrength() * 12;
         this.Alive = true;
@@ -165,9 +168,9 @@ public class Monster implements Inventorised{
      *          lower, uppercase characters, numbers and the symbol '.
      *          | result == (Name.matches("[A-Z][a-zA-Z0-9 ']{2,}"))
      */
-    private boolean isValidName(String Name) {
+    private static boolean isValidName(String Name) throws IllegalArgumentException{
         if (!Name.matches("[A-Z][a-zA-Z0-9 ']{2,}")) {
-            return false;
+            throw new IllegalArgumentException("It is not a valid name for a Monster.");
         } else {
             return true;
         }
@@ -317,7 +320,7 @@ public class Monster implements Inventorised{
      * @return  True if protection is higher than MIN_PROTECTION, lower than MAX_PROTECTION and if it is a prime number
      *          |   result == (protection >= MIN_PROTECTION && protection <= MAX_PROTECTION && isPrime(protection))
      */
-    public boolean isValidProtection(int protection){
+    public static boolean isValidProtection(int protection){
         if(protection >= MIN_PROTECTION && protection <= MAX_PROTECTION && isPrime(protection))
             return true;
         else
@@ -331,7 +334,7 @@ public class Monster implements Inventorised{
      *          | result == (n%2 != 0 && n%i != 0)
      *
      */
-    private boolean isPrime(int n) {
+    private static boolean isPrime(int n) {
         //check if n is a multiple of 2
         if ((n%2==0) && n!=2) {
             return false;
@@ -388,8 +391,8 @@ public class Monster implements Inventorised{
      * @post The new HP ceiling will always equal the provided value.
      *       | MAX_HP == newMAX_HP
      */
-    public void setMAX_HP(int newMAX_HP){
-        this.MAX_HP = newMAX_HP;
+    public static void setMAX_HP(int newMAX_HP){
+        MAX_HP = newMAX_HP;
     }
 
 
@@ -522,7 +525,7 @@ public class Monster implements Inventorised{
     }
 
     /**
-     * Delete an item from monster's inventory
+     * Delete multiple items from monster's inventory
      * @param   items
      *          Items to be deleted from monster's inventory
      *
@@ -551,13 +554,22 @@ public class Monster implements Inventorised{
         }
     }
 
-
-    public void swap(InventoryItem thisItem, InventoryItem otherItem) throws IllegalStateException{
+    /**
+     * Swap items at anchors
+     * @param thisItem
+     * @param otherItem
+     * @throws IllegalAccessException
+     *
+     *
+     *
+     *
+     */
+    public void swap(InventoryItem thisItem, InventoryItem otherItem) throws IllegalArgumentException, IllegalAccessException {
         if ((thisItem==null) || (otherItem==null)) {
             throw new IllegalArgumentException();
         } else if ((thisItem.getIndirectHolder() != this)
                 || (otherItem.getIndirectHolder() != this)) {
-            throw new IllegalStateException();
+            throw new IllegalAccessException();
         } else if ((thisItem.getHolder() == this) && (otherItem.getHolder() == this)) {
             //fetch keys for the swapped items
             String thisItemLocation = null;

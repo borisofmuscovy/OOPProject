@@ -66,7 +66,7 @@ public class Purse extends InventoryItem {
     public Purse(int value, float weight, int content, int capacity) {
         super(value, weight);
         this.ID = generateID();
-        assert(content <= capacity);
+        assert(content <= capacity && !(content < 0));
         this.content = content;
         this.capacity = capacity;
         this.Torn = false;
@@ -124,15 +124,11 @@ public class Purse extends InventoryItem {
      */
     @Basic
     private void setContent(int newContent) {
-        try{
             if(this.Torn) {
-                throw new IllegalAccessException("Cannot do anything to a torn purse.");
+                this.content = 0;
             } else {
                 this.content = newContent;
             }
-        } catch (IllegalAccessException e) {
-            System.out.println(e.getMessage());
-        }
     }
 
     /**
@@ -146,6 +142,9 @@ public class Purse extends InventoryItem {
     }
 
 
+    public int getCapacity() {
+        return this.capacity;
+    }
     /**
      * Adds content to the purse
      * @pre     To add ducats to this purse, purse cannot be torn
@@ -157,13 +156,13 @@ public class Purse extends InventoryItem {
      *          |If (this.content > this.capacity)
      *              then tearThePurse()
      */
-    public void add(int ducats){
+    public void add(int ducats) throws  IllegalStateException{
         if(this.Torn)
-            setContent(0);
+            throw new IllegalStateException("You cannot remove items from torn purse");
         else
-            setContent(this.content + ducats);
+            setContent(this.getContent() + ducats);
             this.setWeight(this.getWeight() + 50*ducats);
-        if(this.content > this.capacity)
+        if(this.getContent() > this.getCapacity())
             tearThePurse();
     }
 
@@ -172,11 +171,11 @@ public class Purse extends InventoryItem {
      * @param ducats
      *        Number of ducats to be removed from the purse
      */
-    public void remove(int ducats){
+    public void remove(int ducats) throws IllegalStateException{
         if(this.Torn)
-            setContent(0);
+            throw new IllegalStateException("You cannot remove items from torn purse");
         else
-            setContent(this.content - ducats);
+            setContent(this.getContent() - ducats);
     }
 
     /**
@@ -193,11 +192,11 @@ public class Purse extends InventoryItem {
      */
 
     public void transfer(Purse other, int ducats){
-        this.setContent(this.content - ducats);
-        other.setContent(other.content + ducats);
-        if(this.content > this.capacity)
+        this.setContent(this.getContent() - ducats);
+        other.setContent(other.getContent() + ducats);
+        if(this.getContent() > this.getCapacity())
             this.tearThePurse();
-        if(other.content > other.capacity)
+        if(other.getContent() > other.getCapacity())
             other.tearThePurse();
     }
 
@@ -205,17 +204,20 @@ public class Purse extends InventoryItem {
      * Calculates total value of the purse
      */
     public int getTotalValue(){
-        return (this.getValue() + this.content);
+        return (this.getValue() + this.getContent());
     }
 
     /**
      * Method to destroy the purse
      * @post    The purse is torn
      *          | this.Torn = true
+     * @effect  Content and value of torn purse is set to 0
+     *          | this.setValue(0)
+     *          | this.setContent(0)
      */
     private void tearThePurse(){
-        this.value = 0;
-        this.content = 0;
+        this.setValue(0);
+        this.setContent(0);
         this.Torn = true;
     }
 

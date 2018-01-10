@@ -182,6 +182,7 @@ public class Monster implements Inventorised{
      * @return  True if alive, false if dead.
      *          | this.Alive
      */
+    @Basic
     public boolean isAlive() {
         return this.Alive;
     }
@@ -212,7 +213,6 @@ public class Monster implements Inventorised{
      * @param   newStrength
      *          The new strength for this monster
      */
-    @Basic
     protected void setStrength(int newStrength){
         this.strength = newStrength;
     }
@@ -368,7 +368,6 @@ public class Monster implements Inventorised{
      *          The new HP is equal to or less than 0, which means the monster is dead.
      *          | if (newHP <= 0) { Death() }
      */
-    @Basic
     private void setHP(int newHP) throws IllegalArgumentException {
             if (newHP <= 0) {
                 this.Death();
@@ -383,7 +382,8 @@ public class Monster implements Inventorised{
      * @return  MAX_HP
      *          | this.MAX_HP
      */
-    public int getMAX_HP() { return this.MAX_HP; }
+
+    public final int getMAX_HP() { return this.MAX_HP; }
 
     /**
      * Sets the new maximum hitpoint value

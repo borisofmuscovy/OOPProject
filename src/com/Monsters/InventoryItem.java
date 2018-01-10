@@ -138,7 +138,6 @@ public abstract class InventoryItem {
      * @post    Value of this item corresponds to newValue
      *          | this.value = newValue
      */
-    @Basic
     protected void setValue(int newValue) {
         assert !(newValue < 0);
         this.value = newValue;
@@ -159,7 +158,6 @@ public abstract class InventoryItem {
      * @param holder
      *        Monster who holds the item.
      */
-    @Basic
     public void setHolder(Object holder)throws IllegalArgumentException{
         if(this.holder instanceof Monster || this.holder instanceof Backpack || this.holder == null)
             this.holder = holder;
@@ -202,7 +200,6 @@ public abstract class InventoryItem {
      *          Thrown if the weight of the item is about to be smaller than 0
      *          | weight < 0
      */
-    @Basic
     public float setWeight(float weight) throws IllegalArgumentException{
         if(weight < 0)
             throw new IllegalArgumentException();

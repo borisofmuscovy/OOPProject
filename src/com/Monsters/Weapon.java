@@ -79,7 +79,6 @@ public class Weapon extends InventoryItem {
      * @pre   newDamage is in range(1, MAX_DAMAGE)
      *        | newDamage >= 1 && newDamage <= MAX_DAMAGE
      */
-    @Basic
     public void setDamage(int newDamage){
         assert(newDamage >= 1 & newDamage <= MAX_DAMAGE);
         this.damage = newDamage;

@@ -112,21 +112,26 @@ public class Purse extends InventoryItem {
      * @return  ID of this purse
      *          | this.ID
      */
-    @Override
+    @Basic @Override
     public long getID(){
         return this.ID;
     }
 
+
+    @Basic @Override
+    public float getWeight(){
+        return this.weight + 50*this.getContent();
+    }
     /**
      * Sets new value of the content of a purse
      * @param newContent
      *        Describes new content of a purse
      */
-    @Basic
     private void setContent(int newContent) {
             if(this.Torn) {
                 this.content = 0;
             } else {
+                assert(newContent >= 0);
                 this.content = newContent;
             }
     }

@@ -57,34 +57,33 @@ class BackpackTest {
                 && Kipling.getContents().contains(Gucci));
     }
 
-    @Test
-
-    void getIndirectHolder(){
-        Weapon Skullcrusher1 = new Weapon(10, 10, 20);
-        Weapon Skullcrusher2 = new Weapon(10, 10, 20);
-        Weapon Skullcrusher3 = new Weapon(10, 10, 20);
-        Purse Dolce = new Purse(20, 6, 2, 30);
-        Backpack Kipling1 = new Backpack(15, 5, 60);
-        Backpack Kipling2 = new Backpack(15, 5, 60);
-        Backpack Kipling3 = new Backpack(15, 5, 60);
-        Kipling1.add(Skullcrusher1);
-        Kipling2.add(Skullcrusher2);
-        Kipling3.add(Skullcrusher3);
-        Kipling2.add(Kipling3);
-        Kipling1.add(Kipling2);
-        Kipling1.add(Dolce);
-        float TotalWeight = Skullcrusher1.getWeight() + Skullcrusher2.getWeight() + Skullcrusher3.getWeight()
-                + Kipling1.getWeight() + Kipling2.getWeight() + Kipling3.getWeight() + Dolce.getWeight();
-        Monster John;
-        while (true) {
-            John = new Monster("John", 40);
-            if (John.getCarryingCapacity() > TotalWeight) {
-                break;
-            }
-        }
-        John.add(Kipling1);
-        assertEquals(John, Skullcrusher3.getIndirectHolder());
-    }
+//    @Test
+//    void getIndirectHolder(){
+//        Weapon Skullcrusher1 = new Weapon(10, 10, 20);
+//        Weapon Skullcrusher2 = new Weapon(10, 10, 20);
+//        Weapon Skullcrusher3 = new Weapon(10, 10, 20);
+//        Purse Dolce = new Purse(20, 6, 2, 30);
+//        Backpack Kipling1 = new Backpack(15, 5, 60);
+//        Backpack Kipling2 = new Backpack(15, 5, 60);
+//        Backpack Kipling3 = new Backpack(15, 5, 60);
+//        Kipling1.add(Skullcrusher1);
+//        Kipling2.add(Skullcrusher2);
+//        Kipling3.add(Skullcrusher3);
+//        Kipling2.add(Kipling3);
+//        Kipling1.add(Kipling2);
+//        Kipling1.add(Dolce);
+//        float TotalWeight = Skullcrusher1.getWeight() + Skullcrusher2.getWeight() + Skullcrusher3.getWeight()
+//                + Kipling1.getWeight() + Kipling2.getWeight() + Kipling3.getWeight() + Dolce.getWeight();
+//        Monster John;
+//        while (true) {
+//            John = new Monster("John", 40);
+//            if (John.getCarryingCapacity() > TotalWeight) {
+//                break;
+//            }
+//        }
+//        John.add(Kipling1);
+//        assertEquals(John, Skullcrusher3.getIndirectHolder());
+//    }
 
     @Test
     void willNotAddBackpackWithHeavyContents(){

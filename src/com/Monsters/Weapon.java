@@ -101,10 +101,11 @@ public class Weapon extends InventoryItem {
      *          | value > 0
      * @param   value
      *          Value to be added to the value of this weapon
+     * @post
      */
     public void repair(int value) {
         assert(value > 0);
-        setValue(this.value + value);
+        setValue(this.getValue() + value);
     }
 
     /**
@@ -113,10 +114,11 @@ public class Weapon extends InventoryItem {
      *          | this.value - value > 0
      * @param   value
      *          Value to be subtracted from current value of this weapon
+     * @post
      */
     public void erode(int value) {
-        assert(this.value - value > 0);
-        setValue(this.value - value);
+        assert(this.getValue() - value > 0);
+        setValue(this.getValue() - value);
     }
 
 }

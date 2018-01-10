@@ -92,8 +92,8 @@ public class Backpack extends InventoryItem implements Inventorised{
      *          Item to be added to tbe backpack
      * @return  true if weight of backpack with new item does not exceed backpack's capacity, false otherwise
      *          |   this.getContentsWeight() + item.getWeight()) > this.getCapacity()
-     */
-    public boolean canContain(InventoryItem item){
+            */
+        public boolean canContain(InventoryItem item){
         if (item == null){
             return false;
         } else if (((this.getContentsWeight() + item.getWeight()) > this.getCapacity())
@@ -191,9 +191,11 @@ public class Backpack extends InventoryItem implements Inventorised{
      * @param   items
      *          Items to be transferred to other backpack
      * @throws  IllegalArgumentException
-     *          Throws illegal argument exception if item is too heavy to be transferres;
+     *          Throws illegal argument exception if item is too heavy to be transferred;
      *          Capacity of other backpack would be exceeded
      *          | ! other.canContain(item)
+     * @throws  IllegalStateException
+     *
      * @post    Items are removed from this backpack and put in other backpack
      *          | this.remove(item)
      *          |  other.add(item)

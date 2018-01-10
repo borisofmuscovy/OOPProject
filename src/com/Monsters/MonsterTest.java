@@ -4,11 +4,6 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertFalse;
-import static junit.framework.TestCase.assertTrue;
-
 class MonsterTest {
     @Test
     void multiEquip(){
@@ -186,14 +181,14 @@ class MonsterTest {
         assertFalse(weakling.getContents().containsValue(Skullcrusher));
     }
 
-    @Test
-    void swap(){
-        Weapon Skullcrusher = new Weapon(5, 10, 20);
-        Purse Gucci = new Purse(20, 5, 2, 30);
-        Monster John = new Monster("John", 40, Skullcrusher, Gucci);
-        John.swap(Skullcrusher, Gucci);
-        assertTrue((John.getContents().get("Left") == Gucci)
-                && (John.getContents().get("Right") == Skullcrusher));
-    }
+//    @Test
+//    void swap(){
+//        Weapon Skullcrusher = new Weapon(5, 10, 20);
+//        Purse Gucci = new Purse(20, 5, 2, 30);
+//        Monster John = new Monster("John", 40, Skullcrusher, Gucci);
+//        John.swap(Skullcrusher, Gucci);
+//        assertTrue((John.getContents().get("Left") == Gucci)
+//                && (John.getContents().get("Right") == Skullcrusher));
+//    }
 
 }

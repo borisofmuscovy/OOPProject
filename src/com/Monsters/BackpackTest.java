@@ -155,10 +155,24 @@ class BackpackTest {
 
     @Test
     void getHeaviest() {
+        Weapon Skullcrusher1 = new Weapon(10, 10, 20);
+        Weapon Skullcrusher2 = new Weapon(11, 10, 20);
+        Weapon Skullcrusher3 = new Weapon(12, 10, 20);
+        Purse Dolce = new Purse(20, 6, 2, 30);
+        Backpack Kipling1 = new Backpack(15, 5, 60);
+        Kipling1.add(Skullcrusher1, Skullcrusher2, Skullcrusher3, Dolce);
+        assertTrue(Kipling1.getLightestItem() == Dolce);
     }
 
     @Test
     void getLightest() {
+        Weapon Skullcrusher1 = new Weapon(10, 10, 20);
+        Weapon Skullcrusher2 = new Weapon(11, 10, 20);
+        Weapon Skullcrusher3 = new Weapon(12, 10, 20);
+        Purse Dolce = new Purse(20, 6, 2, 30);
+        Backpack Kipling1 = new Backpack(15, 5, 60);
+        Kipling1.add(Skullcrusher1, Skullcrusher2, Skullcrusher3, Dolce);
+        assertTrue(Kipling1.getHeaviestItem() == Skullcrusher3);
     }
 
 }

@@ -2,6 +2,9 @@ package com.Monsters;
 
 /**
  * An interface implementing methods to be used by Objects possessing the inventory, i.e. Backpacks and Monsters
+ *
+ * @version 1.0
+ * @author Boris Shilov & Alicja Ochman
  */
 interface Inventorised {
     /**
@@ -39,7 +42,7 @@ interface Inventorised {
      * @param   item
      *          Item to be checked
      * @return  true if weight of the Inventory with new item does not exceed Object's capacity, false otherwise
-     *          |   this.getContentsWeight() + item.getWeight()) > this.getCapacity()
+     *          |   result == (this.getContentsWeight() + item.getWeight()) > this.getCapacity())
      */
     boolean canContain(InventoryItem item);
 

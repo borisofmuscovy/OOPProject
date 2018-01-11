@@ -7,6 +7,10 @@ import java.util.Random;
 /**
  * The class of Purse, special case of Inventory Item.
  * Apart from value, weight and holder, Purse also has content and capacity.
+ *
+ *
+ * @version 1.0
+ * @author Boris Shilov & Alicja Ochman
  */
 public class Purse extends InventoryItem {
 
@@ -39,7 +43,7 @@ public class Purse extends InventoryItem {
      * @param   capacity
      *          Describes maximum capacity of the purse
      */
-    public Purse(int value, float weight, int content, int capacity, Monster holder){
+    public Purse(int value, float weight, int content, int capacity, Object holder){
         super(value, holder, weight);
         this.ID = generateID();
         assert(content <= capacity);
@@ -114,15 +118,32 @@ public class Purse extends InventoryItem {
         return this.ID;
     }
 
-
+    /**
+     * Returns weight of the purse
+     * @return  this.weight
+     */
     @Basic @Override
     public float getWeight(){
         return this.weight;
     }
+
+    /**
+     * Returns total weight of the purse with its content
+     * @return  totalWeight
+     */
+    public float getTotalWeight(){
+        float ducatWeight = 0.5F;
+        return (this.getWeight() + (ducatWeight * (float)this.getContent()));
+    }
+
     /**
      * Sets new value of the content of a purse
      * @param newContent
      *        Describes new content of a purse
+     * @pre   new content cannot be a negative value
+     *        | newContent >= 0
+     * @post  Content of this purse equals newContent
+     *        | new.getContent() == newContent
      */
     private void setContent(int newContent) {
             if(this.Torn) {
@@ -144,6 +165,11 @@ public class Purse extends InventoryItem {
         return this.content;
     }
 
+
+    /**
+     * Returns capacity of the purse
+     * @return  this.capacity
+     */
     @Basic
     @Immutable
     public int getCapacity() {
@@ -178,7 +204,7 @@ public class Purse extends InventoryItem {
      *          Number of ducats to be removed from the purse
      * @pre     Purse cannot be torn to remove content from it
      *          | this.Torn == false
-     * @effect  Content of the purse is reduced by ducats
+     * @effect  Content of this purse is reduced by ducats
      *          | setContent(this.getContent() - ducats)
      */
     public void remove(int ducats) throws IllegalStateException{
@@ -201,7 +227,7 @@ public class Purse extends InventoryItem {
      *           |      then other.isTorn == true;
      * @effect  Content of this purse is reduced by ducats
      *          | setContent(this.getContent - ducats)
-     * @effect  Content of this purse is increased by ducats
+     * @effect  Content of other purse is increased by ducats
      *          | setContent(other.getContent +  ducats)
      */
 
@@ -244,9 +270,5 @@ public class Purse extends InventoryItem {
         return this.Torn;
     }
 
-    public float getTotalWeight(){
-        float ducatWeight = 0.5F;
-        return (this.getWeight() + (ducatWeight * (float)this.getContent()));
-    }
 
 }

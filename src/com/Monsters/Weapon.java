@@ -1,12 +1,9 @@
 package com.Monsters;
 
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
-
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The class of Weapon, special case of an inventory item.
@@ -14,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Weapons can be held by a monsters and used during the battles.
  *
  * @invar   Damage has to have a valid value
- *          | damage >= 1 & damage <= MAX_DAMAGE
+ *          | isValidDamage(damage)
  */
 public class Weapon extends InventoryItem {
 
@@ -35,19 +32,22 @@ public class Weapon extends InventoryItem {
 
     /**
      * Initializes weapon with its weight, value and damage
-     * @pre   Damage cause by the weapon has to be in the range from 1 to MAXIMUM_DAMAGE
-     *        | damage >= 1 && damage <= MAX_DAMAGE
-     * @param weight
-     *        Describes weight of the weapon
-     * @param value
-     *        Describes value of the weapon
-     * @param damage
-     *        Describes damage that can be caused by the weapon
+     * @pre     Damage cause by the weapon has to be in the range from 1 to MAXIMUM_DAMAGE
+     *          | damage >= 1 && damage <= MAX_DAMAGE
+     * @param   weight
+     *          Describes weight of the weapon
+     * @param   value
+     *          Describes value of the weapon
+     * @param   damage
+     *          Describes damage that can be caused by the weapon
+     * @effect  Weight fo this monster is set to given weight
+     *          | new.getWeight() == weight
      */
+    @Raw
     public Weapon(float weight, int value, int damage){
         super(value, weight);
         this.setValue(value);
-        assert(damage >= MIN_DAMAGE & damage <= MAX_DAMAGE);
+        assert(isValidDamage(damage));
         this.damage = damage;
         this.weight = setWeight(weight);
         this.ID = generateID();
@@ -60,27 +60,39 @@ public class Weapon extends InventoryItem {
      *          | this.ID
      */
     @Override
+    @Immutable
     public long getID(){
         return this.ID;
     }
 
     /**
      * Sets new MAX_DAMAGE for weapons
-     * @return MAX_DAMAGE
+     * @post    new maximum value of a damage is set to a random value between 1 and 20
+     *          | new.getMAX_DAMAGE() == (r.nextInt(20 + 1) + 1)
      */
-    public int setMaxDamage(){
+    public void setMaxDamage(){
         Random r = new Random();
         MAX_DAMAGE = r.nextInt(20 + 1) + 1;
+    }
+
+    /**
+     * Returns maximum value of damage
+     * @return  MAX_DAMAGE
+     */
+    public int getMAX_DAMAGE(){
         return MAX_DAMAGE;
     }
 
     /**
      * Sets damage caused by weapon to new damage
      * @pre   newDamage is in range(1, MAX_DAMAGE)
-     *        | newDamage >= 1 && newDamage <= MAX_DAMAGE
+     *        | newDamage >= MIN_DAMAGE && newDamage <= MAX_DAMAGE
+     * @post  Value of damage eguals the value of newDamage
+     *        | new.getDamage() == newDamage
      */
+    @Raw
     public void setDamage(int newDamage){
-        assert(newDamage >= 1 & newDamage <= MAX_DAMAGE);
+        assert(isValidDamage(newDamage));
         this.damage = newDamage;
     }
 
@@ -90,8 +102,21 @@ public class Weapon extends InventoryItem {
      *          |this.damage
      */
     @Basic
+    @Immutable
+    @Raw
     public int getDamage(){
         return this.damage;
+    }
+
+    /**
+     * Checks validity of damage to be set
+     * @param   damage
+     *          Damage to check
+     * @return  True if damage is in range(MIN_DAMAGE, MAX_DAMAGE)
+     *          | result == damage >= MIN_DAMAGE && damage <= MAX_DAMAGE
+     */
+    public boolean isValidDamage(int damage){
+        return (damage >= MIN_DAMAGE && damage <= MAX_DAMAGE);
     }
 
     /**
@@ -100,7 +125,8 @@ public class Weapon extends InventoryItem {
      *          | value > 0
      * @param   value
      *          Value to be added to the value of this weapon
-     * @post
+     * @effect  Value of the weapon is set to new value
+     *          | setValue(this.getValue() + value)
      */
     public void repair(int value) {
         assert(value > 0);
@@ -113,7 +139,8 @@ public class Weapon extends InventoryItem {
      *          | this.value - value > 0
      * @param   value
      *          Value to be subtracted from current value of this weapon
-     * @post
+     * @effect  Value of the weapon is set to value lower than current value
+     *          | setValue(this.getValue() - value)
      */
     public void erode(int value) {
         assert(this.getValue() - value > 0);

@@ -2,15 +2,11 @@ package com.Monsters;
 
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
-import be.kuleuven.cs.som.annotate.Raw;
-
 import java.util.Random;
 
 /**
  * The class of Purse, special case of Inventory Item.
  * Apart from value, weight and holder, Purse also has content and capacity.
- * @invar   Content of a purse cannot exceed its capacity
- *          | content <= capacity)
  */
 public class Purse extends InventoryItem {
 
@@ -33,7 +29,7 @@ public class Purse extends InventoryItem {
     /**
      * Initialized a purse with weight, value, content, capacity and holder
      * @pre     Content cannot be bigger than capacity
-     *          | content >= capacityy
+     *          | content >= capacity
      * @param   value
      *          Sets value of the purse
      * @param   holder
@@ -94,7 +90,6 @@ public class Purse extends InventoryItem {
      * @return  Random long from the fibonacciSeries array
      *          | purseID
      */
-    @Immutable
     protected long generateID(){
         long purseID = 0;
         int n = 1000;
@@ -112,7 +107,9 @@ public class Purse extends InventoryItem {
      * @return  ID of this purse
      *          | this.ID
      */
-    @Basic @Override
+    @Basic
+    @Override
+    @Immutable
     public long getID(){
         return this.ID;
     }
@@ -131,7 +128,7 @@ public class Purse extends InventoryItem {
             if(this.Torn) {
                 this.content = 0;
             } else {
-                assert(newContent >= 0);
+                assert(newContent >= 0 );
                 this.content = newContent;
             }
     }
@@ -142,11 +139,13 @@ public class Purse extends InventoryItem {
      *          | this.content
      */
     @Basic
+    @Immutable
     public int getContent(){
         return this.content;
     }
 
-
+    @Basic
+    @Immutable
     public int getCapacity() {
         return this.capacity;
     }
@@ -156,14 +155,17 @@ public class Purse extends InventoryItem {
      *          this.Torn != true
      * @param   ducats
      *          Number of ducats to be added to the purse
+     * @effect  Ducats are added to the purse
+     *          | setContent(this.getContent() + ducats)
      * @post    If the content of the purse after addition of the ducats exceeds its capacity
      *              this purse is torn
      *          |If (this.content > this.capacity)
-     *              then tearThePurse()
+     *          |   then this.isTorn == true
+     *
      */
     public void add(int ducats) throws  IllegalStateException{
         if(this.Torn)
-            throw new IllegalStateException("You cannot remove items from torn purse");
+            throw new IllegalStateException("You cannot add ducats to torn purse");
         else
             setContent(this.getContent() + ducats);
         if(this.getContent() > this.getCapacity())
@@ -172,12 +174,16 @@ public class Purse extends InventoryItem {
 
     /**
      * Removes ducats from the purse
-     * @param ducats
-     *        Number of ducats to be removed from the purse
+     * @param   ducats
+     *          Number of ducats to be removed from the purse
+     * @pre     Purse cannot be torn to remove content from it
+     *          | this.Torn == false
+     * @effect  Content of the purse is reduced by ducats
+     *          | setContent(this.getContent() - ducats)
      */
     public void remove(int ducats) throws IllegalStateException{
         if(this.Torn)
-            throw new IllegalStateException("You cannot remove items from torn purse");
+            throw new IllegalStateException("You cannot remove ducats from torn purse");
         else
             setContent(this.getContent() - ducats);
     }
@@ -190,9 +196,13 @@ public class Purse extends InventoryItem {
      *          Number of ducats to be transferred
      * @post     If the new content of one of the purses exceeds its capacity, the purse is torn
      *           |  if(this.content > this.capacity)
-     *           |      then this.tearThePurse();
+     *           |      then this.isTorn == true;
      *           |  if(other.content > other.capacity)
-     *           |      then other.tearThePurse();
+     *           |      then other.isTorn == true;
+     * @effect  Content of this purse is reduced by ducats
+     *          | setContent(this.getContent - ducats)
+     * @effect  Content of this purse is increased by ducats
+     *          | setContent(other.getContent +  ducats)
      */
 
     public void transfer(Purse other, int ducats){
@@ -205,7 +215,7 @@ public class Purse extends InventoryItem {
     }
 
     /**
-     * Calculates total value of the purse
+     * Returns total value of the purse
      */
     public int getTotalValue(){
         return (this.getValue() + this.getContent());

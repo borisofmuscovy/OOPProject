@@ -1,13 +1,14 @@
 package com.Monsters;
 
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Immutable;
 
 import java.util.*;
 
 /**
  * Class of Backpack a special kind of InventoryItem.
  * In addition to value, holder and weight, each backpack has its capacity.
- * Other inventory items can be stored in backpacks.
+ * Other inventory items can be stored in backpacks (including backpacks)
  */
 public class Backpack extends InventoryItem implements Inventorised{
 
@@ -71,7 +72,9 @@ public class Backpack extends InventoryItem implements Inventorised{
      * @return  ID
      *          | this.ID
      */
+    @Basic
     @Override
+    @Immutable
     public long getID(){
         return this.ID;
     }
@@ -82,6 +85,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      *          | this.capacity
      */
     @Basic
+    @Immutable
     public float getCapacity(){
         return this.capacity;
     }
@@ -111,7 +115,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      * For items contained in the backpack, sets backpack holder as items holder
      * @post    If item is contained in a backpack, it has the same holder as the backpack
      *          | for(InventoryItem item: this.backpackContent)
-     *              item.getHolder == this.getHolder
+     *              item.getHolder() == this.getHolder()
      */
     public void setHolderRecursively(){
         for(InventoryItem item : this.backpackContent) {
@@ -129,8 +133,8 @@ public class Backpack extends InventoryItem implements Inventorised{
      * @param   items
      *          Items to be added to a backpack
      * @post    The item is placed in the backpack and new holder of the item is set
-     *          | this.backpackContent.add(item)
-     *          | this.setHolderRecursively()
+     *          | this.backpackContent.contains(item) == true
+     *          | item.getHolder() ==  this
      * @throws  IllegalArgumentException
      *          Throws an exception of the item to be added is to heavy or the item is already in the backpack
      *          or the item already has different holder
@@ -162,9 +166,9 @@ public class Backpack extends InventoryItem implements Inventorised{
      *          Items to be removed
      * @throws  IllegalArgumentException
      *          Throws an exception if item to be removed is not contained in the backpack
-     *          | !this.backpackContent.contains(item)
+     *          | !this.backpackContent.contains(items)
      * @post    The item is removed from the backpack
-     *          | this.backpackContent.remove(item)
+     *          | this.backpackContent.contains(items) == false
      */
     public void remove(InventoryItem... items) throws IllegalArgumentException{
         try {
@@ -197,8 +201,8 @@ public class Backpack extends InventoryItem implements Inventorised{
      * @throws  IllegalStateException
      *
      * @post    Items are removed from this backpack and put in other backpack
-     *          | this.remove(item)
-     *          |  other.add(item)
+     *          | this.backpackContent.contains(item) == false
+     *          |  other.backpackContent.contains(items) == true
      */
     public void transfer(Inventorised other, InventoryItem... items) throws IllegalArgumentException, IllegalStateException{
         try {
@@ -222,7 +226,7 @@ public class Backpack extends InventoryItem implements Inventorised{
     /**
      * Returns weight of items contained in the backpack
      * @return  total weight of items from the backpack
-     *          | contentsWeight
+     *          | totalContainedWeight(0)
      */
     public float getContentsWeight(){
         return totalContainedWeight(0);
@@ -231,12 +235,19 @@ public class Backpack extends InventoryItem implements Inventorised{
     /**
      * Returns total weight of the backpack
      * @return  weight of the backpack and of the items contained in it
-     *          | totalBackpackWeight
+     *          | totalContainedWeight(this.getWeight())
      */
     public float getTotalWeight(){
         return totalContainedWeight(this.getWeight());
     }
 
+    /**
+     *  Returns total weight of items contained in the backpack
+     * @param   totalWeight
+     *          total weight of backpack
+     * @return  totalWeight of backpack and items contained in it
+     *          | totalWeight
+     */
     private float totalContainedWeight(float totalWeight){
         for(InventoryItem item : this.backpackContent) {
             if (item instanceof Backpack) {
@@ -258,6 +269,13 @@ public class Backpack extends InventoryItem implements Inventorised{
         return totalContainedValue(this.getValue());
     }
 
+    /**
+     * Returns value of items contained in the backpack
+     * @param   totalValue
+     *          Value of a backpack
+     * @return  value of backpack and items contained in it
+     *          | totalValue
+     */
     private float totalContainedValue(float totalValue){
         for(InventoryItem item : this.backpackContent) {
             if (item instanceof Backpack) {

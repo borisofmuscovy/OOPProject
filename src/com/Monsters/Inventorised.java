@@ -1,13 +1,13 @@
 package com.Monsters;
 
 /**
- * An interface implementing methods to be used by Objects possessing in inventory
+ * An interface implementing methods to be used by Objects possessing the inventory, i.e. Backpacks and Monsters
  */
 interface Inventorised {
     /**
      * Add multiple inventory items to possessions
      * @param   items
-     *          Items to be added
+     *          Items to be added to inventory
      */
     void add(InventoryItem... items);
 

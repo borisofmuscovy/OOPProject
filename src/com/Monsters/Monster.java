@@ -124,30 +124,40 @@ public class Monster implements Inventorised{
         this.MAX_HP = hp;
         this.carryingCapacity = this.getStrength() * 12;
         this.Alive = true;
-        int j = 1;
-        //defensivise this anchor code
-        if (items.length > 3) {
+        if (items.length >= 3) {
             this.anchors = items.length;
-            for (int i = 0;i < this.anchors;i++){
+            items[0].setHolder(this);
+            this.inventory.put(anchorDefaults.get(0), items[0]);
+            items[2].setHolder(this);
+            this.inventory.put(anchorDefaults.get(1), items[2]);
+            items[1].setHolder(this);
+            this.inventory.put(anchorDefaults.get(2), items[1]);
+            int j = 1;
+            for (int i = 3;i < this.anchors;i++){
                 items[i].setHolder(this);
-                if (i <= 2) {
-                    this.inventory.put(anchorDefaults.get(i), items[i]);
+                this.inventory.put("Appendage" + j, items[i]);
+                j++;
+            }
+        } else if (items.length > 0){
+            this.anchors = 3;
+            int emptyAnchorNo = anchors - items.length;
+            items[0].setHolder(this);
+            this.inventory.put(anchorDefaults.get(0), items[0]);
+            int i = 1;
+            for (int j = items.length - 1; j >= emptyAnchorNo;j--) {
+                if (i < items.length) {
+                    items[j].setHolder(this);
+                    this.inventory.put(anchorDefaults.get(j), items[j]);
+                    i++;
                 } else {
-                    this.inventory.put("Appendage" + j, items[i]);
-                    j++;
+                    this.inventory.put(anchorDefaults.get(j), null);
                 }
             }
         } else {
             this.anchors = 3;
-            int emptyAnchorNo = anchors - items.length;
-            for (int i = 0; i < anchors; i++) {
-                if (i < items.length) {
-                    items[i].setHolder(this);
-                    this.inventory.put(anchorDefaults.get(i), items[i]);
-                } else {
-                    this.inventory.put(anchorDefaults.get(i), null);
-                }
-            }
+            this.inventory.put("Left", null);
+            this.inventory.put("Right", null);
+            this.inventory.put("Back", null);
         }
     }
 
@@ -408,6 +418,8 @@ public class Monster implements Inventorised{
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
             if (entry.getValue() instanceof Backpack) {
                 totalCarriedWeight += (((Backpack) entry.getValue()).getTotalWeight());
+            } else if (entry.getValue() instanceof Purse) {
+                totalCarriedWeight += ((Purse) entry.getValue()).getTotalWeight();
             } else if (entry.getValue() != null) {
                 totalCarriedWeight += entry.getValue().getWeight();
             }

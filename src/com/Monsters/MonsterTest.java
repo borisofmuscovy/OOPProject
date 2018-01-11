@@ -20,10 +20,10 @@ class MonsterTest {
         Purse Gucci = new Purse(20, 5, 2, 30);
         Backpack Kipling = new Backpack(15, 5, 60);
         Weapon Thrasher = new Weapon(3, 10, 20);
-        Monster John = new Monster("John", 40, Skullcrusher, Gucci, Kipling, Thrasher);
+        Monster John = new Monster("John", 40, Skullcrusher, Kipling, Gucci, Thrasher);
         assertTrue((John.getContents().get("Left") == Skullcrusher)
-                && (John.getContents().get("Right") == Gucci)
                 && (John.getContents().get("Back") == Kipling)
+                && (John.getContents().get("Right") == Gucci)
                 && (John.getContents().get("Appendage1") == Thrasher));
     }
 
@@ -38,8 +38,8 @@ class MonsterTest {
         Purse Gucci = new Purse(20, 5, 2, 30);
         Weapon Thrasher = new Weapon(3, 10, 20);
         Monster John = new Monster("John", 40, Skullcrusher, Gucci, Thrasher);
-        float trueWeight = Skullcrusher.getWeight() + Gucci.getWeight() + Thrasher.getWeight();
-        assertTrue(trueWeight == John.getTotalWeight());
+        float trueWeight = Skullcrusher.getWeight() + Gucci.getTotalWeight() + Thrasher.getWeight();
+        assertEquals(trueWeight, John.getTotalWeight());
     }
 
     @Test
@@ -151,7 +151,7 @@ class MonsterTest {
         Backpack Kipling1 = new Backpack(15, 5, 60);
         Backpack Kipling2 = new Backpack(5, 5, 60);
         float trueTotalWeight = Skullcrusher1.getWeight() + Skullcrusher2.getWeight() + Skullcrusher3.getWeight()
-                + Dolce.getWeight() + Kipling1.getWeight() + Kipling2.getWeight();
+                + Dolce.getTotalWeight() + Kipling1.getWeight() + Kipling2.getWeight();
         Monster John;
         while (true) {
             John = new Monster("John", 40);

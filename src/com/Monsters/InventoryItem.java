@@ -1,8 +1,6 @@
 package com.Monsters;
-import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.*;
 
-import java.text.DecimalFormat;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -59,7 +57,8 @@ public abstract class InventoryItem {
      *          |  if weight < 0
      *          |       then throw new IllegalArgumentException
      */
-    public InventoryItem(int value, Object holder, float weight) throws IllegalArgumentException {
+    @Model
+    protected InventoryItem(int value, Object holder, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
         if (weight < 0)
             throw new IllegalArgumentException();
@@ -86,7 +85,8 @@ public abstract class InventoryItem {
      *          |  if weight < 0
      *          |       then throw new IllegalArgumentException
      */
-    public InventoryItem(int value, float weight) throws IllegalArgumentException {
+    @Model
+    protected InventoryItem(int value, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
         if (weight < 0)
             throw new IllegalArgumentException();

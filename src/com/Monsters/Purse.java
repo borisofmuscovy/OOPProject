@@ -166,7 +166,6 @@ public class Purse extends InventoryItem {
             throw new IllegalStateException("You cannot remove items from torn purse");
         else
             setContent(this.getContent() + ducats);
-            this.setWeight(this.getWeight() + 50*ducats);
         if(this.getContent() > this.getCapacity())
             tearThePurse();
     }
@@ -233,6 +232,10 @@ public class Purse extends InventoryItem {
      */
     public boolean isTorn(){
         return this.Torn;
+    }
+
+    public float getTotalWeight(){
+        return this.getWeight() + (float)0.5 * this.getContent();
     }
 
 }

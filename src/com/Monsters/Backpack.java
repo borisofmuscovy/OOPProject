@@ -253,6 +253,8 @@ public class Backpack extends InventoryItem implements Inventorised{
             if (item instanceof Backpack) {
                 totalWeight += item.getWeight();
                 totalWeight = ((Backpack) item).totalContainedWeight(totalWeight);
+            } else if (item instanceof Purse) {
+                totalWeight += ((Purse) item).getTotalWeight();
             } else {
                 totalWeight += item.getWeight();
             }

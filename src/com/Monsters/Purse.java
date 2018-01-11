@@ -117,7 +117,7 @@ public class Purse extends InventoryItem {
 
     @Basic @Override
     public float getWeight(){
-        return this.weight + 50*this.getContent();
+        return this.weight;
     }
     /**
      * Sets new value of the content of a purse
@@ -245,7 +245,8 @@ public class Purse extends InventoryItem {
     }
 
     public float getTotalWeight(){
-        return this.getWeight() + (float)0.5 * this.getContent();
+        float ducatWeight = 0.5F;
+        return (this.getWeight() + (ducatWeight * (float)this.getContent()));
     }
 
 }

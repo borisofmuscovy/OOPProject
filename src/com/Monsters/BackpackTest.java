@@ -107,7 +107,7 @@ class BackpackTest {
         Purse Dolce = new Purse(20, 11, 2, 30);
         Kipling.add(Skullcrusher1, Skullcrusher2, Skullcrusher3, Gucci, Dolce);
         float contentWeight = Skullcrusher1.getWeight() + Skullcrusher2.getWeight() + Skullcrusher3.getWeight()
-                + Gucci.getWeight() + Dolce.getWeight();
+                + Gucci.getTotalWeight() + Dolce.getTotalWeight();
         float trueContentWeight = Kipling.getContentsWeight();
         assertTrue(contentWeight == trueContentWeight);
     }
@@ -128,7 +128,7 @@ class BackpackTest {
         Kipling1.add(Kipling2);
         Kipling1.add(Dolce);
         float trueTotalWeight = Skullcrusher1.getWeight() + Skullcrusher2.getWeight() + Skullcrusher3.getWeight()
-                + Kipling1.getWeight() + Kipling2.getWeight() + Kipling3.getWeight() + Dolce.getWeight();
+                + Kipling1.getWeight() + Kipling2.getWeight() + Kipling3.getWeight() + Dolce.getTotalWeight();
         assertEquals(Kipling1.getTotalWeight(), trueTotalWeight);
     }
 

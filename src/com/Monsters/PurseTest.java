@@ -45,11 +45,11 @@ public class PurseTest {
         assertTrue(Gucci.isTorn());
     }
 
-    @Test
-    public void tearAdd(){
+    @Test(expected = IllegalStateException.class)
+    public void tearAdd() throws IllegalStateException{
         Purse Gucci = new Purse(10, 10, 3, 40);
         Gucci.add(60);
         Gucci.add(60);
-        assertEquals(Gucci.getTotalValue(), 0);
+
     }
 }

@@ -12,6 +12,9 @@ import java.util.Random;
  *
  * @invar   Damage has to have a valid value
  *          | isValidDamage(damage)
+ *
+ * @version 1.0
+ * @author Boris Shilov & Alicja Ochman
  */
 public class Weapon extends InventoryItem {
 
@@ -32,16 +35,14 @@ public class Weapon extends InventoryItem {
 
     /**
      * Initializes weapon with its weight, value and damage
-     * @pre     Damage cause by the weapon has to be in the range from 1 to MAXIMUM_DAMAGE
-     *          | damage >= 1 && damage <= MAX_DAMAGE
+     * @pre     Damage cause by the weapon has to be a valid value
+     *          | isValidDamage(damage)
      * @param   weight
      *          Describes weight of the weapon
      * @param   value
      *          Describes value of the weapon
      * @param   damage
      *          Describes damage that can be caused by the weapon
-     * @effect  Weight fo this monster is set to given weight
-     *          | new.getWeight() == weight
      */
     @Raw
     public Weapon(float weight, int value, int damage){
@@ -49,7 +50,6 @@ public class Weapon extends InventoryItem {
         this.setValue(value);
         assert(isValidDamage(damage));
         this.damage = damage;
-        this.weight = setWeight(weight);
         this.ID = generateID();
         this.holder = null;
     }
@@ -85,9 +85,9 @@ public class Weapon extends InventoryItem {
 
     /**
      * Sets damage caused by weapon to new damage
-     * @pre   newDamage is in range(1, MAX_DAMAGE)
-     *        | newDamage >= MIN_DAMAGE && newDamage <= MAX_DAMAGE
-     * @post  Value of damage eguals the value of newDamage
+     * @pre   newDamage is valid value for damage
+     *        | isValidDamage(damage)
+     * @post  Value of damage equals the value of newDamage
      *        | new.getDamage() == newDamage
      */
     @Raw
@@ -113,7 +113,7 @@ public class Weapon extends InventoryItem {
      * @param   damage
      *          Damage to check
      * @return  True if damage is in range(MIN_DAMAGE, MAX_DAMAGE)
-     *          | result == damage >= MIN_DAMAGE && damage <= MAX_DAMAGE
+     *          | result == (damage >= MIN_DAMAGE && damage <= MAX_DAMAGE)
      */
     public boolean isValidDamage(int damage){
         return (damage >= MIN_DAMAGE && damage <= MAX_DAMAGE);

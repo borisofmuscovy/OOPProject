@@ -4,6 +4,9 @@ import java.util.Comparator;
 
 /**
  * Class implementing comparison of InventoryItem weights
+ *
+ *  @version 1.0
+ * @author Boris Shilov & Alicja Ochman
  */
 class WeightComparator implements Comparator<InventoryItem> {
     /**

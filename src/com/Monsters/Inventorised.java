@@ -2,6 +2,9 @@ package com.Monsters;
 
 /**
  * An interface implementing methods to be used by Objects possessing the inventory, i.e. Backpacks and Monsters
+ *
+ * @version 1.0
+ * @author Boris Shilov & Alicja Ochman
  */
 interface Inventorised {
     /**

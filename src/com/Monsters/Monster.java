@@ -15,7 +15,7 @@ import java.util.*;
  * @invar   The value of protection has to be a valid value
  *          | isValidProtection(protection)
  *
- * @version 0.3
+ * @version 1.0
  * @author Boris Shilov & Alicja Ochman
  */
 public class Monster implements Inventorised{
@@ -95,7 +95,7 @@ public class Monster implements Inventorised{
 
 
     /**
-     * Initialise a named monster with a given number of hit points.
+     * Initialise a named monster with a given number of hit points and some inventory items.
      *
      * @param   Name
      *          The name of the monster. Must start with a capital letter, can contain lowercase, uppercase letters, numbers
@@ -107,10 +107,13 @@ public class Monster implements Inventorised{
      * @pre     The given name must be a valid name for a monster
      *          | isValidName(name)
      * @pre     Initial value of hitpoints cannot be lower than 0
-     *          | ! (startHP < 0)
+     *          | (startHP > 0)
      * @throws  IllegalArgumentException
      *          The given name is not a valid name for a monster.
      *          | ! isValidName(name)
+     * @throws  IllegalArgumentException
+     *          Initial value of hitpoints is lower than 0
+     *          | startHP < 0
      *
      */
     @Raw
@@ -126,7 +129,7 @@ public class Monster implements Inventorised{
         this.damage = generateDamage();
         this.strength = (int) (new Random().nextGaussian() * 10 + 10);
         this.protection = generateProtection();
-        this.MAX_HP = hp;
+        MAX_HP = hp;
         this.carryingCapacity = this.getStrength() * 12;
         this.Alive = true;
         if (items.length >= 3) {
@@ -206,8 +209,6 @@ public class Monster implements Inventorised{
      * Kills the monster by setting Alive to false.
      * @post    Monster is dead
      *          | this.Alive = false
-     * @effect  Monster's hitpoints are set to 0
-     *          | this.setHP(0)
      */
     private void Death(){
         this.Alive = false;
@@ -225,7 +226,7 @@ public class Monster implements Inventorised{
     }
 
     /**
-     * Sets strength of a monster ti a given new strength
+     * Sets strength of a monster to a given new strength
      * @param   newStrength
      *          The new strength for this monster
      * @post    The strength of this Monster is set to given newStrength
@@ -271,7 +272,7 @@ public class Monster implements Inventorised{
     }
 
     /**
-     * Generates damage cause be monster
+     * Generates damage caused by the monster
      * @return random number between MIN_DAMAGE and MAX_DAMAGE
      *         | nextInt(MAX_DAMAGE - MIN_DAMAGE + 1) + MIN_DAMAGE)
      */
@@ -424,8 +425,6 @@ public class Monster implements Inventorised{
         MAX_HP = newMAX_HP;
     }
 
-
-    //all of the following inventory code deals with anchors only for now, no support for looking into backpacks
 
     /**
      * Returns total weight of items carried by a monster
@@ -674,7 +673,7 @@ public class Monster implements Inventorised{
         } catch (IllegalStateException e1) {
             System.out.println(this.getName() + " tried to transfer an item they do not possess.");
         } catch (IllegalArgumentException e2) {
-            System.out.print(this.getName() + " tried to transfer a weapon to " + other + ", but " +
+            System.out.println(this.getName() + " tried to transfer a weapon to " + other + ", but " +
                     "their inventory was full!");
         }
     }

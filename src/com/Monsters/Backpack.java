@@ -9,6 +9,9 @@ import java.util.*;
  * Class of Backpack a special kind of InventoryItem.
  * In addition to value, holder and weight, each backpack has its capacity.
  * Other inventory items can be stored in backpacks (including backpacks)
+ *
+ * @version 1.0
+ * @author Boris Shilov & Alicja Ochman
  */
 public class Backpack extends InventoryItem implements Inventorised{
 
@@ -33,16 +36,17 @@ public class Backpack extends InventoryItem implements Inventorised{
      * @param   capacity
      *          The capacity of this new backpack
      */
-    public Backpack(int value, Monster holder, float weight, float capacity){
+    public Backpack(int value, Object holder, float weight, float capacity){
         super(value, holder, weight);
         this.ID = generateID();
         this.capacity = capacity;
-        holder.add(this);
         this.holder = holder;
+        ((Inventorised) holder).add(this);
+
     }
 
     /**
-     * Initialize new backpack with value, wieght and capacity
+     * Initialize new backpack with value, weight and capacity
      * @param   value
      *          The value of this new backpack
      * @param   weight
@@ -54,7 +58,6 @@ public class Backpack extends InventoryItem implements Inventorised{
         super (value, weight);
         this.ID = generateID();
         this.capacity = capacity;
-        this.holder = null;
     }
 
     /**
@@ -95,9 +98,9 @@ public class Backpack extends InventoryItem implements Inventorised{
      * @param   item
      *          Item to be added to tbe backpack
      * @return  true if weight of backpack with new item does not exceed backpack's capacity, false otherwise
-     *          |   this.getContentsWeight() + item.getWeight()) > this.getCapacity()
-            */
-        public boolean canContain(InventoryItem item){
+     *          |   result == (this.getContentsWeight() + item.getWeight()) > this.getCapacity())
+     */
+    public boolean canContain(InventoryItem item){
         if (item == null){
             return false;
         } else if (((this.getContentsWeight() + item.getWeight()) > this.getCapacity())
@@ -199,7 +202,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      *          Capacity of other backpack would be exceeded
      *          | ! other.canContain(item)
      * @throws  IllegalStateException
-     *
+     *          Throws an exception if the item to be transferred is not in the inventory of this backpack
      * @post    Items are removed from this backpack and put in other backpack
      *          | this.backpackContent.contains(item) == false
      *          |  other.backpackContent.contains(items) == true

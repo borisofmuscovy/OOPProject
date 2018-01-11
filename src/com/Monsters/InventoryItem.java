@@ -12,6 +12,10 @@ import java.util.Random;
  *          | isValidValue(value)
  * @invar   Weight is a valid weight for an item
  *          | isValidWeight(weight)
+ *
+ *
+ * @version 1.0
+ * @author Boris Shilov & Alicja Ochman
  */
 public abstract class InventoryItem {
 
@@ -33,7 +37,7 @@ public abstract class InventoryItem {
     /**
      * Variable indicating the holder of the item
      */
-    protected Object holder = null;
+    protected Object holder;
 
     /**
      * List of all IDs that were already assigned to the items
@@ -44,8 +48,8 @@ public abstract class InventoryItem {
     /**
      * Initialized new inventory item: weapon, purse or backpack with value, holder and weight
      *
-     * @pre     Value of the item cannot be smaller than 0
-     *          | !(value < 0)
+     * @pre     Value of the item is a valid value
+     *          | isValidValue(value)
      * @param   value
      *          Parameter describing value of the purse no smaller than zero
      * @param   weight
@@ -53,9 +57,12 @@ public abstract class InventoryItem {
      * @param   holder
      *          Monster that carries the inventory
      * @throws  IllegalArgumentException
-     *          Throws an exception if weight of the item is smaller than zero
-     *          |  if weight < 0
+     *          Throws an exception if weight of the item is not a valid weight
+     *          |  if(!(isValidWeight(weight))
      *          |       then throw new IllegalArgumentException
+     * @throws  IllegalArgumentException
+     *          Throws an exception if holder is different than Monster or Backpack
+     *          | !(holder instanceof Monster) || !(holder instanceof Backpack)
      */
     @Model
     @Raw
@@ -75,15 +82,15 @@ public abstract class InventoryItem {
     /**
      * Initialized new inventory item: weapon, purse or backpack with value and weight
      *
-     * @pre     Value of the item cannot be smaller than 0
-     *          | !(value < 0)
+     * @pre     Value of the item has to be a valid value
+     *          | isValidValue(value)
      * @param   value
      *          Parameter describing value of the purse no smaller than zero
      * @param   weight
      *          Weight of the inventory item
      * @throws  IllegalArgumentException
-     *          Throws an exception if weight of the item is smaller than zero
-     *          |  if weight < 0
+     *          Throws an exception if weight of the item is not a valid weight
+     *          |  if(!(isValidWeight(weight))
      *          |       then throw new IllegalArgumentException
      */
     @Model
@@ -94,7 +101,6 @@ public abstract class InventoryItem {
             throw new IllegalArgumentException();
         this.weight = weight;
         this.value = value;
-        this.holder = null;
     }
 
     /**
@@ -119,17 +125,6 @@ public abstract class InventoryItem {
     }
 
     /**
-     * Checks validity of value
-     * @param   value
-     *          Value to be checked
-     * @return  True if value is not negative
-     *          | result == (value >= 0)
-     */
-    private boolean isValidValue(int value){
-        return value >= 0;
-    }
-
-    /**
      * Method setting odd unique ID of an item
      * @pre     ID has to be an odd number
      *          | ID % 2 != 0
@@ -148,6 +143,17 @@ public abstract class InventoryItem {
                 ID = newID.nextLong();
             }
         }
+    }
+
+    /**
+     * Checks validity of value
+     * @param   value
+     *          Value to be checked
+     * @return  True if value is not negative
+     *          | result == (value >= 0)
+     */
+    private boolean isValidValue(int value){
+        return value >= 0;
     }
 
     /**
@@ -181,7 +187,7 @@ public abstract class InventoryItem {
      * @param   holder
      *          Holder to be set
      * @pre     New holder of the item has to be backpack, monster or can be null if the object is dropped
-     *          | holder instanceof Monster || holder instanceof Backpack || holder == null
+     *          | (holder instanceof Monster) || (holder instanceof Backpack) || (holder == null)
      * @post    Holder of the item is set to holder
      *          | new.getHolder() == holder
      */
@@ -227,8 +233,8 @@ public abstract class InventoryItem {
      * @param   weight
      *          | Non-negative float
      * @throws  IllegalArgumentException
-     *          Thrown if the weight of the item is about to be smaller than 0
-     *          | weight < 0
+     *          Thrown if the weight of the item is about to be invalid weight
+     *          | !isValidWeight(weight)
      * @post    Weight of the item is set to weight
      *          |new.getWeight() == weight
      */

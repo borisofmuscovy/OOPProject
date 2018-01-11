@@ -592,10 +592,10 @@ public class Monster implements Inventorised{
      * @param   thisItem
      *          Item to be swiped at anchors with another item
      * @param   otherItem
-     *          Item to be swiped at anchors with item
+     *          Item to be swiped at anchors with this item
      * @throws  IllegalAccessException
-     *          Throws an exception if one or both or the items are not held by this monster
-     *          | thisItem.getIndirectHolder != this || otherItem.getIndirectHolder != this
+     *          Throws an exception if one or both of the items are not held by this monster
+     *          | thisItem.getIndirectHolder() != this || otherItem.getIndirectHolder() != this
      * @throws  IllegalArgumentException
      *          Throws an exception if one of the items does not exist
      *          | (thisItem == null) || (otherItem == null)
@@ -642,7 +642,7 @@ public class Monster implements Inventorised{
      *          | !this.inventory.containsValue(item)
      *          | other.inventory.containsValue(item)
      * @post    Holder of an item changes
-     *          | new.item.getHolder() == other
+     *          | (new.item).getHolder() == other
      * @throws  IllegalArgumentException
      *          Throws an exception if other monster is not able to carry the item because of its weight or other monster's inventory is full
      *          | !other.canContain(item)
@@ -697,7 +697,6 @@ public class Monster implements Inventorised{
         return totalValueOfWeapons;
     }
 
-//    public Map<String, Weapon> getAllCarriedWeapons
 
     /**
      * Method representing battle of the monsters.

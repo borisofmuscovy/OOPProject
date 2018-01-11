@@ -211,7 +211,6 @@ public class Monster implements Inventorised{
      */
     private void Death(){
         this.Alive = false;
-        this.setHP(0);
     }
 
     /**
@@ -399,8 +398,8 @@ public class Monster implements Inventorised{
      */
     private void setHP(int newHP) throws IllegalArgumentException {
             if (newHP <= 0) {
+                this.hp = 0;
                 this.Death();
-                throw new IllegalArgumentException();
             } else {
                 this.hp = newHP;
             }

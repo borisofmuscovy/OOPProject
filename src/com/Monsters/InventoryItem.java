@@ -107,7 +107,9 @@ public abstract class InventoryItem {
      * Returns the ID of inventory item
      */
     @Basic
-    public abstract long getID();
+    public long getID(){
+        return this.ID;
+    };
 
     /**
      * Checks validity of the ID

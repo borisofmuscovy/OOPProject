@@ -94,6 +94,7 @@ public class Purse extends InventoryItem {
      * @return  Random long from the fibonacciSeries array
      *          | purseID
      */
+    @Override
     protected long generateID(){
         long purseID = 0;
         int n = 1000;
@@ -106,26 +107,6 @@ public class Purse extends InventoryItem {
         return purseID;
     }
 
-    /**
-     * Returns ID of this purse
-     * @return  ID of this purse
-     *          | this.ID
-     */
-    @Basic
-    @Override
-    @Immutable
-    public long getID(){
-        return this.ID;
-    }
-
-    /**
-     * Returns weight of the purse
-     * @return  this.weight
-     */
-    @Basic @Override
-    public float getWeight(){
-        return this.weight;
-    }
 
     /**
      * Returns total weight of the purse with its content

@@ -95,14 +95,6 @@ class MonsterTest {
     }
 
 
-    @Test
-    void setMAX_HP() {
-        Monster Bob = new Monster("Bob", 40);
-        int oldHealth = Bob.getMAX_HP();
-        Bob.setMAX_HP(50);
-        assertTrue(Bob.getMAX_HP() != oldHealth);
-    }
-
     //@Test
     void hit() {
         Monster Bob = new Monster("Bob", 40);

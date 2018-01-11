@@ -143,21 +143,19 @@ public class Monster implements Inventorised{
                 this.inventory.put("Appendage" + j, items[i]);
                 j++;
             }
-        } else if (items.length > 0){
+        } else if (items.length == 2){
             this.anchors = 3;
-            int emptyAnchorNo = anchors - items.length;
             items[0].setHolder(this);
-            this.inventory.put(anchorDefaults.get(0), items[0]);
-            int i = 1;
-            for (int j = items.length - 1; j >= emptyAnchorNo;j--) {
-                if (i < items.length) {
-                    items[j].setHolder(this);
-                    this.inventory.put(anchorDefaults.get(j), items[j]);
-                    i++;
-                } else {
-                    this.inventory.put(anchorDefaults.get(j), null);
-                }
-            }
+            this.inventory.put("Left", items[0]);
+            this.inventory.put("Right", null);
+            items[1].setHolder(this);
+            this.inventory.put("Back", items[1]);
+        } else if (items.length == 1){
+            this.anchors = 3;
+            items[0].setHolder(this);
+            this.inventory.put("Left", items[0]);
+            this.inventory.put("Right", null);
+            this.inventory.put("Back", null);
         } else {
             this.anchors = 3;
             this.inventory.put("Left", null);

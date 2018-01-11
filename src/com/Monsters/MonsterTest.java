@@ -11,7 +11,7 @@ class MonsterTest {
         Purse Gucci = new Purse(20, 5, 2, 30);
         Monster John = new Monster("John", 40, Skullcrusher, Gucci);
         assertTrue((John.getContents().get("Left") == Skullcrusher)
-                && (John.getContents().get("Right") == Gucci));
+                && (John.getContents().get("Back") == Gucci));
     }
 
     @Test
@@ -40,6 +40,16 @@ class MonsterTest {
         Monster John = new Monster("John", 40, Skullcrusher, Gucci, Thrasher);
         float trueWeight = Skullcrusher.getWeight() + Gucci.getTotalWeight() + Thrasher.getWeight();
         assertEquals(trueWeight, John.getTotalWeight());
+    }
+
+    @Test
+    void equipsToBackPreferentially(){
+        Weapon Skullcrusher = new Weapon(10, 10, 20);
+        Purse Gucci = new Purse(20, 5, 2, 30);
+        Weapon Thrasher = new Weapon(3, 10, 20);
+        Monster John = new Monster("John", 40, Skullcrusher, Gucci);
+        assertTrue((John.getContents().get("Back") == Gucci)
+                && (John.getContents().get("Right") == null));
     }
 
     @Test
@@ -93,18 +103,11 @@ class MonsterTest {
         assertTrue(Bob.getMAX_HP() != oldHealth);
     }
 
-    @Test
+    //@Test
     void hit() {
-        Monster Bob;
+        Monster Bob = new Monster("Bob", 40);
         Monster Alice = new Monster("Alice", 40);
         int oldHealth = Alice.getHP();
-        while (true) {
-            Bob = new Monster("Bob", 40);
-            if (Bob.getDamage() > 20){
-                break;
-            }
-        }
-
         while (true) {
             Bob.hit(Alice);
             if (Alice.getHP() != oldHealth) {
@@ -188,7 +191,7 @@ class MonsterTest {
         Monster John = new Monster("John", 40, Skullcrusher, Gucci);
         John.swap(Skullcrusher, Gucci);
         assertTrue((John.getContents().get("Left") == Gucci)
-                && (John.getContents().get("Right") == Skullcrusher));
+                && (John.getContents().get("Back") == Skullcrusher));
     }
 
     @Test

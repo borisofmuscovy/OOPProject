@@ -147,9 +147,9 @@ public class Main {
 
         try {
             if (Bob.isAlive()) {
-                Alice.transfer(Bob, Alice.getContents().get("Left"), Alice.getContents().get("Right"));
+                Alice.transfer(Bob, Alice.getContents().get("Left"), Alice.getContents().get("Back"));
             } else if (Alice.isAlive()) {
-                Bob.transfer(Alice, Bob.getContents().get("Left"), Bob.getContents().get("Right"));
+                Bob.transfer(Alice, Bob.getContents().get("Left"), Bob.getContents().get("Back"));
             }
         } catch (IllegalArgumentException e) {
             System.out.println("The winner could not loot the losers inventory fully.");

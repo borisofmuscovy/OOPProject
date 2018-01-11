@@ -191,4 +191,12 @@ class MonsterTest {
                 && (John.getContents().get("Right") == Skullcrusher));
     }
 
+    @Test
+    void getTotalValueofWeapons(){
+        Weapon Skullcrusher1 = new Weapon(5, 10, 20);
+        Weapon Skullcrusher2 = new Weapon(5, 10, 20);
+        Weapon Skullcrusher3 = new Weapon(5, 10, 20);
+
+    }
+
 }

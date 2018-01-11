@@ -1,73 +1,91 @@
 package com.Monsters;
 
+import java.security.AllPermission;
 import java.util.Map;
 
 public class Main {
 
 
-    public static String Battle(Monster Monster1, Monster Monster2) {
+    public static void Battle(Monster Monster1, Monster Monster2) {
+        int hitCount = 0;
         if (Math.random() < 0.5){
-            while (Monster1.isAlive() && Monster2.isAlive()) {
+            while (Monster1.isAlive() && Monster2.isAlive() && (hitCount < 100)) {
                 System.out.println(Monster1.hit(Monster2));
                 System.out.println(Monster2.hit(Monster1));
+                hitCount++;
             }
         } else {
-            while (Monster1.isAlive() && Monster2.isAlive()) {
+            while (Monster1.isAlive() && Monster2.isAlive() && (hitCount < 100)) {
                 System.out.println(Monster2.hit(Monster1));
                 System.out.println(Monster1.hit(Monster2));
+                hitCount++;
             }
         }
-
         if (Monster2.isAlive()) {
-            System.out.println(Monster2.getName() + " has Protection " + Monster2.getProtection() + ", Strength " +
-                    Monster2.getStrength() + ", Damage " + Monster2.getDamage()
-                    + " and their maximum HP is " + Monster2.getMAX_HP() + ".");
-            return Monster2.getName();
+            System.out.println(Monster2.getName() + " won the fight.");
+            printMonsterStats(Monster2);
         } else if (Monster1.isAlive()) {
-            System.out.println(Monster1.getName() + " has Protection " + Monster1.getProtection() + ", Strength " +
-                    Monster1.getStrength() + ", Damage " + Monster1.getDamage()
-                    + " and their maximum HP is " + Monster1.getMAX_HP() + ".");
-            return Monster1.getName();
+            System.out.println(Monster1.getName() + " won the fight.");
+            printMonsterStats(Monster1);
         } else {
-            System.out.println("Everybody is dead!");
-            return null;
+            System.out.println("The opponents cannot beat each other. Draw.");
         }
+    }
+
+    public static void printMonsterStats(Monster Monster1) {
+        System.out.println(Monster1.getName() + " has Protection " + Monster1.getProtection() + ", Strength " +
+                Monster1.getStrength() + ", Damage " + Monster1.getDamage()
+                + " and their maximum HP is " + Monster1.getMAX_HP() + ".");
+    }
+
+    public static void printInventory(Monster Monster1) {
+        System.out.println(Monster1.getName() + " carries the following in their anchors: ");
+        for (int i = 0; i < Monster1.getContents().size(); i++) {
+            String anchor = (String) Monster1.getContents().keySet().toArray()[i];
+            if (Monster1.getContents().get(anchor) instanceof Backpack) {
+                System.out.print("A backpack in " + anchor + " anchor. ");
+            } else if (Monster1.getContents().get(anchor) instanceof Weapon) {
+                System.out.print("A weapon in " + anchor + " anchor. ");
+            } else if (Monster1.getContents().get(anchor) instanceof Purse) {
+                System.out.print("A purse in " + anchor + " anchor. ");
+            } else {
+                System.out.print("Nothing in " + anchor + " anchor. ");
+            }
+        }
+        System.out.println("\n");
     }
 
     public static void Part1() throws IllegalAccessException{
         System.out.println("This is Part 1 of the project.");
         Monster Bob = new Monster("Bob", 30);
+        printMonsterStats(Bob);
         Monster Alice = new Monster("Alice", 30);
-        Weapon Skullcrusher = new Weapon(2, 10, 10);
-        Alice.add(Skullcrusher);
-        System.out.println(Alice.getContents());
-        Alice.transfer(Bob, Skullcrusher);
-        System.out.println("Alice" + Alice.getContents());
-        System.out.println("Bob" + Bob.getContents());
-        System.out.println(Skullcrusher.getHolder());
+        printMonsterStats(Alice);
         Battle(Alice, Bob);
         System.out.println("END PART 1\n");
     }
 
     public static void Part2() throws IllegalAccessException{
         System.out.println("This is Part 2 of the project.");
-        Monster Bob = new Monster("Bob", 30);
-        Monster Alice = new Monster("Alice", 30);
-        System.out.println(Bob);
-        System.out.println(Alice);
+        Weapon Stick = new Weapon(2, 10, 12);
+        Weapon Rock = new Weapon(2, 10, 12);
+        Monster Bob = new Monster("Bob", 30, Rock);
+        Monster Alice = new Monster("Alice", 30, Stick);
 
         Purse Gucci = new Purse(10, 1, 20, 50);
         Purse Yves = new Purse(20, 1, 30, 70);
 
+        Alice.add(Gucci);
+        Bob.add(Yves);
+
         Weapon Bonemasher = new Weapon(5, 5, 10);
         Weapon Skullcrusher = new Weapon(5, 5, 10);
 
-        Alice.add(Gucci);
         Alice.add(Bonemasher);
-        Bob.add(Yves);
         Bob.add(Skullcrusher);
 
         Battle(Alice, Bob);
+        try{
         if (Bob.isAlive()) {
             for (Map.Entry<String,InventoryItem> entry : Alice.getContents().entrySet()) {
                 if (entry.getValue() instanceof Weapon) {
@@ -76,7 +94,6 @@ public class Main {
                     ((Purse) entry.getValue()).transfer(Yves, ((Purse) entry.getValue()).getContent());
                 }
             }
-            System.out.println(Bob.getContents());
         } else if (Alice.isAlive()) {
             for (Map.Entry<String,InventoryItem> entry : Bob.getContents().entrySet()) {
                 if (entry.getValue() instanceof Weapon) {
@@ -85,26 +102,35 @@ public class Main {
                     ((Purse) entry.getValue()).transfer(Gucci, ((Purse) entry.getValue()).getContent());
                 }
             }
-            System.out.println(Alice.getContents());
+        }
+        } catch (IllegalArgumentException e1) {
+            System.out.println(e1.getMessage());
+        } catch (IllegalStateException e2) {
+            System.out.print(e2.getMessage());
+        } finally {
+            if (Bob.isAlive()) {
+                printInventory(Bob);
+            } else if (Alice.isAlive()) {
+                printInventory(Alice);
+            }
         }
         System.out.println("END PART 2\n");
     }
 
     public static void Part3() throws IllegalAccessException{
         System.out.println("This is Part 3 of the project.");
-        Monster Bob = new Monster("Bob", 30);
-        Monster Alice = new Monster("Alice", 30);
-
-        Backpack BobsBackpack = new Backpack(10, Bob, 15, 30);
-        Backpack AlicesBackpack = new Backpack(10, Alice, 12, 32);
-
         Weapon Stick = new Weapon(2, 10, 12);
-        Alice.add(Stick);
         Weapon Rock = new Weapon(2, 10, 12);
-        Bob.add(Rock);
+        Backpack BobsBackpack = new Backpack(10, 15, 30);
+        Backpack AlicesBackpack = new Backpack(10, 12, 32);
 
-        System.out.println(Bob.getContents());
-        System.out.println(Alice.getContents());
+
+        Monster Bob = new Monster("Bob", 30, Stick, BobsBackpack);
+        Monster Alice = new Monster("Alice", 30, Rock, AlicesBackpack);
+
+
+        printInventory(Bob);
+        printInventory(Alice);
 
         Backpack Versace = new Backpack(20, 25, 100);
         Weapon Skullcrusher = new Weapon(2, 10, 10);
@@ -119,18 +145,26 @@ public class Main {
 
         Battle(Bob, Alice);
 
-        if (Bob.isAlive()) {
-            Alice.transfer(Bob, Alice.getContents().get("Left"), Alice.getContents().get("Right"),
-                    Alice.getContents().get("Back"));
-        } else if (Alice.isAlive()) {
-            Bob.transfer(Alice, Bob.getContents().get("Left"), Bob.getContents().get("Right"),
-                    Bob.getContents().get("Back"));
+        try {
+            if (Bob.isAlive()) {
+                Alice.transfer(Bob, Alice.getContents().get("Left"), Alice.getContents().get("Right"));
+            } else if (Alice.isAlive()) {
+                Bob.transfer(Alice, Bob.getContents().get("Left"), Bob.getContents().get("Right"));
+            }
+        } catch (IllegalArgumentException e) {
+            System.out.println("The winner could not loot the losers inventory fully.");
+        } finally {
+            if (Bob.isAlive()) {
+                printInventory(Bob);
+            } else if (Alice.isAlive()) {
+                printInventory(Alice);
+            }
         }
 
         System.out.println("END PART 3\n");
     }
 
-    public static void main(String[] args) throws IllegalAccessException{
+    public static void main(String[] args) throws IllegalAccessException, IllegalStateException, IllegalArgumentException{
         Part1();
         Part2();
         Part3();

@@ -656,14 +656,13 @@ public class Monster implements Inventorised{
      *          | !this.inventory.containsValue(item)
      */
     public void transfer(Inventorised other, InventoryItem... items) throws IllegalArgumentException, IllegalStateException{
-        try {
             for (int i=0; i < items.length;i++){
                 InventoryItem item = items[i];
                 //first determine if this monster trying to transfer has the item in question
                 if (!this.inventory.containsValue(item)){
-                    throw new IllegalStateException();
+                    throw new IllegalStateException("Tried to transfer item not in " + this.getName() + " inventory.");
                 } else if (!other.canContain(item)) {
-                    throw new IllegalArgumentException();
+                    throw new IllegalArgumentException("Recipient of transfer is unable to carry item.");
                 } else {
                     this.inventory.entrySet().remove(item);
                     item.setHolder(null);
@@ -671,12 +670,6 @@ public class Monster implements Inventorised{
                 }
 
                 }
-        } catch (IllegalStateException e1) {
-            System.out.println(this.getName() + " tried to transfer an item they do not possess.");
-        } catch (IllegalArgumentException e2) {
-            System.out.print(this.getName() + " tried to transfer a weapon to " + other + ", but " +
-                    "their inventory was full!");
-        }
     }
 
     /**
@@ -751,7 +744,7 @@ public class Monster implements Inventorised{
             return (opponent.getName() + " has been slain! The mortal blow has been dealt by " + this.getName()
                     + " dealing " + this.hitDamage() + " damage!");
         } catch (IllegalStateException e) {
-            return (this.getName() + " kicked the dead body of " + opponent.getName());
+            return ("");
         }
     }
         }

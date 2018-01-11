@@ -69,18 +69,6 @@ public class Backpack extends InventoryItem implements Inventorised{
     }
 
     /**
-     * Returns ID of this backpack
-     * @return  ID
-     *          | this.ID
-     */
-    @Basic
-    @Override
-    @Immutable
-    public long getID(){
-        return this.ID;
-    }
-
-    /**
      * Returns capacity of this backpack
      * @return  capacity of this backpack
      *          | this.capacity
@@ -118,7 +106,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      *          | for(InventoryItem item: this.backpackContent)
      *              (new item).getHolder() == this.getHolder()
      */
-    public void setHolderRecursively(){
+    private void setHolderRecursively(){
         for(InventoryItem item : this.backpackContent) {
             if (item instanceof Backpack) {
                 item.setHolder(this);

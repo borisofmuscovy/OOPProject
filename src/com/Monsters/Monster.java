@@ -55,7 +55,7 @@ public class Monster implements Inventorised{
     /**
      * Constant indicating maximum hitpoints that Monster can have
      */
-    private static int MAX_HP;
+    private int MAX_HP;
     /**
      * Variable indicating if the monster is alive
      */
@@ -74,7 +74,7 @@ public class Monster implements Inventorised{
     /**
      * Variable indicating maximum weight of items that can be carried by a monster
      */
-    private int carryingCapacity;
+    private float carryingCapacity;
 
     /**
      * Collection of items that are in monster's possession
@@ -127,7 +127,7 @@ public class Monster implements Inventorised{
         this.damage = generateDamage();
         this.strength = (int) (new Random().nextGaussian() * 10 + 10);
         this.protection = generateProtection();
-        MAX_HP = hp;
+        this.MAX_HP = hp;
         this.carryingCapacity = this.getStrength() * 12;
         this.Alive = true;
         if (items.length >= 3) {
@@ -228,7 +228,7 @@ public class Monster implements Inventorised{
      * @post    The strength of this Monster is set to given newStrength
      *          | new.getStrength() = newStrength
      */
-    protected void setStrength(int newStrength){
+    private void setStrength(int newStrength){
         this.strength = newStrength;
     }
 
@@ -283,7 +283,7 @@ public class Monster implements Inventorised{
      * @post The new damage value will be a random number between the MIN_DAMAGE value and the MAX_DAMAGE value.
      *       | new.getDamage() == rand(MIN_DAMAGE:MAX_DAMAGE)
      */
-    public void changeDamage() {
+    protected void changeDamage() {
         this.damage = generateDamage();
     }
 
@@ -323,7 +323,7 @@ public class Monster implements Inventorised{
      *          | isValidProtection(protectionFactor)
      */
     @Raw
-    public int generateProtection(){
+    private int generateProtection(){
         boolean flag = true;
         Random n = new Random();
         int protectionFactor = 0;
@@ -343,7 +343,7 @@ public class Monster implements Inventorised{
      * @return  True if protection is higher than MIN_PROTECTION, lower than MAX_PROTECTION and if it is a prime number
      *          |   result == (protection >= MIN_PROTECTION && protection <= MAX_PROTECTION && isPrime(protection))
      */
-    public static boolean isValidProtection(int protection){
+    private static boolean isValidProtection(int protection){
         if(protection >= MIN_PROTECTION && protection <= MAX_PROTECTION && isPrime(protection))
             return true;
         else
@@ -417,8 +417,8 @@ public class Monster implements Inventorised{
      * @post The new maximum value of hitpoints will equal the provided value.
      *       | new.getMAX_HP() == newMAX_HP
      */
-    public static void setMAX_HP(int newMAX_HP){
-        MAX_HP = newMAX_HP;
+    private void setMAX_HP(int newMAX_HP){
+        this.MAX_HP = newMAX_HP;
     }
 
 
@@ -448,7 +448,7 @@ public class Monster implements Inventorised{
      */
     @Basic
     @Immutable
-    public int getCarryingCapacity(){
+    public float getCarryingCapacity(){
         return this.carryingCapacity;
     }
 

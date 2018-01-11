@@ -52,23 +52,13 @@ public class Weapon extends InventoryItem {
         this.holder = null;
     }
 
-    /**
-     * Returns ID of this weapon
-     * @return  ID of this weapon
-     *          | this.ID
-     */
-    @Override
-    @Immutable
-    public long getID(){
-        return this.ID;
-    }
 
     /**
      * Sets new MAX_DAMAGE for weapons
      * @post    new maximum value of a damage is set to a random value between 1 and 20
      *          | new.getMAX_DAMAGE() == (r.nextInt(20 + 1) + 1)
      */
-    public void setMaxDamage(){
+    private void setMaxDamage(){
         Random r = new Random();
         MAX_DAMAGE = r.nextInt(20 + 1) + 1;
     }
@@ -89,7 +79,7 @@ public class Weapon extends InventoryItem {
      *        | new.getDamage() == newDamage
      */
     @Raw
-    public void setDamage(int newDamage){
+    private void setDamage(int newDamage){
         assert(isValidDamage(newDamage));
         this.damage = newDamage;
     }
@@ -113,7 +103,7 @@ public class Weapon extends InventoryItem {
      * @return  True if damage is in range(MIN_DAMAGE, MAX_DAMAGE)
      *          | result == (damage >= MIN_DAMAGE && damage <= MAX_DAMAGE)
      */
-    public boolean isValidDamage(int damage){
+    private boolean isValidDamage(int damage){
         return (damage >= MIN_DAMAGE && damage <= MAX_DAMAGE);
     }
 

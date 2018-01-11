@@ -72,6 +72,9 @@ public class Main {
         Monster Bob = new Monster("Bob", 30, Rock);
         Monster Alice = new Monster("Alice", 30, Stick);
 
+        printMonsterStats(Bob);
+        printMonsterStats(Alice);
+
         Purse Gucci = new Purse(10, 1, 20, 50);
         Purse Yves = new Purse(20, 1, 30, 70);
 
@@ -128,8 +131,9 @@ public class Main {
         Monster Bob = new Monster("Bob", 30, Stick, BobsBackpack);
         Monster Alice = new Monster("Alice", 30, Rock, AlicesBackpack);
 
-
+        printMonsterStats(Bob);
         printInventory(Bob);
+        printMonsterStats(Alice);
         printInventory(Alice);
 
         Backpack Versace = new Backpack(20, 25, 100);

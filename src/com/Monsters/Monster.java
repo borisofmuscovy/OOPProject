@@ -427,6 +427,7 @@ public class Monster implements Inventorised{
      * @return  total weight of the items currently carried by a monster
      *          | totalCarriedWeight
      */
+    @Override
     public float getTotalWeight() {
         float totalCarriedWeight = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
@@ -471,6 +472,7 @@ public class Monster implements Inventorised{
      *          | result == this.getTotalWeight() + item.getWeight()) <= this.carryingCapacity
      *          |   && !(this.inventory.containsValue(item))
      */
+    @Override
     public boolean canContain(InventoryItem item){
         if (item == null) {
             return false;
@@ -507,6 +509,7 @@ public class Monster implements Inventorised{
      * @effect  Item's holder is set to this monster
      *          | item.getHolder == this
      */
+    @Override
     public void add(InventoryItem... items) throws IllegalStateException{
         try {
             for (int i=0; i < items.length;i++){
@@ -571,6 +574,7 @@ public class Monster implements Inventorised{
      * @post    items are removed from Monster's inventory
      *          | this.removeItem(item)
      */
+    @Override
     public void remove(InventoryItem... items) throws IllegalArgumentException{
         // drop od remove from inventory. cannot drop weapons, sets holder to null
         try {
@@ -650,6 +654,7 @@ public class Monster implements Inventorised{
      *          Throws an exception if monster is trying to transfer an item it does not possess
      *          | !this.inventory.containsValue(item)
      */
+    @Override
     public void transfer(Inventorised other, InventoryItem... items) throws IllegalArgumentException, IllegalStateException{
             for (int i=0; i < items.length;i++){
                 InventoryItem item = items[i];
@@ -671,6 +676,7 @@ public class Monster implements Inventorised{
      * Returns total value of this monster's inventory items
      * @return  totalValue
      */
+    @Override
     public float getTotalValue() {
         float totalValue = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
@@ -741,4 +747,4 @@ public class Monster implements Inventorised{
             return ("");
         }
     }
-        }
+}

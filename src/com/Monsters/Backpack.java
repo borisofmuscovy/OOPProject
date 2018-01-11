@@ -86,6 +86,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      * @return  true if weight of backpack with new item does not exceed backpack's capacity, false otherwise
      *          |   result == (this.getContentsWeight() + item.getWeight()) > this.getCapacity())
      */
+    @Override
     public boolean canContain(InventoryItem item){
         if (item == null){
             return false;
@@ -129,6 +130,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      *          or the item already has different holder
      *          | (!canContain(item)) || this.backpackContent.contains(item)) || item.getHolder()!=null
      */
+    @Override
     public void add(InventoryItem... items) throws IllegalArgumentException{
         try {
             for (int i=0; i < items.length;i++){
@@ -159,6 +161,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      * @post    The item is removed from the backpack
      *          | this.backpackContent.contains(items) == false
      */
+    @Override
     public void remove(InventoryItem... items) throws IllegalArgumentException{
         try {
             for (int i=0; i < items.length;i++){
@@ -193,6 +196,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      *          | this.backpackContent.contains(item) == false
      *          |  other.backpackContent.contains(items) == true
      */
+    @Override
     public void transfer(Inventorised other, InventoryItem... items) throws IllegalArgumentException, IllegalStateException{
         try {
             for (int i=0; i < items.length;i++){
@@ -226,6 +230,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      * @return  weight of the backpack and of the items contained in it
      *          | totalContainedWeight(this.getWeight())
      */
+    @Override
     public float getTotalWeight(){
         return totalContainedWeight(this.getWeight());
     }
@@ -256,6 +261,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      * @return  value of the backpack and of the items contained in it
      *          | backpackValue
      */
+    @Override
     public float getTotalValue(){
         return totalContainedValue(this.getValue());
     }

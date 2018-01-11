@@ -60,8 +60,8 @@ public abstract class InventoryItem {
     @Model
     @Raw
     protected InventoryItem(int value, Object holder, float weight) throws IllegalArgumentException {
-        assert (!(value < 0));
-        if (isValidWeight(weight))
+        assert (isValidValue(value));
+        if (!isValidWeight(weight))
             throw new IllegalArgumentException();
         this.weight = weight;
         this.value = value;
@@ -89,9 +89,8 @@ public abstract class InventoryItem {
     @Model
     @Raw
     protected InventoryItem(int value, float weight) throws IllegalArgumentException {
-        assert (!(value < 0));
         assert (isValidValue(value));
-        if (weight < 0)
+        if (!isValidWeight(weight))
             throw new IllegalArgumentException();
         this.weight = weight;
         this.value = value;
@@ -235,7 +234,7 @@ public abstract class InventoryItem {
      */
     @Raw
     public float setWeight(float weight) throws IllegalArgumentException{
-        if(isValidWeight(weight))
+        if(!isValidWeight(weight))
             throw new IllegalArgumentException();
         else
             return weight;

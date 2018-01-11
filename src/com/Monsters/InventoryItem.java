@@ -1,9 +1,8 @@
 package com.Monsters;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Model;
+import be.kuleuven.cs.som.annotate.Raw;
 
-import java.text.DecimalFormat;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,10 +10,10 @@ import java.util.Random;
 /**
  * Abstract class of Inventory Items which can be held by Monsters
  * Superclass of weapons, purses and backpacks
- * @invar   weight of an item has to be bigger than 0
- *          | weight > 0
- * @invar   value must have a proper value
- *          | !(value < 0)
+ * @invar   Value is a valid value for an item
+ *          | isValidValue(value)
+ * @invar   Weight is a valid weight for an item
+ *          | isValidWeight(weight)
  */
 public abstract class InventoryItem {
 
@@ -61,9 +60,10 @@ public abstract class InventoryItem {
      *          |       then throw new IllegalArgumentException
      */
     @Model
+    @Raw
     public InventoryItem(int value, Object holder, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
-        if (weight < 0)
+        if (isValidWeight(weight))
             throw new IllegalArgumentException();
         this.weight = weight;
         this.value = value;
@@ -89,8 +89,9 @@ public abstract class InventoryItem {
      *          |       then throw new IllegalArgumentException
      */
     @Model
+    @Raw
     public InventoryItem(int value, float weight) throws IllegalArgumentException {
-        assert (!(value < 0));
+        assert (isValidValue(value));
         if (weight < 0)
             throw new IllegalArgumentException();
         this.weight = weight;
@@ -111,12 +112,23 @@ public abstract class InventoryItem {
      * @return  True if the ID is a unique ID, false otherwise
      *          | result == existingIDs.contains(ID)
      */
-    private static boolean checkValidID(long ID) {
+    private static boolean isValidID(long ID) {
         if (existingIDs.contains(ID)) {
             return false;
         } else {
             return true;
         }
+    }
+
+    /**
+     * Checks validity of value
+     * @param   value
+     *          Value to be checked
+     * @return  True if value is not negative
+     *          | result == (value >= 0)
+     */
+    private boolean isValidValue(int value){
+        return value >= 0;
     }
 
     /**
@@ -130,7 +142,7 @@ public abstract class InventoryItem {
      */
     protected long generateID(){
         while(true) {
-            if ((ID % 2 != 0) && (ID > 0) && (checkValidID(ID))){
+            if ((ID % 2 != 0) && (ID > 0) && (isValidID(ID))){
                 existingIDs.add(ID);
                 return ID;
             } else {
@@ -149,8 +161,9 @@ public abstract class InventoryItem {
      * @post    Value of this item corresponds to newValue
      *          | new.getValue() == newValue
      */
+    @Raw
     protected void setValue(int newValue) {
-        assert !(newValue < 0);
+        assert (isValidValue(newValue));
         this.value = newValue;
     }
 
@@ -160,6 +173,7 @@ public abstract class InventoryItem {
      *          | this.value
      */
     @Basic
+    @Raw
     public int getValue() {
         return this.value;
     }
@@ -220,11 +234,12 @@ public abstract class InventoryItem {
      * @post    Weight of the item is set to weight
      *          |new.getWeight() == weight
      */
-    public void setWeight(float weight) throws IllegalArgumentException{
-        if(weight < 0)
+    @Raw
+    public float setWeight(float weight) throws IllegalArgumentException{
+        if(isValidWeight(weight))
             throw new IllegalArgumentException();
         else
-            this.weight = weight;
+            return weight;
     }
 
     /**
@@ -233,8 +248,20 @@ public abstract class InventoryItem {
      *          | this.weight
      */
     @Basic
+    @Raw
     public float getWeight(){
         return this.weight;
+    }
+
+    /**
+     * Checks validity of weight
+     * @param   weight
+     *          Weight to be checked
+     * @return  True if weight is not negative, false otherwise
+     *          | result == (weight >= 0)
+     */
+    public boolean isValidWeight(float weight){
+        return weight >= 0;
     }
 
 }

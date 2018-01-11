@@ -3,11 +3,7 @@ package com.Monsters;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
 import be.kuleuven.cs.som.annotate.Raw;
-
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * The class of Weapon, special case of an inventory item.
@@ -15,7 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
  * Weapons can be held by a monsters and used during the battles.
  *
  * @invar   Damage has to have a valid value
- *          | damage >= 1 & damage <= MAX_DAMAGE
+ *          | isValidDamage(damage)
  */
 public class Weapon extends InventoryItem {
 
@@ -47,10 +43,11 @@ public class Weapon extends InventoryItem {
      * @effect  Weight fo this monster is set to given weight
      *          | new.getWeight() == weight
      */
+    @Raw
     public Weapon(float weight, int value, int damage){
         super(value, weight);
         this.setValue(value);
-        assert(damage >= MIN_DAMAGE & damage <= MAX_DAMAGE);
+        assert(isValidDamage(damage));
         this.damage = damage;
         this.weight = setWeight(weight);
         this.ID = generateID();
@@ -93,8 +90,9 @@ public class Weapon extends InventoryItem {
      * @post  Value of damage eguals the value of newDamage
      *        | new.getDamage() == newDamage
      */
+    @Raw
     public void setDamage(int newDamage){
-        assert(newDamage >= MIN_DAMAGE & newDamage <= MAX_DAMAGE);
+        assert(isValidDamage(newDamage));
         this.damage = newDamage;
     }
 
@@ -105,8 +103,20 @@ public class Weapon extends InventoryItem {
      */
     @Basic
     @Immutable
+    @Raw
     public int getDamage(){
         return this.damage;
+    }
+
+    /**
+     * Checks validity of damage to be set
+     * @param   damage
+     *          Damage to check
+     * @return  True if damage is in range(MIN_DAMAGE, MAX_DAMAGE)
+     *          | result == damage >= MIN_DAMAGE && damage <= MAX_DAMAGE
+     */
+    public boolean isValidDamage(int damage){
+        return (damage >= MIN_DAMAGE && damage <= MAX_DAMAGE);
     }
 
     /**

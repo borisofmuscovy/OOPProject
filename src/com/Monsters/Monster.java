@@ -1,7 +1,7 @@
 package com.Monsters;
 import be.kuleuven.cs.som.annotate.Basic;
 import be.kuleuven.cs.som.annotate.Immutable;
-
+import be.kuleuven.cs.som.annotate.Raw;
 import java.util.*;
 
 
@@ -113,6 +113,7 @@ public class Monster implements Inventorised{
      *          | ! isValidName(name)
      *
      */
+    @Raw
     public Monster(String Name, int startHP, InventoryItem... items) throws IllegalArgumentException{
         if (!isValidName(Name)){
             throw new IllegalArgumentException();
@@ -160,7 +161,7 @@ public class Monster implements Inventorised{
      * @return  name
      *          | this.name
      */
-    @Basic @Immutable
+    @Basic @Immutable @Raw
     public String getName(){
         return this.name;
     }
@@ -304,6 +305,7 @@ public class Monster implements Inventorised{
      */
     @Basic
     @Immutable
+    @Raw
     public int getProtection() { return this.protection; }
 
 
@@ -314,6 +316,7 @@ public class Monster implements Inventorised{
      * @pre     The protection of a monster must be a prime number within range(MIN_PROTECTION, MAX_PROTECTION)
      *          | isValidProtection(protectionFactor)
      */
+    @Raw
     public int generateProtection(){
         boolean flag = true;
         Random n = new Random();
@@ -496,7 +499,7 @@ public class Monster implements Inventorised{
      * @effect  Item is added to the inventory to the empty anchor
      *          | entry.setValue(item)
      * @effect  Item's holder is set to this monster
-     *          | item.setHolder(this)
+     *          | item.getHolder == this
      */
     public void add(InventoryItem... items) throws IllegalStateException{
         try {

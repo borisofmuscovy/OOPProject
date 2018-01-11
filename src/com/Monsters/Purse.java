@@ -7,8 +7,6 @@ import java.util.Random;
 /**
  * The class of Purse, special case of Inventory Item.
  * Apart from value, weight and holder, Purse also has content and capacity.
- * @invar   Content of a purse cannot exceed its capacity
- *          | content <= capacity)
  */
 public class Purse extends InventoryItem {
 
@@ -130,7 +128,7 @@ public class Purse extends InventoryItem {
             if(this.Torn) {
                 this.content = 0;
             } else {
-                assert(newContent >= 0);
+                assert(newContent >= 0 );
                 this.content = newContent;
             }
     }
@@ -167,7 +165,7 @@ public class Purse extends InventoryItem {
      */
     public void add(int ducats) throws  IllegalStateException{
         if(this.Torn)
-            throw new IllegalStateException("You cannot remove items from torn purse");
+            throw new IllegalStateException("You cannot add ducats to torn purse");
         else
             setContent(this.getContent() + ducats);
             this.setWeight(this.getWeight() + 50*ducats);
@@ -186,7 +184,7 @@ public class Purse extends InventoryItem {
      */
     public void remove(int ducats) throws IllegalStateException{
         if(this.Torn)
-            throw new IllegalStateException("You cannot remove items from torn purse");
+            throw new IllegalStateException("You cannot remove ducats from torn purse");
         else
             setContent(this.getContent() - ducats);
     }

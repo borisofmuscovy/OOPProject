@@ -42,7 +42,7 @@ interface Inventorised {
      * @param   item
      *          Item to be checked
      * @return  true if weight of the Inventory with new item does not exceed Object's capacity, false otherwise
-     *          |   this.getContentsWeight() + item.getWeight()) > this.getCapacity()
+     *          |   result == (this.getContentsWeight() + item.getWeight()) > this.getCapacity())
      */
     boolean canContain(InventoryItem item);
 

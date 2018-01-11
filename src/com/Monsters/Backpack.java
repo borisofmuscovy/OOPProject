@@ -1,8 +1,6 @@
 package com.Monsters;
 
-import be.kuleuven.cs.som.annotate.Basic;
-import be.kuleuven.cs.som.annotate.Immutable;
-
+import be.kuleuven.cs.som.annotate.*;
 import java.util.*;
 
 /**
@@ -118,7 +116,7 @@ public class Backpack extends InventoryItem implements Inventorised{
      * For items contained in the backpack, sets backpack holder as items holder
      * @post    If item is contained in a backpack, it has the same holder as the backpack
      *          | for(InventoryItem item: this.backpackContent)
-     *              item.getHolder() == this.getHolder()
+     *              (new item).getHolder() == this.getHolder()
      */
     public void setHolderRecursively(){
         for(InventoryItem item : this.backpackContent) {

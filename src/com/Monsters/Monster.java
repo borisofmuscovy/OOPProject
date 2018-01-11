@@ -31,7 +31,7 @@ public class Monster implements Inventorised{
     private int strength;
 
     /**
-     * Variable indicating damage that can be cause by Monster
+     * Variable indicating damage that can be caused by Monster
      */
     private int damage;
 
@@ -45,17 +45,17 @@ public class Monster implements Inventorised{
      */
     private int hp;
     /**
-     * Constant indicating maximum damage
+     * Constant indicating maximum damage that can be afflicted by a Monster
      */
     private static int MAX_DAMAGE = 20;
 
     /**
-     * Constant indicating minimum damage
+     * Constant indicating minimum damage that can be afflicted by a Monster
      */
     private static final int MIN_DAMAGE = 1;
 
     /**
-     * Constant indicating maximum hitpoints
+     * Constant indicating maximum hitpoints that Monster can have
      */
     private static int MAX_HP;
     /**
@@ -97,14 +97,18 @@ public class Monster implements Inventorised{
     /**
      * Initialise a named monster with a given number of hit points.
      *
-     * @param Name
-     *        The name of the monster. Must start with a capital letter, can contain lowercase, uppercase letters, numbers
-     *        and the ' character.
-     * @param startHP
-     *        The health points value the monster starts with. This is the maximum HP of the monster unless changed explicitly.
-     * @pre    The given name must be a valid name for a monster
-     *         | isValidName(name)
-     * @throws IllegalArgumentException
+     * @param   Name
+     *          The name of the monster. Must start with a capital letter, can contain lowercase, uppercase letters, numbers
+     *          and the ' character.
+     * @param   startHP
+     *          The health points value the monster starts with. This is the maximum HP of the monster unless changed explicitly.
+     * @param   items
+     *          Items to be added to Monster's inventory during initialization of this Monster
+     * @pre     The given name must be a valid name for a monster
+     *          | isValidName(name)
+     * @pre     Initial value of hitpoints cannot be lower than 0
+     *          | ! (startHP < 0)
+     * @throws  IllegalArgumentException
      *          The given name is not a valid name for a monster.
      *          | ! isValidName(name)
      *
@@ -189,21 +193,23 @@ public class Monster implements Inventorised{
 
     /**
      * Kills the monster by setting Alive to false.
-     * @post    Monster is dead and its hitpoints equal 0
+     * @post    Monster is dead
      *          | this.Alive = false
-     *          | this.hp = 0
+     * @effect  Monster's hitpoints are set to 0
+     *          | this.setHP(0)
      */
     private void Death(){
         this.Alive = false;
-        this.hp = 0;
+        this.setHP(0);
     }
 
     /**
      * Returns the strength of the monster.
-     * @return  Stength of this monster
+     * @return  Strength of this monster
      *          | this.strength
      */
     @Basic
+    @Immutable
     public int getStrength(){
         return this.strength;
     }
@@ -212,6 +218,8 @@ public class Monster implements Inventorised{
      * Sets strength of a monster ti a given new strength
      * @param   newStrength
      *          The new strength for this monster
+     * @post    The strength of this Monster is set to given newStrength
+     *          | new.getStrength() = newStrength
      */
     protected void setStrength(int newStrength){
         this.strength = newStrength;
@@ -231,7 +239,8 @@ public class Monster implements Inventorised{
      * @param   newMAX_DAMAGE
      *          The new maximum damage value to be adopted.
      * @post    If the new maximum damage is more than or equal 1, the maximum damage value will equal to the new value.
-     *          | if (newMAX_DAMAGE => 1) { MAX_DAMAGE = newMAX_DAMAGE }
+     *          | if (newMAX_DAMAGE => 1)
+     *          | then   new.getMAX_DAMAGE() = newMAX_DAMAGE
      */
 
     public static void setMAX_DAMAGE(int newMAX_DAMAGE) {
@@ -246,6 +255,7 @@ public class Monster implements Inventorised{
      *          | this.damage
      */
     @Basic
+    @Immutable
     public int getDamage(){
         return this.damage;
     }
@@ -264,7 +274,7 @@ public class Monster implements Inventorised{
     /**
      * Re-roll the damage of the monster.
      * @post The new damage value will be a random number between the MIN_DAMAGE value and the MAX_DAMAGE value.
-     *       | newDamage == rand(MIN_DAMAGE:MAX_DAMAGE)
+     *       | new.getDamage() == rand(MIN_DAMAGE:MAX_DAMAGE)
      */
     public void changeDamage() {
         this.damage = generateDamage();
@@ -272,8 +282,10 @@ public class Monster implements Inventorised{
 
     /**
      * Calculates the damage dealt by a single hit using the strength and damage values, according to a set formula.
-     * @return  Hit damage of a monster according to formula
-     *          | damage + ((strength - 5) / 3)
+     * @return  Hit damage of a monster according to formula if monster does not have a weapon in right anchor
+     *          | this.getDamage() + ((this.getStrength- 5) / 3)
+     *          Hit damage of a monster according to formula if monster does have a weapon in right anchor
+     *          | this.getDamage() + ((this.getStrength- 5) / 3) +  right.getDamage()
      */
     private int hitDamage() {
         int momentaryStrength = ((this.getStrength() - 5) / 3);
@@ -291,6 +303,7 @@ public class Monster implements Inventorised{
      *          | this.protection
      */
     @Basic
+    @Immutable
     public int getProtection() { return this.protection; }
 
 
@@ -299,7 +312,7 @@ public class Monster implements Inventorised{
      * @return  protection value to be assigned to monster
      *          | protectionFactor
      * @pre     The protection of a monster must be a prime number within range(MIN_PROTECTION, MAX_PROTECTION)
-     *          | assert isValidProtection(protectionFactor)
+     *          | isValidProtection(protectionFactor)
      */
     public int generateProtection(){
         boolean flag = true;
@@ -332,7 +345,7 @@ public class Monster implements Inventorised{
      * @param   n
      *          The number to be checked
      * @return  True if the number is a prime number and false otherwise
-     *          | result == (n%2 != 0 && n%i != 0)
+     *          | result == (n%2 != 0 && n%i != 0 && n == 2)
      *
      */
     private static boolean isPrime(int n) {
@@ -354,16 +367,19 @@ public class Monster implements Inventorised{
      *              | this.hp
      */
     @Basic
+    @Immutable
     public int getHP() {
         return this.hp;
     }
 
     /**
-     * Allows to directly modify the health points of the monster.
+     * Allows to directly modify the hitpoints of the monster.
      * @param   newHP
      *          The new HP for this monster.
-     * @post    The HP of the monster will be equal to the HP provided, if it is not equal or less than 0.
-     *          | if (newHP > 0) {hp == newHP}
+     * @pre     New value of hitpoints has to be higher than 0
+     *          | newHP > 0
+     * @post    The HP of the monster will be equal to newHP
+     *          | new.getHP() = newHP
      * @throws  IllegalArgumentException
      *          The new HP is equal to or less than 0, which means the monster is dead.
      *          | if (newHP <= 0) { Death() }
@@ -389,8 +405,8 @@ public class Monster implements Inventorised{
      * Sets the new maximum hitpoint value
      * @param newMAX_HP
      *        The new HP ceiling.
-     * @post The new HP ceiling will always equal the provided value.
-     *       | MAX_HP == newMAX_HP
+     * @post The new maximum value of hitpoints will equal the provided value.
+     *       | new.getMAX_HP() == newMAX_HP
      */
     public static void setMAX_HP(int newMAX_HP){
         MAX_HP = newMAX_HP;
@@ -402,6 +418,7 @@ public class Monster implements Inventorised{
     /**
      * Returns total weight of items carried by a monster
      * @return  total weight of the items currently carried by a monster
+     *          | totalCarriedWeight
      */
     public float getTotalWeight() {
         float totalCarriedWeight = 0;
@@ -421,6 +438,7 @@ public class Monster implements Inventorised{
      *          | this.carryingCapacity
      */
     @Basic
+    @Immutable
     public int getCarryingCapacity(){
         return this.carryingCapacity;
     }
@@ -438,9 +456,11 @@ public class Monster implements Inventorised{
 
     /**
      * Checks if the monster is physically capable of carrying the extra weight of an item.
-     * @param item
-     *        An item to be checked if can be held by a monster
+     * @param   item
+     *          An item to be checked if can be held by a monster
      * @return  True is monster can carry the item, false otherwise
+     *          | result == this.getTotalWeight() + item.getWeight()) <= this.carryingCapacity
+     *          |   && !(this.inventory.containsValue(item))
      */
     public boolean canContain(InventoryItem item){
         if (item == null) {
@@ -473,8 +493,10 @@ public class Monster implements Inventorised{
      *         | ! this.canContain(item) || item.getHolder() != null ||
      *         (this.inventory.get("Left") != null && this.inventory.get("Right") != null
      *              && this.inventory.get("Back") != null)
-     * @post    Item is added to the inventory to the empty anchor
-     *          | this.inventory.put(anchor, item)
+     * @effect  Item is added to the inventory to the empty anchor
+     *          | entry.setValue(item)
+     * @effect  Item's holder is set to this monster
+     *          | item.setHolder(this)
      */
     public void add(InventoryItem... items) throws IllegalStateException{
         try {
@@ -505,14 +527,14 @@ public class Monster implements Inventorised{
 
     /**
      * Deletes an item from monster's inventory
-     * @param item
-     *        Item to be deleted from inventory
-     * @pre   Monster contains the item in its inventory
-     *        this.inventory.containsValue(item)
-     * @post  Item is deleted from monster's inventory
-     *        | entry.setValue(null)??
-     * @post  Holder of an item is set to null
-     *        | item.getHolder == null
+     * @param   item
+     *          Item to be deleted from inventory
+     * @pre     Monster contains the item in its inventory
+     *          this.inventory.containsValue(item)
+     * @effect  Item is deleted from monster's inventory
+     *          | entry.setValue(null)
+     * @effect  Holder of an item is set to null
+     *          | item.getHolder == null
      */
     private void removeItem(InventoryItem item) {
         if (this.inventory.containsValue(item)) {
@@ -529,15 +551,16 @@ public class Monster implements Inventorised{
      * Delete multiple items from monster's inventory
      * @param   items
      *          Items to be deleted from monster's inventory
-     *
      * @throws  IllegalArgumentException
      *          throws an exception if monster tris to drop a weapon
      *          | if (item instance of Weapon)
      *          |       then throw new IllegalArgumentException
      * @throws  IllegalArgumentException
-     *          throws an exception if monster does not hold a weapon it tries to drop
+     *          throws an exception if monster does not hold an item it tries to drop
      *          | ! this.inventory.contains(item)
      *          |       then throw new IllegalArgumentException
+     * @post    items are removed from Monster's inventory
+     *          | this.removeItem(item)
      */
     public void remove(InventoryItem... items) throws IllegalArgumentException{
         // drop od remove from inventory. cannot drop weapons, sets holder to null
@@ -557,12 +580,20 @@ public class Monster implements Inventorised{
 
     /**
      * Swap items at anchors
-     * @param thisItem
-     * @param otherItem
-     * @throws IllegalAccessException
-     *
-     *
-     *
+     * @param   thisItem
+     *          Item to be swiped at anchors with another item
+     * @param   otherItem
+     *          Item to be swiped at anchors with item
+     * @throws  IllegalAccessException
+     *          Throws an exception if one or both or the items are not held by this monster
+     *          | thisItem.getIndirectHolder != this || otherItem.getIndirectHolder != this
+     * @throws  IllegalArgumentException
+     *          Throws an exception if one of the items does not exist
+     *          | (thisItem == null) || (otherItem == null)
+     * @post    thisItem is placed in anchor previously taken by otherItem
+     *          | new.thisItem.getKey() == otherItem.getKey()
+     * @post    otherItem is place in anchor previously taken by thisItem
+     *          | new.otherItem.getKey() == thisItem.getKey()
      *
      */
     public void swap(InventoryItem thisItem, InventoryItem otherItem) throws IllegalArgumentException, IllegalAccessException {
@@ -599,11 +630,11 @@ public class Monster implements Inventorised{
      * @pre     Monster can transfer items only if the other monster has capacity to take them
      *          | other.canContain(item)
      * @post    Items traded are deleted from this monster inventory and added to other monster inventory
-     *          | this.remove(item)
-     *          | entry.setValue(item);
+     *          | !this.inventory.containsValue(item)
+     *          | other.inventory.containsValue(item)
      * @post    Holder of an item changes
-     *          | item.setHolder(other)
-     * @throws  IllegalAccessException
+     *          | new.item.getHolder() == other
+     * @throws  IllegalArgumentException
      *          Throws an exception if other monster is not able to carry the item because of its weight or other monster's inventory is full
      *          | !other.canContain(item)
      * @throws  IllegalStateException
@@ -651,17 +682,17 @@ public class Monster implements Inventorised{
     }
 
     /**
-     * Returns total value of weapons contained in Monster's inventory
-     * @return getTotalValueOfWeapons
+     * Returns total value of weapons contained at Monster's anchors
+     * @return totalValueOfWeapons
      */
-    public int getTotalValueOfWeapons(){ //for now this implementation returns value of weapons in anchors only
-        int totalAnchorWeaponValue = 0;
+    public int getTotalValueOfWeapons(){
+        int totalValueOfWeapons = 0;
         for (Map.Entry<String,InventoryItem> entry : this.inventory.entrySet()) {
             if (entry.getValue() instanceof Weapon) {
-                totalAnchorWeaponValue += entry.getValue().getValue();
+                totalValueOfWeapons += entry.getValue().getValue();
             }
         }
-        return totalAnchorWeaponValue;
+        return totalValueOfWeapons;
     }
 
 //    public Map<String, Weapon> getAllCarriedWeapons
@@ -671,8 +702,8 @@ public class Monster implements Inventorised{
      * @param   opponent
      *          | Opponent monster
      * @throws  IllegalStateException
-     *          If the isAlive is false (monster has no HP) it cannot take part in the battle.
-     *          |  if !this.isAlive()
+     *          If this monster is dead and cannot take part in the battle.
+     *          |  !this.isAlive()
      * @throws  IllegalArgumentException
      *          If opponent monster dies during the battle
      *          | !opponent.isAlive()

@@ -1,5 +1,6 @@
 package com.Monsters;
 import be.kuleuven.cs.som.annotate.Basic;
+import be.kuleuven.cs.som.annotate.Model;
 
 import java.text.DecimalFormat;
 import java.math.RoundingMode;
@@ -59,6 +60,7 @@ public abstract class InventoryItem {
      *          |  if weight < 0
      *          |       then throw new IllegalArgumentException
      */
+    @Model
     public InventoryItem(int value, Object holder, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
         if (weight < 0)
@@ -86,6 +88,7 @@ public abstract class InventoryItem {
      *          |  if weight < 0
      *          |       then throw new IllegalArgumentException
      */
+    @Model
     public InventoryItem(int value, float weight) throws IllegalArgumentException {
         assert (!(value < 0));
         if (weight < 0)
@@ -101,6 +104,13 @@ public abstract class InventoryItem {
     @Basic
     public abstract long getID();
 
+    /**
+     * Checks validity of the ID
+     * @param   ID
+     *          ID to be checked
+     * @return  True if the ID is a unique ID, false otherwise
+     *          | result == existingIDs.contains(ID)
+     */
     private static boolean checkValidID(long ID) {
         if (existingIDs.contains(ID)) {
             return false;
@@ -116,6 +126,7 @@ public abstract class InventoryItem {
      * @pre     ID has to be a number bigger than 0
      *          | ID > 0
      * @return  ID
+     *          ID of an item
      */
     protected long generateID(){
         while(true) {
@@ -136,7 +147,7 @@ public abstract class InventoryItem {
      * @pre     Value of the item cannot be lower than zero
      *          | !(newValue < 0)
      * @post    Value of this item corresponds to newValue
-     *          | this.value = newValue
+     *          | new.getValue() == newValue
      */
     protected void setValue(int newValue) {
         assert !(newValue < 0);
@@ -144,7 +155,7 @@ public abstract class InventoryItem {
     }
 
     /**
-     * Gets value of this item
+     * Returns value of this item
      * @return  value of this item
      *          | this.value
      */
@@ -154,19 +165,23 @@ public abstract class InventoryItem {
     }
 
     /**
-     * Set the holder of the item.
-     * @param holder
-     *        Monster who holds the item.
+     * Set the holder of the item to new holder
+     * @param   holder
+     *          Holder to be set
+     * @pre     New holder of the item has to be backpack, monster or can be null if the object is dropped
+     *          | holder instanceof Monster || holder instanceof Backpack || holder == null
+     * @post    Holder of the item is set to holder
+     *          | new.getHolder() == holder
      */
     public void setHolder(Object holder)throws IllegalArgumentException{
-        if(this.holder instanceof Monster || this.holder instanceof Backpack || this.holder == null)
+        if(holder instanceof Monster || holder instanceof Backpack || holder == null)
             this.holder = holder;
         else
             throw new IllegalArgumentException("Holder of an item has to be Monster or Backpack");
     }
 
     /**
-     * Gets holder of the item.
+     * Returns holder of the item.
      * @return  holder of this item
      *          | this.holder
      */
@@ -180,6 +195,9 @@ public abstract class InventoryItem {
      * E.g. if the item is contained in a backpack, returns holder of this backpack
      * @return  Holder of the item
      *          | this.holder
+     * @throws  IllegalAccessException
+     *          If the holder of the item is neither Monster nor Backpack
+     *          | if (!(this.holder instanceof Monster) || !( this.holder instanceof Backpack)
      */
     @Basic
     public Object getIndirectHolder() throws IllegalAccessException{
@@ -199,16 +217,18 @@ public abstract class InventoryItem {
      * @throws  IllegalArgumentException
      *          Thrown if the weight of the item is about to be smaller than 0
      *          | weight < 0
+     * @post    Weight of the item is set to weight
+     *          |new.getWeight() == weight
      */
-    public float setWeight(float weight) throws IllegalArgumentException{
+    public void setWeight(float weight) throws IllegalArgumentException{
         if(weight < 0)
             throw new IllegalArgumentException();
         else
-            return weight;
+            this.weight = weight;
     }
 
     /**
-     * Gets weight of an item
+     * Returns weight of an item
      * @return  weight of an item
      *          | this.weight
      */

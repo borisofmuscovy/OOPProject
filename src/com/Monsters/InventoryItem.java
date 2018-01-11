@@ -236,7 +236,7 @@ public abstract class InventoryItem {
      */
     @Raw
     public float setWeight(float weight) throws IllegalArgumentException{
-        if(isValidWeight(weight))
+        if(!isValidWeight(weight))
             throw new IllegalArgumentException();
         else
             return weight;
